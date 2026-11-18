@@ -39,39 +39,47 @@ class SpamDataset(Dataset):
         self.rng = random.Random(seed)
         self.perturber = AdversarialPerturber(seed=seed, allow_glyph=allow_glyph_aug)
 
+        # Precompute static IDs and masks once for fast epoch iteration
+        self._static_ids: List[List[int]] = []
+        self._static_obf: List[List[int]] = []
+        for rec in records:
+            txt = rec.proc_text if use_preprocessor else rec.raw_text
+            ids = vocab.encode(txt, max_len=max_len, oov_map=oov_map)
+            if use_preprocessor:
+                obf = rec.obf_mask[: len(ids)]
+            else:
+                obf = compute_token_obfuscation_mask(rec.raw_text, rec.clean_text, rec.label, max_len=max_len)[: len(ids)]
+            if len(obf) < len(ids):
+                obf = list(obf) + [0] * (len(ids) - len(obf))
+            self._static_ids.append(ids)
+            self._static_obf.append(obf)
+
     def __len__(self) -> int:
         return len(self.records)
 
     def __getitem__(self, idx: int) -> Dict[str, object]:
         rec = self.records[idx]
-        text = rec.proc_text if self.use_preprocessor else rec.raw_text
-        obf = rec.obf_mask if self.use_preprocessor else compute_token_obfuscation_mask(
-            rec.raw_text, rec.clean_text, rec.label, max_len=self.max_len
-        )
-
         if self.is_train and self.aug_prob > 0.0 and self.rng.random() < self.aug_prob:
-            base = rec.clean_text if (rec.label == 1 and rec.clean_text) else text
+            base = rec.clean_text if (rec.label == 1 and rec.clean_text) else (rec.proc_text if self.use_preprocessor else rec.raw_text)
             rate = self.rng.uniform(0.12, 0.35)
             pert, pert_mask = self.perturber.perturb(base, rate=rate, return_mask=True)
             if self.preproc is not None and self.use_preprocessor:
-                text = self.preproc.process(pert, enabled=True)
-                obf = compute_token_obfuscation_mask(text, base, 1, max_len=self.max_len)
+                text, obf = self.preproc.process_with_mask(pert, pert_mask, enabled=True)
             else:
-                text = pert
-                obf = pert_mask[: self.max_len]
-
-        ids = self.vocab.encode(text, max_len=self.max_len, oov_map=self.oov_map)
-        seq_len = len(ids)
-        if len(obf) < seq_len:
-            obf = list(obf) + [0] * (seq_len - len(obf))
+                text, obf = pert, pert_mask
+            ids = self.vocab.encode(text, max_len=self.max_len, oov_map=self.oov_map)
+            obf = obf[: len(ids)]
+            if len(obf) < len(ids):
+                obf = list(obf) + [0] * (len(ids) - len(obf))
         else:
-            obf = list(obf[:seq_len])
+            ids = self._static_ids[idx]
+            obf = self._static_obf[idx]
 
         return {
             "ids": ids,
             "label": float(rec.label),
             "obf_mask": obf,
-            "length": seq_len,
+            "length": len(ids),
         }
 
 

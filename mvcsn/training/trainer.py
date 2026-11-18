@@ -1,4 +1,4 @@
-"""Training and evaluation loop for MV-CSN with AMP and early stopping."""
+"""Training & evaluation loop for MV-CSN v2 with RoCBert consistency & AMP."""
 
 from __future__ import annotations
 
@@ -9,7 +9,11 @@ from typing import Dict, List, Tuple
 import torch
 from torch.utils.data import DataLoader
 
-from mvcsn.training.losses import compute_mvcsn_loss
+from mvcsn.training.losses import (
+    compute_consistency_loss,
+    compute_mvcsn_loss,
+    generate_gpu_graph_perturbation,
+)
 from mvcsn.training.metrics import compute_classification_metrics
 
 
@@ -23,8 +27,8 @@ def evaluate_mvcsn(
     probs: List[float] = []
     targets: List[int] = []
     for batch in loader:
-        input_ids = batch["input_ids"].to(device)
-        attn_mask = batch["attn_mask"].to(device)
+        input_ids = batch["input_ids"].to(device, non_blocking=True)
+        attn_mask = batch["attn_mask"].to(device, non_blocking=True)
         out = model(input_ids, attn_mask)
         p = torch.sigmoid(out["spam_logit"]).detach().cpu().tolist()
         probs.extend(p)
@@ -37,13 +41,15 @@ def train_mvcsn(
     train_loader: DataLoader,
     val_loader: DataLoader,
     device: torch.device,
-    epochs: int = 22,
+    epochs: int = 20,
     patience: int = 6,
     lr: float = 1e-3,
     weight_decay: float = 1e-4,
     grad_clip: float = 1.0,
     loc_loss_weight: float = 0.40,
     gate_prior_weight: float = 0.10,
+    use_consistency: bool = True,
+    cons_weight: float = 0.50,
 ) -> Dict[str, object]:
     model = model.to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
@@ -62,31 +68,58 @@ def train_mvcsn(
         tot_loss = 0.0
         n_batches = 0
         for batch in train_loader:
-            input_ids = batch["input_ids"].to(device)
-            attn_mask = batch["attn_mask"].to(device)
-            obf_labels = batch["obf_labels"].to(device)
-            labels = batch["labels"].to(device)
+            input_ids = batch["input_ids"].to(device, non_blocking=True)
+            attn_mask = batch["attn_mask"].to(device, non_blocking=True)
+            obf_labels = batch["obf_labels"].to(device, non_blocking=True)
+            labels = batch["labels"].to(device, non_blocking=True)
 
             optimizer.zero_grad(set_to_none=True)
             with torch.amp.autocast("cuda", enabled=use_amp):
-                out = model(input_ids, attn_mask)
-                losses = compute_mvcsn_loss(
-                    outputs=out,
+                out_orig = model(input_ids, attn_mask)
+                losses_orig = compute_mvcsn_loss(
+                    outputs=out_orig,
                     labels=labels,
                     obf_labels=obf_labels,
                     attn_mask=attn_mask,
-                    loc_loss_weight=loc_loss_weight,
+                    loc_loss_weight=loc_loss_weight if obf_labels.sum() > 0 else 0.0,
                     gate_prior_weight=gate_prior_weight,
                     use_loc_head=getattr(model, "use_loc_head", True),
                     use_gate=getattr(model, "use_gate", True),
                 )
-            scaler.scale(losses["total"]).backward()
+                total = losses_orig["total"]
+
+                if use_consistency:
+                    pert_ids, pert_obf = generate_gpu_graph_perturbation(
+                        input_ids=input_ids,
+                        attn_mask=attn_mask,
+                        phon_nbr_idx=model.phon_nbr_idx,
+                        phon_nbr_sim=model.phon_nbr_sim,
+                        glyph_nbr_idx=model.glyph_nbr_idx,
+                        glyph_nbr_sim=model.glyph_nbr_sim,
+                        token_prob=0.20,
+                    )
+                    combined_obf = torch.maximum(obf_labels, pert_obf)
+                    out_pert = model(pert_ids, attn_mask)
+                    losses_pert = compute_mvcsn_loss(
+                        outputs=out_pert,
+                        labels=labels,
+                        obf_labels=combined_obf,
+                        attn_mask=attn_mask,
+                        loc_loss_weight=loc_loss_weight,
+                        gate_prior_weight=gate_prior_weight,
+                        use_loc_head=getattr(model, "use_loc_head", True),
+                        use_gate=getattr(model, "use_gate", True),
+                    )
+                    l_cons = compute_consistency_loss(out_orig, out_pert)
+                    total = 0.5 * total + 0.5 * losses_pert["total"] + cons_weight * l_cons
+
+            scaler.scale(total).backward()
             scaler.unscale_(optimizer)
             torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
             scaler.step(optimizer)
             scaler.update()
 
-            tot_loss += float(losses["total"].item())
+            tot_loss += float(total.item())
             n_batches += 1
 
         scheduler.step()

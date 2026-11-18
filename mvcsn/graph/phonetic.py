@@ -190,3 +190,26 @@ def compute_phonetic_similarity_matrix(
     sim_out[:2, :] = 0.0
     sim_out[:, :2] = 0.0
     return sim_out
+
+
+
+def extract_char_pinyin_features(chars: List[str]) -> torch.Tensor:
+    """Return [N, 3] tensor of primary (initial_id, final_id, tone_id) per character."""
+    N = len(chars)
+    feats = torch.zeros((N, 3), dtype=torch.long)
+    for idx, ch in enumerate(chars):
+        if len(ch) != 1:
+            continue
+        code = ord(ch)
+        if not ((0x4E00 <= code <= 0x9FFF) or (0x3400 <= code <= 0x4DBF)):
+            continue
+        py = pinyin(ch, style=Style.TONE3, heteronym=False, errors="ignore")
+        if not py or not py[0]:
+            continue
+        ini, fin, ton = split_syllable(py[0][0])
+        if not ini and not fin:
+            continue
+        feats[idx, 0] = INIT_TO_ID.get(ini, 0)
+        feats[idx, 1] = FINAL_TO_ID.get(fin, 0)
+        feats[idx, 2] = ton
+    return feats

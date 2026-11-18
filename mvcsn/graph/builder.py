@@ -3,18 +3,18 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Tuple
 
 import torch
 
 from mvcsn.data.vocab import CharVocab
 from mvcsn.graph.glyph import compute_glyph_similarity_matrix
-from mvcsn.graph.phonetic import compute_phonetic_similarity_matrix
+from mvcsn.graph.phonetic import compute_phonetic_similarity_matrix, extract_char_pinyin_features
 
 
 def extract_topk_neighbors(
     sim_matrix: torch.Tensor,
-    top_k: int = 16,
+    top_k: int = 20,
     min_sim: float = 0.35,
 ) -> Dict[str, torch.Tensor]:
     """Convert dense [V, V] similarity matrix into [V, K] index & weight tensors."""
@@ -35,9 +35,9 @@ def build_multiview_graphs(
     vocab: CharVocab,
     chaizi_path: str | Path = "data/resources/chaizi_map.json.gz",
     font_dir: str | Path = "/content/fonts",
-    top_k: int = 16,
+    top_k: int = 20,
     phon_min_sim: float = 0.35,
-    glyph_min_sim: float = 0.50,
+    glyph_min_sim: float = 0.55,
     phonetic_radical_bonus: float = 0.08,
     glyph_size: int = 32,
     glyph_emb_dim: int = 64,
@@ -48,7 +48,7 @@ def build_multiview_graphs(
     seed: int = 42,
     device: torch.device | None = None,
 ) -> Tuple[Dict[str, torch.Tensor], Dict[str, object]]:
-    """Build View 1 (Soft-Phonetic) and View 2 (Rendered-Glyph CNN) dense top-K graphs."""
+    """Build View 1 (Soft-Phonetic) & View 2 (Rendered-Glyph CNN) graphs + multimodal anchors."""
     phon_sim = compute_phonetic_similarity_matrix(
         vocab=vocab,
         chaizi_path=chaizi_path,
@@ -69,12 +69,15 @@ def build_multiview_graphs(
     )
     phon_top = extract_topk_neighbors(phon_sim, top_k=top_k, min_sim=phon_min_sim)
     glyph_top = extract_topk_neighbors(glyph_sim, top_k=top_k, min_sim=glyph_min_sim)
+    pinyin_ids = extract_char_pinyin_features(vocab.itos)
 
     graphs = {
         "phon_nbr_idx": phon_top["nbr_idx"],
         "phon_nbr_sim": phon_top["nbr_sim"],
         "glyph_nbr_idx": glyph_top["nbr_idx"],
         "glyph_nbr_sim": glyph_top["nbr_sim"],
+        "glyph_z": glyph_meta["glyph_z"].float(),
+        "pinyin_ids": pinyin_ids.long(),
     }
     return graphs, glyph_meta
 
@@ -82,7 +85,7 @@ def build_multiview_graphs(
 def save_graphs(
     graphs: Dict[str, torch.Tensor],
     glyph_meta: Dict[str, object],
-    graph_path: str | Path = "artifacts/graphs_top16.pt",
+    graph_path: str | Path = "artifacts/graphs_top20.pt",
     glyph_meta_path: str | Path = "artifacts/glyph_meta.pt",
 ) -> None:
     gp = Path(graph_path)
@@ -93,7 +96,7 @@ def save_graphs(
     torch.save(glyph_meta, mp)
 
 
-def load_graphs(path: str | Path = "artifacts/graphs_top16.pt") -> Dict[str, torch.Tensor]:
+def load_graphs(path: str | Path = "artifacts/graphs_top20.pt") -> Dict[str, torch.Tensor]:
     return torch.load(path, map_location="cpu", weights_only=True)
 
 

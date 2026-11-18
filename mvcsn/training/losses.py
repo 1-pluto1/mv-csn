@@ -1,10 +1,47 @@
-"""Multi-task training objective: Spam BCE + Obfuscation Localization + Gate Prior."""
+"""Multi-task objective: Spam BCE + Token Localization + Gate Prior + RoCBert Consistency."""
 
 from __future__ import annotations
 
-from typing import Dict
+from typing import Dict, Tuple
 import torch
 import torch.nn.functional as F
+
+
+@torch.no_grad()
+def generate_gpu_graph_perturbation(
+    input_ids: torch.Tensor,
+    attn_mask: torch.Tensor,
+    phon_nbr_idx: torch.Tensor,
+    phon_nbr_sim: torch.Tensor,
+    glyph_nbr_idx: torch.Tensor,
+    glyph_nbr_sim: torch.Tensor,
+    token_prob: float = 0.20,
+    min_sim: float = 0.60,
+    unk_prob: float = 0.20,
+) -> Tuple[torch.Tensor, torch.Tensor]:
+    """Fast GPU-vectorized RoCBert-style multimodal graph perturbation."""
+    B, L = input_ids.shape
+    dev = input_ids.device
+
+    # Combine phonetic + glyph neighbor candidates: [B, L, 2*K]
+    cand_idx = torch.cat([phon_nbr_idx[input_ids], glyph_nbr_idx[input_ids]], dim=-1)
+    cand_sim = torch.cat([phon_nbr_sim[input_ids], glyph_nbr_sim[input_ids]], dim=-1)
+    valid_cand = cand_sim >= min_sim
+
+    # Sample random valid neighbor per position via Gumbel/uniform scoring
+    rand_scores = torch.rand_like(cand_sim)
+    rand_scores = torch.where(valid_cand, rand_scores, torch.full_like(rand_scores, -1.0))
+    best_pos = rand_scores.argmax(dim=-1, keepdim=True)
+    sampled_nbr = cand_idx.gather(-1, best_pos).squeeze(-1)
+    has_cand = valid_cand.any(dim=-1)
+
+    drop_mask = (torch.rand((B, L), device=dev) < token_prob) & attn_mask & (input_ids >= 2)
+    use_unk = torch.rand((B, L), device=dev) < unk_prob
+    rep_ids = torch.where(has_cand & (~use_unk), sampled_nbr, torch.ones_like(input_ids))
+
+    pert_ids = torch.where(drop_mask, rep_ids, input_ids)
+    pert_obf = drop_mask.float()
+    return pert_ids, pert_obf
 
 
 def compute_mvcsn_loss(
@@ -43,3 +80,14 @@ def compute_mvcsn_loss(
         total = total + gate_prior_weight * gate_loss
 
     return {"total": total, "spam": spam_loss, "loc": loc_loss, "gate": gate_loss}
+
+
+def compute_consistency_loss(
+    out_orig: Dict[str, torch.Tensor],
+    out_pert: Dict[str, torch.Tensor],
+) -> torch.Tensor:
+    p1 = torch.sigmoid(out_orig["spam_logit"])
+    p2 = torch.sigmoid(out_pert["spam_logit"])
+    prob_mse = F.mse_loss(p1, p2)
+    repr_cos = (1.0 - F.cosine_similarity(out_orig["pooled"], out_pert["pooled"], dim=-1)).mean()
+    return prob_mse + 0.15 * repr_cos
