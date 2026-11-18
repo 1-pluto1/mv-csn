@@ -1,4 +1,4 @@
-"""Pretrained Chinese RoBERTa (hfl/rbt3) baseline and RBT3 + MV-CSN fusion model."""
+"""Pretrained Chinese RoBERTa (hfl/rbt3) baseline and RBT3 + MV-CSN v2 fusion model."""
 
 from __future__ import annotations
 
@@ -16,12 +16,16 @@ from mvcsn.data.preprocessing import TextPreprocessor
 from mvcsn.data.splits import SpamRecord
 from mvcsn.data.vocab import CharVocab
 from mvcsn.model.mvcsn import MVCSNModel
-from mvcsn.training.losses import compute_mvcsn_loss
+from mvcsn.training.losses import (
+    compute_consistency_loss,
+    compute_mvcsn_loss,
+    generate_gpu_graph_perturbation,
+)
 from mvcsn.training.metrics import compute_classification_metrics
 
 
 class RBT3HybridDataset(Dataset):
-    """Pre-tokenizes RBT3 inputs & character spans once for 15x faster GPU training."""
+    """Pre-tokenizes RBT3 inputs & character spans once for fast GPU training."""
 
     def __init__(
         self,
@@ -31,10 +35,11 @@ class RBT3HybridDataset(Dataset):
         preproc: TextPreprocessor | None = None,
         oov_map: Optional[Dict[str, int]] = None,
         max_len: int = 192,
+        use_preprocessor: bool = True,
     ) -> None:
         self.records = records
         raw_texts = [r.raw_text for r in records]
-        proc_texts = [r.proc_text[:max_len] for r in records]
+        proc_texts = [(r.proc_text if use_preprocessor else r.raw_text)[:max_len] for r in records]
 
         enc_raw = tokenizer(raw_texts, padding=False, truncation=True, max_length=max_len)
         enc_proc = tokenizer(
@@ -139,7 +144,7 @@ class RBT3Classifier(nn.Module):
 
 
 class RBT3MVCSNFusion(nn.Module):
-    """Fuses projected RBT3 contextual states (768->128) with aligned MV-CSN char-graph states."""
+    """Fuses projected RBT3 contextual states (768->128) with aligned MV-CSN v2 char-graph states."""
 
     def __init__(self, mvcsn_model: MVCSNModel, model_name: str = "hfl/rbt3", dropout: float = 0.15) -> None:
         super().__init__()
@@ -160,14 +165,19 @@ class RBT3MVCSNFusion(nn.Module):
             nn.Linear(m_dim, 1),
         )
 
-    def forward(self, batch: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
+    def forward(
+        self,
+        batch: Dict[str, torch.Tensor],
+        override_char_ids: Optional[torch.Tensor] = None,
+    ) -> Dict[str, torch.Tensor]:
         rbt_out = self.backbone(
             input_ids=batch["proc_input_ids"],
             attention_mask=batch["proc_attention_mask"],
         ).last_hidden_state
         r_proj = self.rbt_proj(rbt_out)
 
-        mv_out = self.mvcsn(batch["char_ids"], batch["char_mask"])
+        cids = override_char_ids if override_char_ids is not None else batch["char_ids"]
+        mv_out = self.mvcsn(cids, batch["char_mask"])
         h_char = mv_out["h_fused"]
         h_aligned = torch.bmm(batch["span_align"], h_char)
 
@@ -177,12 +187,14 @@ class RBT3MVCSNFusion(nn.Module):
         mask_t = batch["proc_attention_mask"].float()
         tok_pooled = (tok_fused * mask_t.unsqueeze(-1)).sum(dim=1) / torch.clamp(mask_t.sum(dim=1, keepdim=True), min=1.0)
         mv_pooled, _ = self.mvcsn.pool(h_char, batch["char_mask"])
-        spam_logit = self.classifier(torch.cat([tok_pooled, mv_pooled], dim=-1)).squeeze(-1)
+        pooled = torch.cat([tok_pooled, mv_pooled], dim=-1)
+        spam_logit = self.classifier(pooled).squeeze(-1)
 
         return {
             "spam_logit": spam_logit,
             "obf_logits": mv_out["obf_logits"],
             "alpha": mv_out["alpha"],
+            "pooled": pooled,
         }
 
 
@@ -212,10 +224,11 @@ def train_rbt3_family(
     train_loader: DataLoader,
     val_loader: DataLoader,
     device: torch.device,
-    epochs: int = 5,
+    epochs: int = 4,
     lr: float = 3e-5,
     is_fusion: bool = False,
     loc_loss_weight: float = 0.25,
+    use_consistency: bool = True,
 ) -> Dict[str, object]:
     model = model.to(device)
     if is_fusion:
@@ -240,17 +253,39 @@ def train_rbt3_family(
             opt.zero_grad(set_to_none=True)
             with torch.amp.autocast("cuda", enabled=use_amp):
                 out = model(b)
-                loss = F.binary_cross_entropy_with_logits(out["spam_logit"], b["labels"])
-                if is_fusion and "obf_logits" in out:
+                if not is_fusion:
+                    loss = F.binary_cross_entropy_with_logits(out["spam_logit"], b["labels"])
+                else:
                     aux = compute_mvcsn_loss(
                         outputs=out,
                         labels=b["labels"],
                         obf_labels=b["obf_labels"],
                         attn_mask=b["char_mask"],
-                        loc_loss_weight=loc_loss_weight,
+                        loc_loss_weight=loc_loss_weight if b["obf_labels"].sum() > 0 else 0.0,
                         gate_prior_weight=0.05,
                     )
                     loss = aux["total"]
+                    if use_consistency:
+                        pert_ids, pert_obf = generate_gpu_graph_perturbation(
+                            input_ids=b["char_ids"],
+                            attn_mask=b["char_mask"],
+                            phon_nbr_idx=model.mvcsn.phon_nbr_idx,
+                            phon_nbr_sim=model.mvcsn.phon_nbr_sim,
+                            glyph_nbr_idx=model.mvcsn.glyph_nbr_idx,
+                            glyph_nbr_sim=model.mvcsn.glyph_nbr_sim,
+                            token_prob=0.20,
+                        )
+                        out_pert = model(b, override_char_ids=pert_ids)
+                        aux_p = compute_mvcsn_loss(
+                            outputs=out_pert,
+                            labels=b["labels"],
+                            obf_labels=torch.maximum(b["obf_labels"], pert_obf),
+                            attn_mask=b["char_mask"],
+                            loc_loss_weight=loc_loss_weight,
+                            gate_prior_weight=0.05,
+                        )
+                        l_cons = compute_consistency_loss(out, out_pert)
+                        loss = 0.5 * loss + 0.5 * aux_p["total"] + 0.35 * l_cons
             scaler.scale(loss).backward()
             scaler.unscale_(opt)
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
