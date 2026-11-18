@@ -1,0 +1,8 @@
+LICENSE
+README.md
+pyproject.toml
+mvcsn.egg-info/PKG-INFO
+mvcsn.egg-info/SOURCES.txt
+mvcsn.egg-info/dependency_links.txt
+mvcsn.egg-info/requires.txt
+mvcsn.egg-info/top_level.txt

@@ -1,0 +1,63 @@
+seed: 42
+seeds: [42, 1024, 2025]
+
+data:
+  dataset_path: "data/resources/variant_spam_16k.tsv.gz"
+  chaizi_path: "data/resources/chaizi_map.json.gz"
+  ssc_lookup_path: "data/resources/ssc_lookup.json.gz"
+  max_len: 192
+  min_char_freq: 1
+  max_vocab_size: 8000
+  cluster_sim_threshold: 0.65
+  train_ratio: 0.70
+  val_ratio: 0.10
+  test_ratio: 0.20
+  train_aug_prob: 0.25
+
+graph:
+  top_k: 20
+  phon_min_sim: 0.35
+  glyph_min_sim: 0.50
+  phonetic_radical_bonus: 0.08
+  glyph_size: 32
+  glyph_emb_dim: 64
+  glyph_ae_epochs: 40
+  glyph_ae_lr: 0.002
+  glyph_cnn_weight: 0.70
+  glyph_pixel_weight: 0.30
+  oov_min_sim: 0.95
+
+model:
+  char_emb_dim: 128
+  hidden_dim: 128
+  num_heads: 4
+  gat_heads: 2
+  num_transformer_layers: 2
+  transformer_ff_dim: 256
+  dropout: 0.15
+  loc_loss_weight: 0.40
+  gate_prior_weight: 0.10
+
+training:
+  batch_size: 64
+  epochs: 22
+  patience: 6
+  lr: 0.001
+  weight_decay: 0.0001
+  grad_clip: 1.0
+
+rbt3:
+  model_name: "hfl/rbt3"
+  batch_size: 32
+  epochs: 5
+  lr: 3.0e-5
+  fusion_lr: 5.0e-5
+  max_len: 192
+
+lzasd:
+  emb_dim: 100
+  hidden_dim: 128
+  sim_threshold: 0.60
+  batch_size: 64
+  epochs: 20
+  lr: 0.001

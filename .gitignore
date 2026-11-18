@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ipynb_checkpoints/
+checkpoints/
+assets/fonts/*.otf
+assets/fonts/*.ttf
+assets/fonts/*.ttc
+artifacts/
+data/raw/
+runs/
+logs/
+*.log
+.DS_Store
