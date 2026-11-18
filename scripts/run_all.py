@@ -48,6 +48,7 @@ from mvcsn.training.metrics import (
 )
 from mvcsn.training.trainer import evaluate_mvcsn, train_mvcsn
 from mvcsn.utils.seed import get_device, seed_everything
+from scripts.gdrive_sync import bootstrap_from_gdrive, persist_to_gdrive
 
 SEEDS = [42, 1024, 2025]
 RESULTS_DIR = Path("results")
@@ -104,6 +105,7 @@ def to_clean_record(r: SpamRecord, preproc: TextPreprocessor) -> SpamRecord:
 def run_in_dist_benchmark(
     bench_name: str,
     splits_path: str,
+    dataset_path: str,
     vocab_path: str,
     graphs_path: str,
     gmeta_path: str,
@@ -111,7 +113,7 @@ def run_in_dist_benchmark(
     preproc: TextPreprocessor,
     device: torch.device,
 ) -> Dict[str, object]:
-    records, meta = build_or_load_splits(cache_path=splits_path)
+    records, meta = build_or_load_splits(cache_path=splits_path, dataset_path=dataset_path)
     tr_recs = [r for r in records if r.split == "train"]
     va_recs = [r for r in records if r.split == "val"]
     te_recs = [r for r in records if r.split == "test"]
@@ -269,6 +271,7 @@ def build_realistic_stress_perturber(vocab: CharVocab, chaizi_path: str = "data/
 
 
 def main() -> None:
+    bootstrap_from_gdrive()
     mon = ProgressMonitor(interval=15.0)
     mon.start()
     device = get_device()
@@ -280,12 +283,12 @@ def main() -> None:
         # Experiment 1: In-Distribution Benchmark A + B
         mon.set_stage("exp1_bench_a")
         res_a = run_in_dist_benchmark(
-            "Benchmark A (Course 16K)", "artifacts/splits.json.gz", "artifacts/vocab.json",
+            "Benchmark A (Course 16K)", "artifacts/splits.json.gz", "data/resources/variant_spam_16k.tsv.gz", "artifacts/vocab.json",
             "artifacts/graphs_top20.pt", "artifacts/glyph_meta.pt", tok, preproc, device
         )
         mon.set_stage("exp1_bench_b")
         res_b = run_in_dist_benchmark(
-            "Benchmark B (SMS-Matched 16.5K)", "artifacts/splits_sms_matched.json.gz", "artifacts/vocab_sms.json",
+            "Benchmark B (SMS-Matched 16.5K)", "artifacts/splits_sms_matched.json.gz", "data/resources/variant_spam_sms_matched.tsv.gz", "artifacts/vocab_sms.json",
             "artifacts/graphs_sms_top20.pt", "artifacts/glyph_meta_sms.pt", tok, preproc, device
         )
         (RESULTS_DIR / "in_dist_results.json").write_text(
@@ -294,7 +297,7 @@ def main() -> None:
 
         # Experiment 2 & 3: Zero-Shot Clean->RealVariants + Intensity Curve (0% -> 60%) on Benchmark B
         mon.set_stage("exp2_3_zeroshot_clean_to_variant")
-        recs_b, _ = build_or_load_splits(cache_path="artifacts/splits_sms_matched.json.gz")
+        recs_b, _ = build_or_load_splits(cache_path="artifacts/splits_sms_matched.json.gz", dataset_path="data/resources/variant_spam_sms_matched.tsv.gz")
         tr_clean = [to_clean_record(r, preproc) for r in recs_b if r.split == "train"]
         va_clean = [to_clean_record(r, preproc) for r in recs_b if r.split == "val"]
         te_real = [r for r in recs_b if r.split == "test"]
@@ -602,6 +605,7 @@ def main() -> None:
         for a, stats in abl_summary.items():
             print(f"  {a:28s}: F1={stats['f1']['mean']:.4f}±{stats['f1']['std']:.4f} (dF1={stats['delta_f1']:+.4f})")
         print("Gate Means [ctx, phon, glyph]:", gate_payload["means"], flush=True)
+        persist_to_gdrive()
 
     finally:
         mon.stop()

@@ -34,7 +34,9 @@ def ensure_fonts(font_dir: str | Path = "/content/fonts") -> Tuple[Path, Path]:
     fdir = Path(font_dir)
     if not (fdir / "NotoSansCJKsc-Regular.otf").exists():
         alt_dir = Path("assets/fonts")
-        if (alt_dir / "NotoSansCJKsc-Regular.otf").exists():
+        if (alt_dir / "NotoSansCJKsc-Regular.otf").exists() or (
+            str(fdir) == "/content/fonts" and not (Path("/content").exists() and os.access("/content", os.W_OK))
+        ):
             fdir = alt_dir
     fdir.mkdir(parents=True, exist_ok=True)
     paths: List[Path] = []
