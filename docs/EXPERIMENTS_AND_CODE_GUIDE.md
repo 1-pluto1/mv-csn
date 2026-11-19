@@ -260,9 +260,9 @@ mv-csn/
 4. **Q：本地或答辩现场怎么快速把交互式 Demo 和测试跑起来？**
    ```bash
    git clone https://github.com/1-pluto1/mv-csn.git && cd mv-csn
-   pip install -r requirements.txt && pip install -e . --no-deps
-   pytest -v                      # 8/8 自动化测试通过（含推理与 Streamlit AppTest）
-   streamlit run demo/app.py      # 浏览器打开 3-Tab 实时检测 + 32×32 字形与门控热力图
+   ./reproduce.sh setup           # 一键安装依赖与可编辑包
+   ./reproduce.sh verify          # 12 项自动化测试 + 编译校验 + CPU 实时推理演示 + 结果汇总
+   ./reproduce.sh demo            # 浏览器打开 3-Tab 实时检测 + 32×32 字形与门控热力图
    ```
 5. **Q：为什么不用 `results/error_analysis.json` 里发现的“标注噪声”去改测试集分数？**
    - **A**：为了保证和所有基线（TFIDF-SVM / LZASD / RBT3 / Qwen3）严格同口径对比，**所有主表分数均严格保留原始测试集（3,395 条）不删不改**；仅在 Error Analysis 讨论中客观指出这 4 条标错的公告/点餐样本，反而能体现团队对数据质量的深入核查态度。

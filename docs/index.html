@@ -268,7 +268,7 @@
     <section id="progress">
       <div class="sec-head">
         <h2>Project &amp; Experiment Progress Dashboard</h2>
-        <span class="sec-note">Core Experiments &amp; Engineering: <strong>100% Complete (7/7 Suites · 8/8 Tests Passing)</strong></span>
+        <span class="sec-note">Core Experiments &amp; Engineering: <strong>100% Complete (7/7 Suites · 12 Tests)</strong></span>
       </div>
       <div class="card">
         <div style="display:flex;justify-content:space-between;font-size:0.85rem;font-weight:600;">
@@ -329,7 +329,7 @@
           <div class="task-item">
             <div>
               <div class="task-title">Engineering · Streamlit Demo, Code Guide &amp; Cloud Sync</div>
-              <div class="task-desc">3-tab <code>demo/app.py</code>, executed <code>mv_csn_colab_demo.ipynb</code>, <code>pytest</code> 8/8 pass, GitHub + Google Drive synced.</div>
+              <div class="task-desc">3-tab <code>demo/app.py</code>, executed <code>mv_csn_colab_demo.ipynb</code>, <code>reproduce.sh</code> + 12 <code>pytest</code> cases, Release <code>v2.0.0</code> + Google Drive synced.</div>
             </div>
             <span class="badge done">Done</span>
           </div>
@@ -524,9 +524,9 @@
           </table>
         </div>
         <pre>git clone https://github.com/1-pluto1/mv-csn.git &amp;&amp; cd mv-csn
-pip install -r requirements.txt &amp;&amp; pip install -e . --no-deps
-pytest -v                     # 8/8 tests (pipeline, gdrive_sync, demo inference, Streamlit AppTest)
-streamlit run demo/app.py     # Launch full 3-tab interactive detector &amp; 32x32 glyph inspector</pre>
+./reproduce.sh setup          # Install dependencies &amp; editable mvcsn package
+./reproduce.sh verify         # 12 pytest cases + py_compile + live CPU inference + summary
+./reproduce.sh demo           # Launch full 3-tab interactive detector &amp; 32x32 glyph inspector</pre>
       </div>
     </section>
 
