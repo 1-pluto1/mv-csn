@@ -4,6 +4,7 @@
 
 - **在线项目主页 & 实验进度看板**：https://uestcyz.top/mv-csn/ （`https://1-pluto1.github.io/mv-csn/` 自动跳转，纯静态零外部依赖）
 - **GitHub 仓库**：https://github.com/1-pluto1/mv-csn
+- **开源模型权重与数据集归档（Release v2.0.0）**：https://github.com/1-pluto1/mv-csn/releases/tag/v2.0.0 （含 `demo_bundle.pt`、Benchmark A/B 数据集、零泄漏划分、图缓存与 SHA-256 校验）
 - **Google Drive 持久化资产目录**：`SYSU_DSE_MVCSN/`（包含全部预处理数据、词表、图缓存、字体、权重包 `demo_bundle.pt` 与 8 份 `results/*.json`）
 
 ---

@@ -1,6 +1,7 @@
 # MV-CSN v2: Multi-View Context-Gated Character Similarity Network
 
 **Interactive Project Page & Progress Dashboard:** https://uestcyz.top/mv-csn/ (`https://1-pluto1.github.io/mv-csn/` redirects automatically)  
+**Open-Source Weights & Dataset Release (`v2.0.0`):** https://github.com/1-pluto1/mv-csn/releases/tag/v2.0.0  
 **Code & All-Experiments Handoff Guide (中文代码与实验说明文档):** [docs/EXPERIMENTS_AND_CODE_GUIDE.md](docs/EXPERIMENTS_AND_CODE_GUIDE.md)
 
 **Chinese Adversarial Variant Spam Detection** — *Sun Yat-sen University, Data Science & Engineering Capstone Project*
@@ -87,7 +88,7 @@ MV-CSN v2 is a ~1.37M-parameter character-level defense network combining phonet
 
 ## Teammate Handoff: Google Drive Sync & `results/*.json` Data Dictionary
 
-Large cached splits/graphs (`~125 MB`), fonts, LoRA adapters, and all experimental outputs are mirrored in Google Drive folder `SYSU_DSE_MVCSN/` (`/content/drive/MyDrive/SYSU_DSE_MVCSN`). Inside any Colab notebook or local environment:
+All cached splits/graphs, pretrained checkpoints (`artifacts/demo_bundle.pt`), fonts, and experimental outputs (`~59 MB` total) are mirrored in Google Drive folder `SYSU_DSE_MVCSN/` (`/content/drive/MyDrive/SYSU_DSE_MVCSN`) as well as bundled in [GitHub Release `v2.0.0`](https://github.com/1-pluto1/mv-csn/releases/tag/v2.0.0). Inside any Colab notebook or local environment:
 
 ```bash
 # Initialize resources, artifacts, fonts, and results from Google Drive
@@ -135,3 +136,14 @@ Use `./reproduce.sh` directly from the repository root:
 ```
 
 Individual experiment scripts: `scripts/run_all.py`, `scripts/run_ablations.py`, `scripts/run_llm_eval.py`, `scripts/run_error_analysis.py`, and executed walkthrough `notebooks/mv_csn_colab_demo.ipynb`.
+
+---
+
+## Open-Source Assets, Licensing & Data Attribution
+
+All open-source checkpoints, benchmark datasets, zero-leakage cluster splits, and multi-view graph caches are published in **[GitHub Release `v2.0.0`](https://github.com/1-pluto1/mv-csn/releases/tag/v2.0.0)**:
+
+- **Checkpoints & Graphs**: `demo_bundle.pt` (`20.5 MB`, self-contained Seed-42 fp16 `MV-CSN v2` + `GlyphCAE` + vocab + Top-20 phonetic/glyph graphs + compressed 32x32 glyph bitmaps) and `mvcsn_graphs_and_vocabs.tar.gz` (cached Bench A/B/Clean vocabs and Top-20 graph bundles).
+- **Datasets & Zero-Leakage Splits**: `variant_spam_sms_matched.tsv.gz` (debiased **Benchmark B**, 16,507 SMS), `variant_spam_16k.tsv.gz` (**Benchmark A**, 16,000 samples), `splits_sms_matched.json.gz` (12,992 zero-overlap cluster splits + attack tags), `splits.json.gz`, `chaizi_map.json.gz`, and `ssc_lookup.json.gz`.
+- **Verified Metrics & Checksums**: `results_all_json.tar.gz` (all 8 `results/*.json` files) and `SHA256SUMS.txt`.
+- **Licensing & Research-Only Notice**: The `mvcsn` codebase and our trained model weights are released under the [MIT License](LICENSE). The derived benchmark datasets reorganize existing public academic/open-source corpora ([`Red-Scarff/GCC-Spam`](https://github.com/Red-Scarff/GCC-Spam), [`hrwhisper/SpamMessage`](https://github.com/hrwhisper/SpamMessage), and [`kfcd/chaizi`](https://github.com/kfcd/chaizi)) and are shared strictly for **academic research and educational purposes**. Font assets (`NotoSansCJKsc-Regular.otf`, `unifont.otf`) are fetched automatically at runtime from their official upstream releases under their respective SIL OFL / GNU licenses.
