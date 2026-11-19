@@ -382,8 +382,7 @@
         <span class="t-arrow">→</span>
         <span class="t-chip" data-i18n="t_step3">门控 6.7% → 77.3%</span>
         <span class="t-arrow">→</span>
-        <span class="t-chip spam">SPAM P = 1.0000 · 0.243 ms</span>
-        <span class="t-chip ok" data-i18n="t_step5">Clean → Variant 零样本泛化</span>
+        <span class="t-chip spam" data-i18n="t_step4">SPAM P = 1.0000 · 0.243 ms (Zero-Shot)</span>
       </div>
     </header>
   </div>
@@ -448,22 +447,22 @@
             <!-- Stage 1 -->
             <g class="arch-node" data-stage="1">
               <rect x="10" y="78" width="164" height="100" rx="12" fill="#faf9f5" stroke="#94a3b8" stroke-width="1.6"/>
-              <text x="92" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#181a1f">1. 预处理器 Preproc</text>
-              <text x="92" y="128" text-anchor="middle" font-size="11.2" fill="#575c66">选择性 NFKC (⑧→8)</text>
-              <text x="92" y="146" text-anchor="middle" font-size="11.2" fill="#575c66">保留跨字形 (髙/え/Ꝗ)</text>
-              <text x="92" y="164" text-anchor="middle" font-size="11.2" fill="#575c66">Chaizi 2/3 字拆字重组</text>
+              <text x="92" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#181a1f" data-i18n="a1_t">1. 预处理器 Preproc</text>
+              <text x="92" y="128" text-anchor="middle" font-size="11.2" fill="#575c66" data-i18n="a1_1">选择性 NFKC (⑧→8)</text>
+              <text x="92" y="146" text-anchor="middle" font-size="11.2" fill="#575c66" data-i18n="a1_2">保留跨字形 (髙/え/Ꝗ)</text>
+              <text x="92" y="164" text-anchor="middle" font-size="11.2" fill="#575c66" data-i18n="a1_3">Chaizi 2/3 字拆字重组</text>
             </g>
             <line x1="174" y1="128" x2="206" y2="128" stroke="#787e8a" stroke-width="1.6" marker-end="url(#arr)"/>
 
             <!-- Stage 2 -->
             <g class="arch-node" data-stage="2">
               <rect x="210" y="58" width="194" height="140" rx="12" fill="#f0f9f8" stroke="#0f766e" stroke-width="1.6"/>
-              <text x="307" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#0f766e">2. 多模态锚点与编码</text>
-              <text x="307" y="110" text-anchor="middle" font-size="11.2" fill="#115e59">Char ID + 声母/韵母/声调</text>
+              <text x="307" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#0f766e" data-i18n="a2_t">2. 多模态锚点与编码</text>
+              <text x="307" y="110" text-anchor="middle" font-size="11.2" fill="#115e59" data-i18n="a2_1">Char ID + 声母/韵母/声调</text>
               <text x="307" y="128" text-anchor="middle" font-size="11.2" fill="#115e59">+ 32×32 GlyphCAE (64d)</text>
               <line x1="230" y1="142" x2="384" y2="142" stroke="#ccfbf1" stroke-width="1"/>
               <text x="307" y="162" text-anchor="middle" font-size="11.5" font-weight="700" fill="#181a1f">CNN (k=3,5) + 2L Transformer</text>
-              <text x="307" y="181" text-anchor="middle" font-size="11" fill="#575c66">输出上下文表征 h_ctx</text>
+              <text x="307" y="181" text-anchor="middle" font-size="11" fill="#575c66" data-i18n="a2_2">输出上下文表征 h_ctx</text>
             </g>
 
             <!-- Connectors into Stage 3 -->
@@ -474,18 +473,18 @@
             <!-- Stage 3: Grouped Dual-View GAT + Context Stream -->
             <g class="arch-node" data-stage="3">
               <rect x="444" y="6" width="248" height="240" rx="14" fill="none" stroke="#cbd5e1" stroke-dasharray="4,3" stroke-width="1.2"/>
-              <text x="568" y="23" text-anchor="middle" font-size="10.8" font-weight="700" fill="#575c66">3. 双视图 GAT 与 OOV 动态桥</text>
+              <text x="568" y="23" text-anchor="middle" font-size="10.8" font-weight="700" fill="#575c66" data-i18n="a3_hdr">3. 双视图 GAT 与 OOV 动态桥</text>
 
               <rect x="454" y="32" width="228" height="60" rx="10" fill="#e8f3ee" stroke="#0b5d3b" stroke-width="1.6"/>
-              <text x="568" y="55" text-anchor="middle" font-size="12.2" font-weight="700" fill="#0b5d3b">View 1 · 语音相似图 GAT</text>
-              <text x="568" y="76" text-anchor="middle" font-size="11" fill="#14532d">Top-20 多音字加权读音先验</text>
+              <text x="568" y="55" text-anchor="middle" font-size="12.2" font-weight="700" fill="#0b5d3b" data-i18n="a3_v1t">View 1 · 语音相似图 GAT</text>
+              <text x="568" y="76" text-anchor="middle" font-size="11" fill="#14532d" data-i18n="a3_v1s">Top-20 多音字加权读音先验</text>
 
               <rect x="454" y="106" width="228" height="44" rx="10" fill="#f4f2eb" stroke="#94a3b8" stroke-width="1.3"/>
               <text x="568" y="133" text-anchor="middle" font-size="11.6" font-weight="650" fill="#181a1f">Direct Context Stream (h_ctx)</text>
 
               <rect x="454" y="164" width="228" height="68" rx="10" fill="#fdf0ef" stroke="#c83e37" stroke-width="1.6"/>
-              <text x="568" y="189" text-anchor="middle" font-size="12.2" font-weight="700" fill="#991b1b">View 2 · 渲染字形图 GAT</text>
-              <text x="568" y="211" text-anchor="middle" font-size="11" fill="#991b1b">32×32 Font + SpellGCN OOV 桥</text>
+              <text x="568" y="189" text-anchor="middle" font-size="12.2" font-weight="700" fill="#991b1b" data-i18n="a3_v2t">View 2 · 渲染字形图 GAT</text>
+              <text x="568" y="211" text-anchor="middle" font-size="11" fill="#991b1b" data-i18n="a3_v2s">32×32 Font + SpellGCN OOV 桥</text>
             </g>
 
             <!-- Connectors into Stage 4 -->
@@ -496,11 +495,11 @@
             <!-- Stage 4 -->
             <g class="arch-node" data-stage="4">
               <rect x="728" y="68" width="160" height="120" rx="12" fill="#fef6e7" stroke="#b45309" stroke-width="1.6"/>
-              <text x="808" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e">4. 动态门控 Gate</text>
-              <text x="808" y="118" text-anchor="middle" font-size="11.2" fill="#78350f">逐字 Softmax 单形权</text>
+              <text x="808" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e" data-i18n="a4_t">4. 动态门控 Gate</text>
+              <text x="808" y="118" text-anchor="middle" font-size="11.2" fill="#78350f" data-i18n="a4_1">逐字 Softmax 单形权</text>
               <text x="808" y="138" text-anchor="middle" font-size="11.2" font-weight="700" fill="#92400e">[α_ctx, α_phon, α_glyph]</text>
-              <text x="808" y="160" text-anchor="middle" font-size="10.8" fill="#b45309">+ RoCBert 图一致性损失</text>
-              <text x="808" y="177" text-anchor="middle" font-size="10.2" fill="#787e8a">正常字稳ctx · 变体切双图</text>
+              <text x="808" y="160" text-anchor="middle" font-size="10.8" fill="#b45309" data-i18n="a4_2">+ RoCBert 图一致性损失</text>
+              <text x="808" y="177" text-anchor="middle" font-size="10.2" fill="#787e8a" data-i18n="a4_3">正常字稳ctx · 变体切双图</text>
             </g>
 
             <line x1="888" y1="128" x2="914" y2="128" stroke="#787e8a" stroke-width="1.6" marker-end="url(#arr)"/>
@@ -508,12 +507,12 @@
             <!-- Stage 5 -->
             <g class="arch-node" data-stage="5">
               <rect x="918" y="62" width="152" height="132" rx="12" fill="#181a1f" stroke="#181a1f" stroke-width="1.5"/>
-              <text x="994" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">5. 双任务输出头</text>
-              <text x="994" y="116" text-anchor="middle" font-size="11.2" fill="#86efac">• Attention-Pooled 判别</text>
-              <text x="994" y="137" text-anchor="middle" font-size="11.2" fill="#fca5a5">• Token 级混淆定位</text>
+              <text x="994" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff" data-i18n="a5_t">5. 双任务输出头</text>
+              <text x="994" y="116" text-anchor="middle" font-size="11.2" fill="#86efac" data-i18n="a5_1">• Attention-Pooled 判别</text>
+              <text x="994" y="137" text-anchor="middle" font-size="11.2" fill="#fca5a5" data-i18n="a5_2">• Token 级混淆定位</text>
               <line x1="934" y1="152" x2="1054" y2="152" stroke="#374151" stroke-width="1"/>
-              <text x="994" y="170" text-anchor="middle" font-size="10.2" fill="#d1d5db">可选 RBT3 跨度融合 /</text>
-              <text x="994" y="185" text-anchor="middle" font-size="10.2" fill="#d1d5db">Qwen3-4B 不确定性级联</text>
+              <text x="994" y="170" text-anchor="middle" font-size="10.2" fill="#d1d5db" data-i18n="a5_3">可选 RBT3 跨度融合 /</text>
+              <text x="994" y="185" text-anchor="middle" font-size="10.2" fill="#d1d5db" data-i18n="a5_4">Qwen3-4B 不确定性级联</text>
             </g>
           </svg>
         </div>
@@ -669,7 +668,13 @@
         hero_sub: "仅 <strong>1.37M 参数</strong> 的字符级双视图图注意力防御网络，融合 32×32 渲染字形卷积嵌入、多音字读音先验、SpellGCN 动态未登录字图桥接与 RoCBert 一致性正则——在去偏 Benchmark B 零样本跨攻击评测中以 <strong>0.243&nbsp;ms/条</strong> 延迟比肩或超越 <strong>600M–4B Qwen3 大模型</strong>（快 <strong>36.5×–251×</strong>）。",
         cta_repo: "GitHub 源码仓库", cta_rel: "开源权重与数据集 v2.0.0", cta_guide: "代码与实验说明手册",
         cta_nb: "Colab 实跑 Notebook", cta_json: "原始数据 (8 JSON)", cta_xray: "交互式 Gate X-Ray",
-        t_step2: "预处理器重组 + 32×32 字形/拼音图", t_step3: "门控 6.7% → 77.3%", t_step5: "Clean → Variant 零样本泛化",
+        t_step2: "预处理器重组 + 32×32 字形/拼音图", t_step3: "门控 6.7% → 77.3%", t_step4: "SPAM P = 1.0000 · 0.243 ms (Zero-Shot)",
+        a1_t:"1. 预处理器 Preproc", a1_1:"选择性 NFKC (⑧→8)", a1_2:"保留跨字形 (髙/え/Ꝗ)", a1_3:"Chaizi 2/3 字拆字重组",
+        a2_t:"2. 多模态锚点与编码", a2_1:"Char ID + 声母/韵母/声调", a2_2:"输出上下文表征 h_ctx",
+        a3_hdr:"3. 双视图 GAT 与 OOV 动态桥", a3_v1t:"View 1 · 语音相似图 GAT", a3_v1s:"Top-20 多音字加权读音先验",
+        a3_v2t:"View 2 · 渲染字形图 GAT", a3_v2s:"32×32 Font + SpellGCN OOV 桥",
+        a4_t:"4. 动态门控 Gate", a4_1:"逐字 Softmax 单形权", a4_2:"+ RoCBert 图一致性损失", a4_3:"正常字稳ctx · 变体切双图",
+        a5_t:"5. 双任务输出头", a5_1:"• Attention-Pooled 判别", a5_2:"• Token 级混淆定位", a5_3:"可选 RBT3 跨度融合 /", a5_4:"Qwen3-4B 不确定性级联",
         kpi1_lbl: "零样本融合峰值 F1", kpi2_lbl: "独立 MV-CSN v2 F1 (1.37M)", kpi3_lbl: "单条短信推理延迟",
         kpi4_lbl: "全测试集总错判率 (20/3,395)", kpi4_sub: "SPLIT 0/46 errors · 含 4 条上游语料标注噪声",
         sec_prog_h: "实验进度与交付看板", sec_prog_note: "代码、全部 7 组实验、12 项测试与开源发布已完成 · 待队友接力配图与报告",
@@ -698,7 +703,13 @@
         hero_sub: "A <strong>1.37M-parameter</strong> character-level graph defense combining 32×32 Rendered-Glyph CAE embeddings, phonetic priors, dynamic SpellGCN OOV bridging, and RoCBert consistency — matching or outperforming <strong>600M–4B Qwen3 LLMs</strong> at <strong>0.243&nbsp;ms/SMS</strong> (<strong>36.5×–251× faster</strong>).",
         cta_repo: "GitHub Repository", cta_rel: "Release v2.0.0 (Weights & Data)", cta_guide: "Code & Experiments Guide",
         cta_nb: "Colab Notebook", cta_json: "Raw JSONs (8 Files)", cta_xray: "Interactive Gate X-Ray",
-        t_step2: "Preprocessor + 32×32 Glyph/Phonetic Graphs", t_step3: "Gate Shift 6.7% → 77.3%", t_step5: "Clean → Variant Zero-Shot",
+        t_step2: "Preprocessor + 32×32 Glyph/Phonetic Graphs", t_step3: "Gate 6.7% → 77.3%", t_step4: "SPAM P = 1.0000 · 0.243 ms (Zero-Shot)",
+        a1_t:"1. Preprocessor", a1_1:"Selective NFKC (⑧→8)", a1_2:"Preserve Script (髙/え/Ꝗ)", a1_3:"Chaizi 2/3-Char Recomp.",
+        a2_t:"2. Multimodal Encoder", a2_1:"Char ID + Pinyin (I/F/T)", a2_2:"Context States h_ctx",
+        a3_hdr:"3. Dual-View GAT + OOV Bridge", a3_v1t:"View 1 · Phonetic GAT", a3_v1s:"Top-20 Polyphone Priors",
+        a3_v2t:"View 2 · Glyph CAE GAT", a3_v2s:"32×32 Font + SpellGCN OOV",
+        a4_t:"4. Context Gate", a4_1:"Per-Token Softmax Alpha", a4_2:"+ RoCBert Consistency Loss", a4_3:"Clean->ctx · Variant->graph",
+        a5_t:"5. Dual Heads", a5_1:"• Attention-Pooled Spam", a5_2:"• Token Obfuscation Loc", a5_3:"Optional RBT3 Fusion /", a5_4:"Qwen3-4B Cascade",
         kpi1_lbl: "Best Zero-Shot Evasion F1", kpi2_lbl: "Standalone MV-CSN v2 F1 (1.37M)", kpi3_lbl: "Inference Latency / SMS",
         kpi4_lbl: "Overall Test Error Rate (20/3,395)", kpi4_sub: "SPLIT 0/46 errors · incl. 4 upstream label-noise rows",
         sec_prog_h: "Experiment Progress & Delivery Dashboard", sec_prog_note: "Codebase, 7 Suites, 12 Tests & Release v2.0.0 Complete · Ready for Figures & Report",
