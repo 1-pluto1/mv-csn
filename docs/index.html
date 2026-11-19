@@ -15,15 +15,12 @@
       --line: #e5e3dc;
       --line-strong: #d4d1c7;
       --emerald: #0b5d3b;
-      --emerald-mid: #15803d;
       --emerald-soft: #e8f3ee;
       --teal: #0f766e;
       --vermilion: #c83e37;
       --vermilion-soft: #fdf0ef;
       --amber: #b45309;
       --amber-soft: #fef6e7;
-      --indigo: #4338ca;
-      --slate: #64748b;
       --radius: 14px;
       --serif: "Iowan Old Style", "Songti SC", "Noto Serif SC", Georgia, "Times New Roman", serif;
       --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
@@ -46,7 +43,7 @@
     /* Sticky Header */
     .topbar {
       position: sticky; top: 0; z-index: 40;
-      background: rgba(250, 249, 245, 0.90);
+      background: rgba(250, 249, 245, 0.92);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
     }
@@ -62,7 +59,7 @@
       width: 9px; height: 9px; border-radius: 50%; background: var(--emerald);
       box-shadow: 0 0 0 3px var(--emerald-soft);
     }
-    .nav-right { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .nav-right { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
     .nav-links { display: flex; gap: 18px; font-size: 0.86rem; flex-wrap: wrap; }
     .nav-links a { color: var(--muted); font-weight: 500; }
     .nav-links a:hover { color: var(--emerald); text-decoration: none; }
@@ -83,7 +80,7 @@
       border-bottom: 1px solid var(--line);
     }
     .hero {
-      max-width: 1120px; margin: 0 auto; padding: 48px 24px 36px; text-align: center;
+      max-width: 1120px; margin: 0 auto; padding: 44px 24px 34px; text-align: center;
     }
     .eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
@@ -91,20 +88,20 @@
       background: var(--emerald-soft); color: var(--emerald);
       border: 1px solid rgba(11, 93, 59, 0.18);
       font-size: 0.79rem; font-weight: 700; letter-spacing: 0.02em;
-      margin-bottom: 16px;
+      margin-bottom: 15px;
     }
     h1 {
       font-family: var(--serif);
-      margin: 0 auto 14px; max-width: 920px;
-      font-size: clamp(1.75rem, 3.1vw, 2.5rem);
-      font-weight: 700; line-height: 1.24; letter-spacing: -0.02em; color: var(--ink);
+      margin: 0 auto 14px; max-width: 960px;
+      font-size: clamp(1.62rem, 2.75vw, 2.24rem);
+      font-weight: 700; line-height: 1.28; letter-spacing: -0.02em; color: var(--ink);
     }
     .subtitle {
-      margin: 0 auto 24px; max-width: 800px;
-      font-size: 1.01rem; color: var(--muted); line-height: 1.68;
+      margin: 0 auto 22px; max-width: 820px;
+      font-size: 0.99rem; color: var(--muted); line-height: 1.7;
     }
     .cta-row {
-      display: flex; justify-content: center; gap: 9px; flex-wrap: wrap; margin-bottom: 24px;
+      display: flex; justify-content: center; gap: 9px; flex-wrap: wrap; margin-bottom: 20px;
     }
     .btn {
       display: inline-flex; align-items: center; gap: 6px;
@@ -117,17 +114,17 @@
     .btn.primary { background: var(--emerald); border-color: var(--emerald); color: #fff; }
     .btn.primary:hover { background: #08492e; color: #fff; }
 
-    /* Live Defense Teaser Strip */
+    /* Single-Row Defense Flow Teaser Strip */
     .teaser {
-      max-width: 960px; margin: 0 auto;
+      max-width: 1020px; margin: 0 auto;
       background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
-      padding: 13px 18px;
-      display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
-      font-size: 0.85rem;
+      padding: 11px 14px;
+      display: flex; align-items: center; justify-content: center; gap: 7px; flex-wrap: wrap;
+      font-size: 0.8rem;
     }
     .t-chip {
-      padding: 4px 10px; border-radius: 8px; border: 1px solid var(--line);
-      background: var(--surface-alt); font-family: var(--mono); font-size: 0.8rem;
+      padding: 4px 9px; border-radius: 7px; border: 1px solid var(--line);
+      background: var(--surface-alt); font-family: var(--mono); font-size: 0.77rem; white-space: nowrap;
     }
     .t-chip.spam { background: var(--vermilion-soft); border-color: rgba(200, 62, 55, 0.25); color: var(--vermilion); font-weight: 700; }
     .t-chip.ok { background: var(--emerald-soft); border-color: rgba(11, 93, 59, 0.25); color: var(--emerald); font-weight: 700; }
@@ -164,23 +161,25 @@
       margin-bottom: 14px; border-bottom: 1px solid var(--line); padding-bottom: 10px;
     }
     h2 {
-      font-family: var(--serif); margin: 0; font-size: 1.42rem; font-weight: 700; letter-spacing: -0.015em;
+      font-family: var(--serif); margin: 0; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.015em;
     }
-    .sec-note { font-size: 0.85rem; color: var(--muted); }
+    .sec-note { font-size: 0.84rem; color: var(--muted); }
     .card {
       background: var(--surface); border: 1px solid var(--line);
       border-radius: var(--radius); padding: 22px 24px;
     }
 
-    /* Milestone Stepper */
+    /* Milestone Stepper — Non-stacking horizontal icons */
     .stepper {
       display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px;
     }
-    @media (max-width: 780px) { .stepper { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 880px) { .stepper { grid-template-columns: repeat(2, 1fr); } }
     .step-pill {
-      border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--bg);
-      display: flex; align-items: center; gap: 9px; font-size: 0.83rem; font-weight: 600;
+      border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; background: var(--bg);
+      display: flex; align-items: center; gap: 8px; font-size: 0.81rem; font-weight: 600;
     }
+    .step-icon { flex-shrink: 0; font-weight: 800; line-height: 1; }
+    .step-text { line-height: 1.35; }
     .step-pill.done { background: var(--emerald-soft); border-color: rgba(11, 93, 59, 0.22); color: var(--emerald); }
     .step-pill.pending { background: var(--amber-soft); border-color: rgba(180, 83, 9, 0.25); color: var(--amber); }
 
@@ -193,18 +192,18 @@
       background: #fff; transition: border-color 0.14s ease;
     }
     .task-item:hover { border-color: var(--line-strong); }
-    .task-title { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
-    .task-desc { font-size: 0.8rem; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+    .task-title { font-weight: 700; font-size: 0.89rem; color: var(--ink); }
+    .task-desc { font-size: 0.79rem; color: var(--muted); margin-top: 3px; line-height: 1.5; }
     .task-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
     .badge {
-      font-size: 0.7rem; font-weight: 700; padding: 2px 9px;
-      border-radius: 999px; letter-spacing: 0.03em; text-transform: uppercase;
+      font-size: 0.69rem; font-weight: 700; padding: 2px 9px;
+      border-radius: 999px; letter-spacing: 0.03em; text-transform: uppercase; white-space: nowrap;
     }
     .badge.done { background: var(--emerald-soft); color: var(--emerald); border: 1px solid rgba(11, 93, 59, 0.2); }
     .badge.team { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(180, 83, 9, 0.25); }
     .jump-link {
       font-size: 0.75rem; font-weight: 600; color: var(--teal); cursor: pointer;
-      background: none; border: none; padding: 0; font-family: inherit;
+      background: none; border: none; padding: 0; font-family: inherit; white-space: nowrap;
     }
     .jump-link:hover { text-decoration: underline; }
 
@@ -212,20 +211,20 @@
     .arch-detail {
       margin-top: 12px; padding: 12px 16px; border-radius: 10px;
       background: var(--surface-alt); border: 1px solid var(--line);
-      font-size: 0.86rem; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+      font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
     }
     .arch-node { cursor: pointer; transition: opacity 0.15s ease; }
     .arch-node:hover { opacity: 0.88; }
 
-    /* Results Tabs */
+    /* Results Tabs — Single Row at 1280px */
     .tabs {
       display: flex; gap: 6px; flex-wrap: wrap;
       border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px;
     }
     .tab-btn {
-      padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line);
-      background: var(--surface-alt); color: var(--muted); font-weight: 600; font-size: 0.83rem; cursor: pointer;
-      transition: all 0.14s ease;
+      padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line);
+      background: var(--surface-alt); color: var(--muted); font-weight: 600; font-size: 0.81rem; cursor: pointer;
+      transition: all 0.14s ease; white-space: nowrap;
     }
     .tab-btn:hover { color: var(--ink); border-color: var(--line-strong); }
     .tab-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
@@ -250,7 +249,7 @@
     .callout {
       margin-top: 16px; padding: 13px 16px; border-radius: 10px;
       background: var(--surface-alt); border-left: 4px solid var(--teal);
-      font-size: 0.87rem; color: var(--ink);
+      font-size: 0.86rem; color: var(--ink);
     }
     .callout.emerald { background: var(--emerald-soft); border-left-color: var(--emerald); }
 
@@ -278,7 +277,7 @@
     .case-pills { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 12px; }
     .case-pill {
       padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line-strong);
-      background: var(--bg); font-size: 0.81rem; font-weight: 600; cursor: pointer; color: var(--ink);
+      background: var(--bg); font-size: 0.8rem; font-weight: 600; cursor: pointer; color: var(--ink);
     }
     .case-pill.active { background: var(--emerald); color: #fff; border-color: var(--emerald); }
     .sms-compare {
@@ -287,25 +286,25 @@
     }
     .sms-box {
       border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; background: var(--bg);
-      font-size: 0.83rem; word-break: break-all;
+      font-size: 0.82rem; word-break: break-all;
     }
     .heatmap-head {
       display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
       font-size: 0.78rem; color: var(--muted);
     }
     .heatmap-box {
-      display: flex; flex-wrap: wrap; gap: 5px; padding: 14px;
+      display: flex; flex-wrap: wrap; gap: 4px; padding: 12px;
       border-radius: 10px; background: var(--bg); border: 1px solid var(--line);
       margin: 8px 0 12px;
     }
     .char-tok {
       display: inline-flex; flex-direction: column; align-items: center;
-      padding: 5px 8px; border-radius: 7px; cursor: pointer;
-      font-size: 1.06rem; font-weight: 600; border: 1px solid var(--line-strong);
+      padding: 4px 6px; border-radius: 7px; cursor: pointer; min-width: 28px;
+      font-size: 0.98rem; font-weight: 600; border: 1px solid var(--line-strong);
       transition: transform 0.1s ease;
     }
     .char-tok:hover, .char-tok.selected { transform: translateY(-2px); outline: 2px solid var(--emerald); }
-    .char-tok small { font-size: 0.64rem; font-weight: 500; color: var(--muted); margin-top: 1px; font-family: var(--mono); }
+    .char-tok small { font-size: 0.62rem; font-weight: 500; color: var(--muted); margin-top: 1px; font-family: var(--mono); }
     .inspector-bar {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px;
       background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 13px 15px;
@@ -364,27 +363,27 @@
   <div class="hero-band">
     <header class="hero">
       <div class="eyebrow" data-i18n="hero_eyebrow">中山大学计算机学院 · 《数据科学与工程》课程大作业项目主页</div>
-      <h1 data-i18n="hero_title">MV-CSN v2：面向中文对抗变体垃圾短信检测的多视图上下文门控字符相似性网络</h1>
+      <h1 data-i18n="hero_title">MV-CSN v2：面向中文对抗变体垃圾短信检测的<br/>多视图上下文门控字符相似性网络</h1>
       <p class="subtitle" data-i18n="hero_sub">
-        仅 <strong>1.37M 参数</strong> 的字符级双视图图注意力防御网络，融合 32×32 渲染字形卷积嵌入、多音字读音先验、SpellGCN 动态未登录字图桥接与 RoCBert 一致性正则——在去偏 Benchmark B 零样本跨攻击评测中以 <strong>0.243 ms/条</strong> 延迟比肩或超越 <strong>600M–4B Qwen3 大模型</strong>（快 <strong>36.5×–251×</strong>）。
+        仅 <strong>1.37M 参数</strong> 的字符级双视图图注意力防御网络，融合 32×32 渲染字形卷积嵌入、多音字读音先验、SpellGCN 动态未登录字图桥接与 RoCBert 一致性正则——在去偏 Benchmark B 零样本跨攻击评测中以 <strong>0.243&nbsp;ms/条</strong> 延迟比肩或超越 <strong>600M–4B Qwen3 大模型</strong>（快 <strong>36.5×–251×</strong>）。
       </p>
       <div class="cta-row">
-        <a class="btn primary" href="https://github.com/1-pluto1/mv-csn" target="_blank">GitHub 源码仓库</a>
-        <a class="btn" href="https://github.com/1-pluto1/mv-csn/releases/tag/v2.0.0" target="_blank">开源权重与数据集 v2.0.0</a>
-        <a class="btn" href="https://github.com/1-pluto1/mv-csn/blob/main/docs/EXPERIMENTS_AND_CODE_GUIDE.md" target="_blank">代码与实验说明手册</a>
-        <a class="btn" href="https://github.com/1-pluto1/mv-csn/blob/main/notebooks/mv_csn_colab_demo.ipynb" target="_blank">Colab 实跑 Notebook</a>
-        <a class="btn" href="https://github.com/1-pluto1/mv-csn/tree/main/results" target="_blank">原始数据 (8 JSON)</a>
-        <a class="btn" href="#xray">交互式 Gate X-Ray</a>
+        <a class="btn primary" href="https://github.com/1-pluto1/mv-csn" target="_blank" data-i18n="cta_repo">GitHub 源码仓库</a>
+        <a class="btn" href="https://github.com/1-pluto1/mv-csn/releases/tag/v2.0.0" target="_blank" data-i18n="cta_rel">开源权重与数据集 v2.0.0</a>
+        <a class="btn" href="https://github.com/1-pluto1/mv-csn/blob/main/docs/EXPERIMENTS_AND_CODE_GUIDE.md" target="_blank" data-i18n="cta_guide">代码与实验说明手册</a>
+        <a class="btn" href="https://github.com/1-pluto1/mv-csn/blob/main/notebooks/mv_csn_colab_demo.ipynb" target="_blank" data-i18n="cta_nb">Colab 实跑 Notebook</a>
+        <a class="btn" href="https://github.com/1-pluto1/mv-csn/tree/main/results" target="_blank" data-i18n="cta_json">原始数据 (8 JSON)</a>
+        <a class="btn" href="#xray" data-i18n="cta_xray">交互式 Gate X-Ray</a>
       </div>
       <div class="teaser">
         <span class="t-chip">特 请，住（册）给 388</span>
         <span class="t-arrow">→</span>
-        <span class="t-chip">预处理器重组 + 32×32 字形/拼音图</span>
+        <span class="t-chip" data-i18n="t_step2">预处理器重组 + 32×32 字形/拼音图</span>
         <span class="t-arrow">→</span>
-        <span class="t-chip">门控切换 6.7% → 77.3%</span>
+        <span class="t-chip" data-i18n="t_step3">门控 6.7% → 77.3%</span>
         <span class="t-arrow">→</span>
         <span class="t-chip spam">SPAM P = 1.0000 · 0.243 ms</span>
-        <span class="t-chip ok">100% Zero-Shot Clean → Variant</span>
+        <span class="t-chip ok" data-i18n="t_step5">Clean → Variant 零样本泛化</span>
       </div>
     </header>
   </div>
@@ -410,7 +409,7 @@
       <div class="kpi amber">
         <div class="kpi-val vermilion">0.59%</div>
         <div class="kpi-label" data-i18n="kpi4_lbl">全测试集总错判率 (20/3,395)</div>
-        <div class="kpi-sub">SPLIT 0/46 errors · 含 4 条上游语料标注噪声</div>
+        <div class="kpi-sub" data-i18n="kpi4_sub">SPLIT 0/46 errors · 含 4 条上游语料标注噪声</div>
       </div>
     </div>
 
@@ -422,177 +421,99 @@
       </div>
       <div class="card">
         <div class="stepper">
-          <div class="step-pill done">✓ 1. <span data-i18n="step1">数据去偏与 12,992 簇划分</span></div>
-          <div class="step-pill done">✓ 2. <span data-i18n="step2">7 组多随机种子实验 (Exp 1–7)</span></div>
-          <div class="step-pill done">✓ 3. <span data-i18n="step3">工程重构 · 12 测试 · Release v2.0.0</span></div>
-          <div class="step-pill pending">⏳ 4. <span data-i18n="step4">队友接力：配图 · 报告 · PPT</span></div>
+          <div class="step-pill done"><span class="step-icon">✓</span><span class="step-text" data-i18n="step1">1. 数据去偏 · 12,992 簇划分</span></div>
+          <div class="step-pill done"><span class="step-icon">✓</span><span class="step-text" data-i18n="step2">2. 7 组多随机种子实验</span></div>
+          <div class="step-pill done"><span class="step-icon">✓</span><span class="step-text" data-i18n="step3">3. 重构 · 12 测试 · v2.0.0</span></div>
+          <div class="step-pill pending"><span class="step-icon">⏳</span><span class="step-text" data-i18n="step4">4. 队友：配图 · 报告 · PPT</span></div>
         </div>
-        <div class="status-grid">
-          <div class="task-item">
-            <div>
-              <div class="task-title">Exp 1 · 双基准分布内对比 (Bench A &amp; B)</div>
-              <div class="task-desc">审计出课程数据长度捷径（191 vs 53 字），构建去偏 SMS-Matched 16.5K 主基准（3 seeds）。</div>
-            </div>
-            <div class="task-right">
-              <span class="badge done">Done</span>
-              <button class="jump-link" data-goto="results:tab-curve">查看图表 ↓</button>
-            </div>
-          </div>
-          <div class="task-item">
-            <div>
-              <div class="task-title">Exp 2 · Zero-Shot Clean → RealVariant &amp; McNemar</div>
-              <div class="task-desc">仅干净文本训练，直测 3,395 条真实变体；MV-CSN v2 领先 RBT3 +3.83% (McNemar p&lt;1e-42)。</div>
-            </div>
-            <div class="task-right">
-              <span class="badge done">Done</span>
-              <button class="jump-link" data-goto="results:tab-zs">查看图表 ↓</button>
-            </div>
-          </div>
-          <div class="task-item">
-            <div>
-              <div class="task-title">Exp 3 · 0%–60% 对抗扰动强度曲线</div>
-              <div class="task-desc">7 档组合噪声压力测试，MV-CSN v2 在最恶劣 60% 扰动下 F1=0.9874 位列第一。</div>
-            </div>
-            <div class="task-right">
-              <span class="badge done">Done</span>
-              <button class="jump-link" data-goto="results:tab-curve">查看图表 ↓</button>
-            </div>
-          </div>
-          <div class="task-item">
-            <div>
-              <div class="task-title">Exp 4 · 8 行多随机种子消融实验</div>
-              <div class="task-desc">24 次独立训练验证组件贡献：预处理器 (−0.0253) &gt; RoCBert 一致性 (−0.0026) &gt; 门控 (−0.0008)。</div>
-            </div>
-            <div class="task-right">
-              <span class="badge done">Done</span>
-              <button class="jump-link" data-goto="results:tab-abl">查看图表 ↓</button>
-            </div>
-          </div>
-          <div class="task-item">
-            <div>
-              <div class="task-title">Exp 5 · Token 级动态门控可解释性</div>
-              <div class="task-desc">19,173 token 统计证实混淆字图权重从 6.7% 跃升至 77.3%，附带逐字透视案例。</div>
-            </div>
-            <div class="task-right">
-              <span class="badge done">Done</span>
-              <button class="jump-link" data-goto="xray:">交互体验 ↓</button>
-            </div>
-          </div>
-          <div class="task-item">
-            <div>
-              <div class="task-title">Exp 6 · Qwen3-0.6B/4B 大模型与级联评测</div>
-              <div class="task-desc">实证 4B 零样本误杀率 59.5%，0.6B LoRA 仅打平却慢 36.5×；Cascade 仅路由 0.71% 样本。</div>
-            </div>
-            <div class="task-right">
-              <span class="badge done">Done</span>
-              <button class="jump-link" data-goto="results:tab-llm">查看图表 ↓</button>
-            </div>
-          </div>
-          <div class="task-item">
-            <div>
-              <div class="task-title">Exp 7 · 全量 3,395 条错判案例审计 (CPU)</div>
-              <div class="task-desc">总共仅 20 条错判（8 FP + 12 FN），其中 4 条为上游语料标错样本，真实召回率 99.65%。</div>
-            </div>
-            <div class="task-right">
-              <span class="badge done">Done</span>
-              <button class="jump-link" data-goto="results:tab-err">查看图表 ↓</button>
-            </div>
-          </div>
-          <div class="task-item">
-            <div>
-              <div class="task-title">工程交付 · 重构 · 一键脚本 · v2.0.0 开源 · 队友收尾</div>
-              <div class="task-desc">统一推理门面、<code>./reproduce.sh</code>、12 项测试、Release v2.0.0 与 Drive 已就绪；仅剩配图/报告/PPT。</div>
-            </div>
-            <div class="task-right">
-              <span class="badge team">Teammates</span>
-              <button class="jump-link" data-goto="handoff:">数据交接 ↓</button>
-            </div>
-          </div>
-        </div>
+        <div class="status-grid" id="progress-grid"></div>
       </div>
     </section>
 
-    <!-- Section 2: Interactive Architecture Pipeline -->
+    <!-- Section 2: Interactive Architecture Pipeline (Consistent 5-Stage Numbering) -->
     <section id="architecture">
       <div class="sec-head">
-        <h2 data-i18n="sec_arch_h">MV-CSN v2 四阶段模型架构（点击模块查看工程实现细节）</h2>
+        <h2 data-i18n="sec_arch_h">MV-CSN v2 五阶段模型架构（点击模块查看工程实现细节）</h2>
         <span class="sec-note" data-i18n="sec_arch_note">融合 ChineseBERT · SpellGCN · RoCBert · kfcd/chaizi，总参数量仅 1,371,632</span>
       </div>
       <div class="card">
         <div class="chart-box">
-          <svg viewBox="0 0 1080 248" width="100%" style="min-width:740px;display:block;">
+          <svg viewBox="0 0 1080 256" width="100%" style="min-width:740px;display:block;">
             <defs>
               <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                 <path d="M 0 1 L 10 5 L 0 9 z" fill="#787e8a"/>
               </marker>
             </defs>
 
-            <!-- Stage 1: Preprocessor -->
+            <!-- Stage 1 -->
             <g class="arch-node" data-stage="1">
-              <rect x="12" y="74" width="166" height="100" rx="12" fill="#faf9f5" stroke="#94a3b8" stroke-width="1.6"/>
-              <text x="95" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#181a1f">1. 预处理器 Preproc</text>
-              <text x="95" y="124" text-anchor="middle" font-size="11.2" fill="#575c66">选择性 NFKC (⑧→8)</text>
-              <text x="95" y="142" text-anchor="middle" font-size="11.2" fill="#575c66">保留跨字形 (髙/え/Ꝗ)</text>
-              <text x="95" y="160" text-anchor="middle" font-size="11.2" fill="#575c66">Chaizi 2/3 字拆字重组</text>
+              <rect x="10" y="78" width="164" height="100" rx="12" fill="#faf9f5" stroke="#94a3b8" stroke-width="1.6"/>
+              <text x="92" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#181a1f">1. 预处理器 Preproc</text>
+              <text x="92" y="128" text-anchor="middle" font-size="11.2" fill="#575c66">选择性 NFKC (⑧→8)</text>
+              <text x="92" y="146" text-anchor="middle" font-size="11.2" fill="#575c66">保留跨字形 (髙/え/Ꝗ)</text>
+              <text x="92" y="164" text-anchor="middle" font-size="11.2" fill="#575c66">Chaizi 2/3 字拆字重组</text>
             </g>
-            <line x1="178" y1="124" x2="212" y2="124" stroke="#787e8a" stroke-width="1.6" marker-end="url(#arr)"/>
+            <line x1="174" y1="128" x2="206" y2="128" stroke="#787e8a" stroke-width="1.6" marker-end="url(#arr)"/>
 
-            <!-- Stage 2: Multimodal Anchor + Context Encoder -->
+            <!-- Stage 2 -->
             <g class="arch-node" data-stage="2">
-              <rect x="216" y="54" width="194" height="140" rx="12" fill="#f0f9f8" stroke="#0f766e" stroke-width="1.6"/>
-              <text x="313" y="84" text-anchor="middle" font-size="13" font-weight="700" fill="#0f766e">2. 多模态锚点与编码</text>
-              <text x="313" y="106" text-anchor="middle" font-size="11.2" fill="#115e59">Char ID + 声母/韵母/声调</text>
-              <text x="313" y="124" text-anchor="middle" font-size="11.2" fill="#115e59">+ 32×32 GlyphCAE (64d)</text>
-              <line x1="236" y1="138" x2="390" y2="138" stroke="#ccfbf1" stroke-width="1"/>
-              <text x="313" y="158" text-anchor="middle" font-size="11.5" font-weight="700" fill="#181a1f">CNN (k=3,5) + 2L Transformer</text>
-              <text x="313" y="177" text-anchor="middle" font-size="11" fill="#575c66">输出上下文表征 h_ctx</text>
+              <rect x="210" y="58" width="194" height="140" rx="12" fill="#f0f9f8" stroke="#0f766e" stroke-width="1.6"/>
+              <text x="307" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#0f766e">2. 多模态锚点与编码</text>
+              <text x="307" y="110" text-anchor="middle" font-size="11.2" fill="#115e59">Char ID + 声母/韵母/声调</text>
+              <text x="307" y="128" text-anchor="middle" font-size="11.2" fill="#115e59">+ 32×32 GlyphCAE (64d)</text>
+              <line x1="230" y1="142" x2="384" y2="142" stroke="#ccfbf1" stroke-width="1"/>
+              <text x="307" y="162" text-anchor="middle" font-size="11.5" font-weight="700" fill="#181a1f">CNN (k=3,5) + 2L Transformer</text>
+              <text x="307" y="181" text-anchor="middle" font-size="11" fill="#575c66">输出上下文表征 h_ctx</text>
             </g>
 
-            <!-- Branches to Dual View GAT -->
-            <path d="M 410 124 C 430 124, 430 48, 452 48" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
-            <line x1="410" y1="124" x2="452" y2="124" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
-            <path d="M 410 124 C 430 124, 430 200, 452 200" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
+            <!-- Connectors into Stage 3 -->
+            <path d="M 404 128 C 424 128, 424 58, 444 58" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
+            <line x1="404" y1="128" x2="444" y2="128" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 404 128 C 424 128, 424 198, 444 198" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
 
-            <!-- Stage 3: Dual-View GAT + Context Bypass -->
+            <!-- Stage 3: Grouped Dual-View GAT + Context Stream -->
             <g class="arch-node" data-stage="3">
-              <rect x="456" y="14" width="228" height="68" rx="11" fill="#e8f3ee" stroke="#0b5d3b" stroke-width="1.6"/>
-              <text x="570" y="39" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b5d3b">View 1 · 语音相似图 GAT</text>
-              <text x="570" y="61" text-anchor="middle" font-size="11.2" fill="#14532d">Top-20 多音字加权读音先验</text>
+              <rect x="444" y="6" width="248" height="240" rx="14" fill="none" stroke="#cbd5e1" stroke-dasharray="4,3" stroke-width="1.2"/>
+              <text x="568" y="23" text-anchor="middle" font-size="10.8" font-weight="700" fill="#575c66">3. 双视图 GAT 与 OOV 动态桥</text>
 
-              <rect x="456" y="102" width="228" height="44" rx="10" fill="#f4f2eb" stroke="#94a3b8" stroke-width="1.3"/>
-              <text x="570" y="129" text-anchor="middle" font-size="11.8" font-weight="650" fill="#181a1f">Direct Context Stream (h_ctx)</text>
+              <rect x="454" y="32" width="228" height="60" rx="10" fill="#e8f3ee" stroke="#0b5d3b" stroke-width="1.6"/>
+              <text x="568" y="55" text-anchor="middle" font-size="12.2" font-weight="700" fill="#0b5d3b">View 1 · 语音相似图 GAT</text>
+              <text x="568" y="76" text-anchor="middle" font-size="11" fill="#14532d">Top-20 多音字加权读音先验</text>
 
-              <rect x="456" y="166" width="228" height="68" rx="11" fill="#fdf0ef" stroke="#c83e37" stroke-width="1.6"/>
-              <text x="570" y="191" text-anchor="middle" font-size="12.5" font-weight="700" fill="#991b1b">View 2 · 渲染字形图 GAT</text>
-              <text x="570" y="213" text-anchor="middle" font-size="11.2" fill="#991b1b">32×32 Font + SpellGCN OOV 桥</text>
+              <rect x="454" y="106" width="228" height="44" rx="10" fill="#f4f2eb" stroke="#94a3b8" stroke-width="1.3"/>
+              <text x="568" y="133" text-anchor="middle" font-size="11.6" font-weight="650" fill="#181a1f">Direct Context Stream (h_ctx)</text>
+
+              <rect x="454" y="164" width="228" height="68" rx="10" fill="#fdf0ef" stroke="#c83e37" stroke-width="1.6"/>
+              <text x="568" y="189" text-anchor="middle" font-size="12.2" font-weight="700" fill="#991b1b">View 2 · 渲染字形图 GAT</text>
+              <text x="568" y="211" text-anchor="middle" font-size="11" fill="#991b1b">32×32 Font + SpellGCN OOV 桥</text>
             </g>
 
-            <!-- Merge to Gate -->
-            <path d="M 684 48 C 706 48, 706 124, 724 124" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
-            <line x1="684" y1="124" x2="724" y2="124" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
-            <path d="M 684 200 C 706 200, 706 124, 724 124" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
+            <!-- Connectors into Stage 4 -->
+            <path d="M 682 62 C 706 62, 706 128, 724 128" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
+            <line x1="682" y1="128" x2="724" y2="128" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 682 198 C 706 198, 706 128, 724 128" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
 
-            <!-- Stage 4: Context Gate -->
+            <!-- Stage 4 -->
             <g class="arch-node" data-stage="4">
-              <rect x="728" y="64" width="160" height="120" rx="12" fill="#fef6e7" stroke="#b45309" stroke-width="1.6"/>
-              <text x="808" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e">3. 动态门控 Gate</text>
-              <text x="808" y="114" text-anchor="middle" font-size="11.2" fill="#78350f">逐字 Softmax 单形权</text>
-              <text x="808" y="134" text-anchor="middle" font-size="11.2" font-weight="700" fill="#92400e">[α_ctx, α_phon, α_glyph]</text>
-              <text x="808" y="156" text-anchor="middle" font-size="10.8" fill="#b45309">+ RoCBert 图一致性损失</text>
-              <text x="808" y="173" text-anchor="middle" font-size="10.2" fill="#787e8a">正常字稳ctx · 变体切双图</text>
+              <rect x="728" y="68" width="160" height="120" rx="12" fill="#fef6e7" stroke="#b45309" stroke-width="1.6"/>
+              <text x="808" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e">4. 动态门控 Gate</text>
+              <text x="808" y="118" text-anchor="middle" font-size="11.2" fill="#78350f">逐字 Softmax 单形权</text>
+              <text x="808" y="138" text-anchor="middle" font-size="11.2" font-weight="700" fill="#92400e">[α_ctx, α_phon, α_glyph]</text>
+              <text x="808" y="160" text-anchor="middle" font-size="10.8" fill="#b45309">+ RoCBert 图一致性损失</text>
+              <text x="808" y="177" text-anchor="middle" font-size="10.2" fill="#787e8a">正常字稳ctx · 变体切双图</text>
             </g>
 
-            <line x1="888" y1="124" x2="914" y2="124" stroke="#787e8a" stroke-width="1.6" marker-end="url(#arr)"/>
+            <line x1="888" y1="128" x2="914" y2="128" stroke="#787e8a" stroke-width="1.6" marker-end="url(#arr)"/>
 
-            <!-- Stage 5: Dual Heads -->
+            <!-- Stage 5 -->
             <g class="arch-node" data-stage="5">
-              <rect x="918" y="58" width="150" height="132" rx="12" fill="#181a1f" stroke="#181a1f" stroke-width="1.5"/>
-              <text x="993" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">4. 双任务输出头</text>
-              <text x="993" y="112" text-anchor="middle" font-size="11.2" fill="#86efac">• Attention-Pooled 判别</text>
-              <text x="993" y="133" text-anchor="middle" font-size="11.2" fill="#fca5a5">• Token 级混淆定位</text>
-              <line x1="934" y1="148" x2="1052" y2="148" stroke="#374151" stroke-width="1"/>
-              <text x="993" y="166" text-anchor="middle" font-size="10.2" fill="#d1d5db">可选 RBT3 跨度融合 /</text>
-              <text x="993" y="181" text-anchor="middle" font-size="10.2" fill="#d1d5db">Qwen3-4B 不确定性级联</text>
+              <rect x="918" y="62" width="152" height="132" rx="12" fill="#181a1f" stroke="#181a1f" stroke-width="1.5"/>
+              <text x="994" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">5. 双任务输出头</text>
+              <text x="994" y="116" text-anchor="middle" font-size="11.2" fill="#86efac">• Attention-Pooled 判别</text>
+              <text x="994" y="137" text-anchor="middle" font-size="11.2" fill="#fca5a5">• Token 级混淆定位</text>
+              <line x1="934" y1="152" x2="1054" y2="152" stroke="#374151" stroke-width="1"/>
+              <text x="994" y="170" text-anchor="middle" font-size="10.2" fill="#d1d5db">可选 RBT3 跨度融合 /</text>
+              <text x="994" y="185" text-anchor="middle" font-size="10.2" fill="#d1d5db">Qwen3-4B 不确定性级联</text>
             </g>
           </svg>
         </div>
@@ -608,18 +529,18 @@
       </div>
       <div class="card">
         <div class="tabs" id="res-tabs">
-          <button class="tab-btn active" data-tab="tab-zs">Exp 2 · 零样本对抗与攻击分类</button>
-          <button class="tab-btn" data-tab="tab-llm">Exp 6 · Qwen3 大模型帕累托对比</button>
-          <button class="tab-btn" data-tab="tab-abl">Exp 4 · 8 行消融实验</button>
-          <button class="tab-btn" data-tab="tab-curve">Exp 1 &amp; 3 · 扰动强度与基准对比</button>
-          <button class="tab-btn" data-tab="tab-err">Exp 7 · 错判案例审计 (20/3,395)</button>
+          <button class="tab-btn active" data-tab="tab-zs" data-i18n="tab_zs">Exp 2 · 零样本对抗与分类</button>
+          <button class="tab-btn" data-tab="tab-llm" data-i18n="tab_llm">Exp 6 · Qwen3 大模型对比</button>
+          <button class="tab-btn" data-tab="tab-abl" data-i18n="tab_abl">Exp 4 · 8 行消融实验</button>
+          <button class="tab-btn" data-tab="tab-curve" data-i18n="tab_curve">Exp 1&amp;3 · 强度曲线与基准</button>
+          <button class="tab-btn" data-tab="tab-err" data-i18n="tab_err">Exp 7 · 错判审计 (20)</button>
         </div>
 
         <!-- Tab 1: Zero-Shot -->
         <div class="tab-panel active" id="tab-zs">
           <div class="chart-box" id="chart-zs"></div>
           <div class="table-scroll" id="table-zs"></div>
-          <div class="callout emerald">
+          <div class="callout emerald" data-i18n="call_zs">
             <strong>核心结论：</strong>仅在干净文本上训练、直接零样本测试 3,395 条真实变体短信时，<strong>RBT3</strong> F1 跌至 <code>0.9568</code>（漏报率超 8%），<strong>LZASD</strong> 的 <code>GLYPH/SPLIT</code> 跌至 <code>0.7657 / 0.5625</code>；而独立 <strong>MV-CSN v2 (1.37M)</strong> 跃升至 <code>F1 = 0.9951</code>（领先 RBT3 <code>+3.83%</code>，McNemar <code>p &lt; 1e-42</code>），<strong>RBT3 + MV-CSN v2</strong> 达到峰值 <code>0.9964</code>（<code>GLYPH = 0.9827</code>）。
           </div>
         </div>
@@ -628,7 +549,7 @@
         <div class="tab-panel" id="tab-llm">
           <div class="chart-box" id="chart-llm"></div>
           <div class="table-scroll" id="table-llm"></div>
-          <div class="callout">
+          <div class="callout" data-i18n="call_llm">
             <strong>到底需不需要调大模型？不需要。</strong> 零样本 <code>Qwen3-4B-Instruct</code> 在正常短信上误杀率高达 59.5%（<code>HamAcc = 0.4050</code>, <code>F1 = 0.8671</code>, <code>30.74 ms</code>），4-Shot ICL 也仅 <code>0.9421</code>（<code>60.98 ms</code>）；即使做 3-seed LoRA 微调，<code>Qwen3-0.6B</code> 也仅仅与 1.37M 的 <code>MV-CSN v2</code> <strong>打平</strong>（<code>0.9951</code> vs. <code>0.9951</code>, McNemar <code>p = 0.3833</code>），却付出 <strong>438× 参数</strong> 和 <strong>36.5× 延迟</strong>。若确需大模型复核，仅送 <code>0.71%</code>（24/3,395）疑难样本进入 <strong>Cascade 级联</strong> 即可保持 <code>0.598 ms/条</code> 平均延迟。
           </div>
         </div>
@@ -637,7 +558,7 @@
         <div class="tab-panel" id="tab-abl">
           <div class="chart-box" id="chart-abl"></div>
           <div class="table-scroll" id="table-abl"></div>
-          <div class="callout">
+          <div class="callout" data-i18n="call_abl">
             <strong>消融解读：</strong> 去掉 <strong>Split/Noise 预处理器</strong> 损失最大（<code>−0.0253 F1</code>，方差放大 12 倍）；去掉 <strong>RoCBert 图一致性正则</strong> 下降 <code>−0.0026</code>（关键的 Clean → Variant 泛化桥）；去掉 <strong>Context Gate</strong> 或 <strong>动态 OOV 桥</strong> 分别下降 <code>−0.0008 / −0.0007</code>。单去 Phonetic 或 Glyph 视图整体 F1 变动处于 3 种子方差内（<code>+0.0003~0.0004</code>），因 <code>MIXED</code> 攻击中双视图互为冗余；Exp 5 则证实模型在混淆字上真实同时依赖双视图提供归因与防御冗余。
           </div>
         </div>
@@ -647,7 +568,7 @@
           <div class="chart-box" id="chart-curve"></div>
           <div class="audit-grid" id="length-audit-bars"></div>
           <div class="table-scroll" id="table-indist"></div>
-          <div class="callout">
+          <div class="callout" data-i18n="call_curve">
             <strong>数据集长度捷径发现：</strong> 原始课程 Benchmark A 的 Ham 是长达 <code>191</code> 字的 BBS 论坛长帖，而 Spam 仅 <code>53</code> 字，导致 TFIDF-SVM 只需数长度就能拿到 <code>0.9991</code>；我们按 Spam 长度直方图重新配对采样出 <strong>Benchmark B（SMS-Matched 16.5K，p50 = 51 vs. 53，12,992 簇零泄漏划分）</strong>，彻底封死了长度捷径。
           </div>
         </div>
@@ -657,14 +578,14 @@
           <div class="chart-box" id="chart-err"></div>
           <div class="filter-bar">
             <div class="filter-pills" id="err-filter-pills">
-              <button class="pill-btn active" data-errfilter="ALL">全部错判 (20)</button>
-              <button class="pill-btn" data-errfilter="FP">误报 FP (8)</button>
-              <button class="pill-btn" data-errfilter="FN">漏报 FN (12)</button>
+              <button class="pill-btn active" data-errfilter="ALL" data-i18n="ef_all">全部错判 (20)</button>
+              <button class="pill-btn" data-errfilter="FP" data-i18n="ef_fp">误报 FP (8)</button>
+              <button class="pill-btn" data-errfilter="FN" data-i18n="ef_fn">漏报 FN (12)</button>
             </div>
-            <span style="font-size:0.79rem;color:var(--muted);">Seed-42 Clean-Trained MV-CSN v2 · 3,395 测试样本总错误率 <strong>0.59%</strong></span>
+            <span style="font-size:0.79rem;color:var(--muted);" data-i18n="err_subnote">Seed-42 Clean-Trained MV-CSN v2 · 3,395 测试样本总错误率 <strong>0.59%</strong></span>
           </div>
           <div class="table-scroll" id="table-err"></div>
-          <div class="callout emerald">
+          <div class="callout emerald" data-i18n="call_err">
             <strong>错判审计核心发现：</strong> <code>8 条 FP</code> 全部集中于带银行卡/手机号/期货行情的特殊正常短信（零日常闲聊误杀）；<code>12 条 FN</code> 中有 <strong>4 条本身属于上游语料标错样本</strong>（气象台大风预警、防疫戴口罩倡议、炒粉点单、水务招标），扣除后<strong>真实垃圾短信召回率高达 99.65%</strong>。此外，全测试集仅 <code>0.74%</code>（25/3,395）样本落入 <code>(0.05, 0.95)</code> 不确定带，却直接捕获了 <strong>35.0%（7/20）</strong> 的错判（47× 富集度）。
           </div>
         </div>
@@ -683,8 +604,8 @@
         <div id="case-verdict" style="font-size:0.88rem;margin-bottom:8px;"></div>
         <div class="sms-compare" id="case-compare"></div>
         <div class="heatmap-head">
-          <span><strong>Token Heatmap</strong>（颜色越红代表该字越可能被对抗替换/插噪，点击或悬停下方字符方块检查详细分配）</span>
-          <span>低混淆 (0%) ▢ ▢ ▢ ▤ ▥ High (100%)</span>
+          <span data-i18n="hm_hint"><strong>逐字混淆热力图</strong>（颜色越红代表该字越可能被对抗替换/插噪，点击或悬停下方字符查看门控分配）</span>
+          <span data-i18n="hm_scale">低混淆 (0%) ▢ ▢ ▤ ▥ High (100%)</span>
         </div>
         <div class="heatmap-box" id="heatmap-box"></div>
         <div class="inspector-bar" id="tok-inspector"></div>
@@ -698,31 +619,9 @@
         <span class="sec-note" data-i18n="sec_hand_note">全部 8 份实验 JSON、权重包、代码手册与 Release v2.0.0 已准备就绪</span>
       </div>
       <div class="card">
-        <div class="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th class="ta-left">文件 / 资产路径</th>
-                <th>大小</th>
-                <th class="ta-left">用途说明（画论文图 / 写报告 / 复现）</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td class="ta-left"><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/in_dist_results.json" target="_blank"><code>results/in_dist_results.json</code></a></td><td>24.6 KB</td><td class="ta-left wrap-cell">Bench A &amp; B 长度审计、参数量、3-seed F1/AUC/HamAcc 与推理耗时。</td></tr>
-              <tr><td class="ta-left"><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/zeroshot_real_variants.json" target="_blank"><code>results/zeroshot_real_variants.json</code></a></td><td>10.1 KB</td><td class="ta-left wrap-cell">Clean → RealVariant 零样本 3-seed 指标与精确 McNemar 检验 p 值。</td></tr>
-              <tr><td class="ta-left"><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/per_attack_breakdown.json" target="_blank"><code>results/per_attack_breakdown.json</code></a></td><td>5.0 KB</td><td class="ta-left wrap-cell"><code>PHON / GLYPH / SPLIT / SPACE / MIXED / CLEAN</code> 分攻击类型 F1 与召回率。</td></tr>
-              <tr><td class="ta-left"><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/intensity_curve.json" target="_blank"><code>results/intensity_curve.json</code></a></td><td>7.4 KB</td><td class="ta-left wrap-cell">0%–60% 七档扰动强度曲线全部 5 模型 3-seed 数据。</td></tr>
-              <tr><td class="ta-left"><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/ablations.json" target="_blank"><code>results/ablations.json</code></a></td><td>15.4 KB</td><td class="ta-left wrap-cell">8 行消融实验完整 3-seed 数据与精确 <code>delta_f1</code>。</td></tr>
-              <tr><td class="ta-left"><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/llm_comparison.json" target="_blank"><code>results/llm_comparison.json</code></a></td><td>14.2 KB</td><td class="ta-left wrap-cell">Qwen3-0.6B/4B Zero-Shot、4-Shot ICL、Clean-LoRA、Cascade 与 McNemar 检验。</td></tr>
-              <tr><td class="ta-left"><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/gate_analysis.json" target="_blank"><code>results/gate_analysis.json</code></a></td><td>332.1 KB</td><td class="ta-left wrap-cell">19,173 token 门控分布与 6 条真实测试集逐字透视样本。</td></tr>
-              <tr><td class="ta-left"><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/error_analysis.json" target="_blank"><code>results/error_analysis.json</code></a></td><td>35.4 KB</td><td class="ta-left wrap-cell">3,395 测试样本全部 20 条错判（8 FP + 12 FN）清单、分类归纳与不确定带统计。</td></tr>
-              <tr><td class="ta-left"><a href="https://github.com/1-pluto1/mv-csn/blob/main/docs/EXPERIMENTS_AND_CODE_GUIDE.md" target="_blank"><code>docs/EXPERIMENTS_AND_CODE_GUIDE.md</code></a></td><td>28.2 KB</td><td class="ta-left wrap-cell">中文《代码架构与全部实验说明手册》（含架构讲解、JSON 字段字典、答辩 Q&amp;A）。</td></tr>
-              <tr><td class="ta-left"><a href="https://github.com/1-pluto1/mv-csn/releases/tag/v2.0.0" target="_blank"><code>Release v2.0.0 (artifacts/demo_bundle.pt)</code></a></td><td>20.5 MB</td><td class="ta-left wrap-cell">Seed-42 fp16 完整权重包 + 压缩 32×32 字形库 + 全部基准/划分/图缓存与 SHA-256。</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="table-scroll" id="handoff-table-wrap"></div>
         <div class="code-wrap">
-          <button class="copy-btn" id="copy-cmd-btn">复制命令</button>
+          <button class="copy-btn" id="copy-cmd-btn" data-i18n="copy_btn">复制命令</button>
           <pre id="quickstart-code">git clone https://github.com/1-pluto1/mv-csn.git &amp;&amp; cd mv-csn
 ./reproduce.sh setup          # 安装 Python 依赖与可编辑 mvcsn 包
 ./reproduce.sh verify         # 12 项 pytest + 语法校验 + CPU 实时推理 + 终端结果表
@@ -731,7 +630,7 @@
       </div>
     </section>
 
-    <footer>
+    <footer data-i18n="footer_txt">
       MV-CSN v2 Project Page · 直接构建自已验证的 <code>results/*.json</code> · 开源托管于 GitHub Pages (<code>1-pluto1/mv-csn</code>)
     </footer>
   </div>
@@ -741,10 +640,15 @@
 
     const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     const tooltip = document.getElementById("chart-tooltip");
+    let curLang = "zh";
+    let activeArchStage = "4";
+    let curCaseIdx = 0;
+    let curTokIdx = 0;
+    let curErrFilter = "ALL";
 
     function bindTooltips(container) {
       container.querySelectorAll("[data-tip]").forEach(el => {
-        el.addEventListener("mouseenter", e => {
+        el.addEventListener("mouseenter", () => {
           tooltip.innerHTML = el.getAttribute("data-tip");
           tooltip.style.display = "block";
         });
@@ -756,63 +660,183 @@
       });
     }
 
-    // Bilingual I18N Toggle (ZH <-> EN)
+    // Complete Bilingual I18N Dictionaries
     const I18N = {
       zh: {
         nav_prog: "实验进度", nav_arch: "模型架构", nav_exp: "实验结果", nav_xray: "门控透视 Demo", nav_handoff: "代码与数据交付",
         hero_eyebrow: "中山大学计算机学院 · 《数据科学与工程》课程大作业项目主页",
-        hero_title: "MV-CSN v2：面向中文对抗变体垃圾短信检测的多视图上下文门控字符相似性网络",
-        hero_sub: "仅 <strong>1.37M 参数</strong> 的字符级双视图图注意力防御网络，融合 32×32 渲染字形卷积嵌入、多音字读音先验、SpellGCN 动态未登录字图桥接与 RoCBert 一致性正则——在去偏 Benchmark B 零样本跨攻击评测中以 <strong>0.243 ms/条</strong> 延迟比肩或超越 <strong>600M–4B Qwen3 大模型</strong>（快 <strong>36.5×–251×</strong>）。",
-        kpi1_lbl: "零样本融合峰值 F1", kpi2_lbl: "独立 MV-CSN v2 F1 (1.37M)", kpi3_lbl: "单条短信推理延迟", kpi4_lbl: "全测试集总错判率 (20/3,395)",
+        hero_title: "MV-CSN v2：面向中文对抗变体垃圾短信检测的<br/>多视图上下文门控字符相似性网络",
+        hero_sub: "仅 <strong>1.37M 参数</strong> 的字符级双视图图注意力防御网络，融合 32×32 渲染字形卷积嵌入、多音字读音先验、SpellGCN 动态未登录字图桥接与 RoCBert 一致性正则——在去偏 Benchmark B 零样本跨攻击评测中以 <strong>0.243&nbsp;ms/条</strong> 延迟比肩或超越 <strong>600M–4B Qwen3 大模型</strong>（快 <strong>36.5×–251×</strong>）。",
+        cta_repo: "GitHub 源码仓库", cta_rel: "开源权重与数据集 v2.0.0", cta_guide: "代码与实验说明手册",
+        cta_nb: "Colab 实跑 Notebook", cta_json: "原始数据 (8 JSON)", cta_xray: "交互式 Gate X-Ray",
+        t_step2: "预处理器重组 + 32×32 字形/拼音图", t_step3: "门控 6.7% → 77.3%", t_step5: "Clean → Variant 零样本泛化",
+        kpi1_lbl: "零样本融合峰值 F1", kpi2_lbl: "独立 MV-CSN v2 F1 (1.37M)", kpi3_lbl: "单条短信推理延迟",
+        kpi4_lbl: "全测试集总错判率 (20/3,395)", kpi4_sub: "SPLIT 0/46 errors · 含 4 条上游语料标注噪声",
         sec_prog_h: "实验进度与交付看板", sec_prog_note: "代码、全部 7 组实验、12 项测试与开源发布已完成 · 待队友接力配图与报告",
-        step1: "数据去偏与 12,992 簇划分", step2: "7 组多随机种子实验 (Exp 1–7)", step3: "工程重构 · 12 测试 · Release v2.0.0", step4: "队友接力：配图 · 报告 · PPT",
-        sec_arch_h: "MV-CSN v2 四阶段模型架构（点击模块查看工程实现细节）", sec_arch_note: "融合 ChineseBERT · SpellGCN · RoCBert · kfcd/chaizi，总参数量仅 1,371,632",
+        step1: "1. 数据去偏 · 12,992 簇划分", step2: "2. 7 组多随机种子实验", step3: "3. 重构 · 12 测试 · v2.0.0", step4: "4. 队友：配图 · 报告 · PPT",
+        sec_arch_h: "MV-CSN v2 五阶段模型架构（点击模块查看工程实现细节）", sec_arch_note: "融合 ChineseBERT · SpellGCN · RoCBert · kfcd/chaizi，总参数量仅 1,371,632",
         sec_res_h: "全部实验结果总览（7 组多随机种子验证数据）", sec_res_note: "所有数值直接由 <code>results/*.json</code> 渲染生成（seeds: <code>42, 1024, 2025</code>）",
+        tab_zs: "Exp 2 · 零样本对抗与分类", tab_llm: "Exp 6 · Qwen3 大模型对比", tab_abl: "Exp 4 · 8 行消融实验", tab_curve: "Exp 1&3 · 强度曲线与基准", tab_err: "Exp 7 · 错判审计 (20)",
+        call_zs: "<strong>核心结论：</strong>仅在干净文本上训练、直接零样本测试 3,395 条真实变体短信时，<strong>RBT3</strong> F1 跌至 <code>0.9568</code>（漏报率超 8%），<strong>LZASD</strong> 的 <code>GLYPH/SPLIT</code> 跌至 <code>0.7657 / 0.5625</code>；而独立 <strong>MV-CSN v2 (1.37M)</strong> 跃升至 <code>F1 = 0.9951</code>（领先 RBT3 <code>+3.83%</code>，McNemar <code>p &lt; 1e-42</code>），<strong>RBT3 + MV-CSN v2</strong> 达到峰值 <code>0.9964</code>（<code>GLYPH = 0.9827</code>）。",
+        call_llm: "<strong>到底需不需要调大模型？不需要。</strong> 零样本 <code>Qwen3-4B-Instruct</code> 在正常短信上误杀率高达 59.5%（<code>HamAcc = 0.4050</code>, <code>F1 = 0.8671</code>, <code>30.74 ms</code>），4-Shot ICL 也仅 <code>0.9421</code>（<code>60.98 ms</code>）；即使做 3-seed LoRA 微调，<code>Qwen3-0.6B</code> 也仅仅与 1.37M 的 <code>MV-CSN v2</code> <strong>打平</strong>（<code>0.9951</code> vs. <code>0.9951</code>, McNemar <code>p = 0.3833</code>），却付出 <strong>438× 参数</strong> 和 <strong>36.5× 延迟</strong>。若确需大模型复核，仅送 <code>0.71%</code>（24/3,395）疑难样本进入 <strong>Cascade 级联</strong> 即可保持 <code>0.598 ms/条</code> 平均延迟。",
+        call_abl: "<strong>消融解读：</strong> 去掉 <strong>Split/Noise 预处理器</strong> 损失最大（<code>−0.0253 F1</code>，方差放大 12 倍）；去掉 <strong>RoCBert 图一致性正则</strong> 下降 <code>−0.0026</code>（关键的 Clean → Variant 泛化桥）；去掉 <strong>Context Gate</strong> 或 <strong>动态 OOV 桥</strong> 分别下降 <code>−0.0008 / −0.0007</code>。单去 Phonetic 或 Glyph 视图整体 F1 变动处于 3 种子方差内（<code>+0.0003~0.0004</code>），因 <code>MIXED</code> 攻击中双视图互为冗余；Exp 5 则证实模型在混淆字上真实同时依赖双视图提供归因与防御冗余。",
+        call_curve: "<strong>数据集长度捷径发现：</strong> 原始课程 Benchmark A 的 Ham 是长达 <code>191</code> 字的 BBS 论坛长帖，而 Spam 仅 <code>53</code> 字，导致 TFIDF-SVM 只需数长度就能拿到 <code>0.9991</code>；我们按 Spam 长度直方图重新配对采样出 <strong>Benchmark B（SMS-Matched 16.5K，p50 = 51 vs. 53，12,992 簇零泄漏划分）</strong>，彻底封死了长度捷径。",
+        ef_all: "全部错判 (20)", ef_fp: "误报 FP (8)", ef_fn: "漏报 FN (12)",
+        err_subnote: "Seed-42 Clean-Trained MV-CSN v2 · 3,395 测试样本总错误率 <strong>0.59%</strong>",
+        call_err: "<strong>错判审计核心发现：</strong> <code>8 条 FP</code> 全部集中于带银行卡/手机号/期货行情的特殊正常短信（零日常闲聊误杀）；<code>12 条 FN</code> 中有 <strong>4 条本身属于上游语料标错样本</strong>（气象台大风预警、防疫戴口罩倡议、炒粉点单、水务招标），扣除后<strong>真实垃圾短信召回率高达 99.65%</strong>。此外，全测试集仅 <code>0.74%</code>（25/3,395）样本落入 <code>(0.05, 0.95)</code> 不确定带，却直接捕获了 <strong>35.0%（7/20）</strong> 的错判（47× 富集度）。",
         sec_xray_h: "交互式 Gate X-Ray · 逐字混淆定位与门控热力图", sec_xray_note: "切换真实测试集攻击样本，悬停或点击任意字符实时查看三路门控权重",
-        sec_hand_h: "队友接力 · 数据字典、开源资产与一键复现", sec_hand_note: "全部 8 份实验 JSON、权重包、代码手册与 Release v2.0.0 已准备就绪"
+        hm_hint: "<strong>逐字混淆热力图</strong>（颜色越红代表该字越可能被对抗替换/插噪，点击或悬停下方字符查看门控分配）",
+        hm_scale: "低混淆 (0%) ▢ ▢ ▤ ▥ High (100%)",
+        sec_hand_h: "队友接力 · 数据字典、开源资产与一键复现", sec_hand_note: "全部 8 份实验 JSON、权重包、代码手册与 Release v2.0.0 已准备就绪",
+        copy_btn: "复制命令",
+        footer_txt: "MV-CSN v2 Project Page · 直接构建自已验证的 <code>results/*.json</code> · 开源托管于 GitHub Pages (<code>1-pluto1/mv-csn</code>)"
       },
       en: {
-        nav_prog: "Progress", nav_arch: "Method", nav_exp: "Experiments", nav_xray: "Gate X-Ray Demo", nav_handoff: "Data & Handoff",
+        nav_prog: "Progress", nav_arch: "Method", nav_exp: "Experiments", nav_xray: "Gate X-Ray", nav_handoff: "Data & Handoff",
         hero_eyebrow: "Sun Yat-sen University · Data Science & Engineering Capstone",
-        hero_title: "MV-CSN v2: Multi-View Context-Gated Character Similarity Network for Chinese Adversarial Spam Detection",
-        hero_sub: "A <strong>1.37M-parameter</strong> character-level graph defense combining 32×32 Rendered-Glyph CAE embeddings, phonetic priors, dynamic SpellGCN OOV bridging, and RoCBert consistency — matching or outperforming <strong>600M–4B Qwen3 LLMs</strong> at <strong>0.243 ms/SMS</strong> (<strong>36.5×–251× faster</strong>).",
-        kpi1_lbl: "Best Zero-Shot Evasion F1", kpi2_lbl: "Standalone MV-CSN v2 F1 (1.37M)", kpi3_lbl: "Inference Latency / SMS", kpi4_lbl: "Overall Test Error Rate (20/3,395)",
-        sec_prog_h: "Experiment Progress & Delivery Dashboard", sec_prog_note: "Codebase, 7 Experiment Suites, 12 Tests & Release v2.0.0 Complete · Ready for Figures/Report",
-        step1: "Debiased Bench B (12,992 Clusters)", step2: "All 7 Multi-Seed Suites (Exp 1–7)", step3: "Refactored · 12 Tests · Release v2.0.0", step4: "Teammates: Figures · Report · Slides",
-        sec_arch_h: "MV-CSN v2 4-Stage Pipeline (Click Any Stage to Inspect Implementation)", sec_arch_note: "Synthesizing ChineseBERT · SpellGCN · RoCBert · kfcd/chaizi in 1,371,632 params",
+        hero_title: "MV-CSN v2: Multi-View Context-Gated Character Similarity<br/>Network for Chinese Adversarial Spam Detection",
+        hero_sub: "A <strong>1.37M-parameter</strong> character-level graph defense combining 32×32 Rendered-Glyph CAE embeddings, phonetic priors, dynamic SpellGCN OOV bridging, and RoCBert consistency — matching or outperforming <strong>600M–4B Qwen3 LLMs</strong> at <strong>0.243&nbsp;ms/SMS</strong> (<strong>36.5×–251× faster</strong>).",
+        cta_repo: "GitHub Repository", cta_rel: "Release v2.0.0 (Weights & Data)", cta_guide: "Code & Experiments Guide",
+        cta_nb: "Colab Notebook", cta_json: "Raw JSONs (8 Files)", cta_xray: "Interactive Gate X-Ray",
+        t_step2: "Preprocessor + 32×32 Glyph/Phonetic Graphs", t_step3: "Gate Shift 6.7% → 77.3%", t_step5: "Clean → Variant Zero-Shot",
+        kpi1_lbl: "Best Zero-Shot Evasion F1", kpi2_lbl: "Standalone MV-CSN v2 F1 (1.37M)", kpi3_lbl: "Inference Latency / SMS",
+        kpi4_lbl: "Overall Test Error Rate (20/3,395)", kpi4_sub: "SPLIT 0/46 errors · incl. 4 upstream label-noise rows",
+        sec_prog_h: "Experiment Progress & Delivery Dashboard", sec_prog_note: "Codebase, 7 Suites, 12 Tests & Release v2.0.0 Complete · Ready for Figures & Report",
+        step1: "1. Debiased Bench B (12,992 Clusters)", step2: "2. All 7 Multi-Seed Suites", step3: "3. Refactored · 12 Tests · v2.0.0", step4: "4. Teammates: Figures & Report",
+        sec_arch_h: "MV-CSN v2 5-Stage Pipeline (Click Any Module to Inspect)", sec_arch_note: "Synthesizing ChineseBERT · SpellGCN · RoCBert · kfcd/chaizi in 1,371,632 params",
         sec_res_h: "Interactive Experimental Results (Verified Multi-Seed Data)", sec_res_note: "All metrics rendered directly from <code>results/*.json</code> (seeds: <code>42, 1024, 2025</code>)",
+        tab_zs: "Exp 2 · Zero-Shot Attacks", tab_llm: "Exp 6 · Qwen3 LLM Pareto", tab_abl: "Exp 4 · 8-Row Ablations", tab_curve: "Exp 1&3 · Curve & Bench A/B", tab_err: "Exp 7 · Error Audit (20)",
+        call_zs: "<strong>Takeaway:</strong> Trained strictly on clean SMS and tested zero-shot on 3,395 real variants, <strong>RBT3</strong> drops to <code>0.9568</code> F1 (&gt;8% miss rate) and <strong>LZASD</strong> collapses on <code>GLYPH/SPLIT</code> (<code>0.7657 / 0.5625</code>). Standalone <strong>MV-CSN v2 (1.37M)</strong> jumps to <code>0.9951</code> (+3.83% over RBT3, McNemar <code>p &lt; 1e-42</code>), while <strong>RBT3 + MV-CSN v2</strong> sets the peak at <code>0.9964</code>.",
+        call_llm: "<strong>Do we need a large LLM? No.</strong> Zero-shot <code>Qwen3-4B-Instruct</code> suffers 59.5% false positives (<code>HamAcc = 0.4050</code>, <code>F1 = 0.8671</code>, <code>30.74 ms</code>) and 4-Shot ICL only reaches <code>0.9421</code> at <code>60.98 ms</code>. Even Clean-LoRA <code>Qwen3-0.6B</code> merely ties <code>MV-CSN v2</code> (<code>0.9951</code> vs. <code>0.9951</code>, McNemar <code>p = 0.3833</code>) at <strong>438× params</strong> and <strong>36.5× latency</strong>. A Cascade escalating only <code>0.71%</code> uncertain cases maintains <code>0.598 ms/SMS</code>.",
+        call_abl: "<strong>Ablation Insight:</strong> Removing the <strong>Split/Noise Preprocessor</strong> causes the largest drop (<code>−0.0253 F1</code>, 12× higher std), followed by <strong>RoCBert Graph Consistency</strong> (<code>−0.0026</code>), <strong>Context Gate</strong> (<code>−0.0008</code>), and <strong>Dynamic OOV Bridge</strong> (<code>−0.0007</code>). Removing a single graph view varies within 3-seed noise due to cross-view redundancy on <code>MIXED</code> attacks, while Exp 5 confirms both views actively drive obfuscated tokens.",
+        call_curve: "<strong>Length-Shortcut Discovery:</strong> Course Benchmark A pairs long <code>191</code>-char BBS Ham with short <code>53</code>-char Spam SMS, inflating TFIDF-SVM (<code>0.9991</code>). Our debiased <strong>Benchmark B (SMS-Matched 16.5K, p50 = 51 vs. 53, 12,992 zero-overlap clusters)</strong> eliminates length shortcuts.",
+        ef_all: "All Errors (20)", ef_fp: "False Positives (8)", ef_fn: "False Negatives (12)",
+        err_subnote: "Seed-42 Clean-Trained MV-CSN v2 · <strong>0.59%</strong> overall error rate across 3,395 test SMS",
+        call_err: "<strong>Failure Audit:</strong> All <code>8 FP</code> come from benign SMS containing bank card / phone / futures figures (zero casual chat false alarms). Among <code>12 FN</code>, <strong>4 are upstream corpus label errors</strong> (weather alert, COVID health advisory, takeout order, water tender); excluding those yields <strong>99.65% true spam recall</strong>. Meanwhile, the <code>0.74%</code> uncertainty band captures <strong>35.0% (7/20)</strong> of all errors (47× enrichment).",
         sec_xray_h: "Interactive Gate X-Ray & Real Test Case Studies", sec_xray_note: "Select any test case and hover/click characters to inspect token-level gate weights",
-        sec_hand_h: "Teammate Handoff: Data Dictionary & One-Click Reproduction", sec_hand_note: "All 8 JSON result files, fp16 bundle, code guide & Release v2.0.0 ready"
+        hm_hint: "<strong>Token Obfuscation Heatmap</strong> (darker red = higher predicted obfuscation; hover or click any character to inspect gate allocation)",
+        hm_scale: "Low (0%) ▢ ▢ ▤ ▥ High (100%)",
+        sec_hand_h: "Teammate Handoff: Data Dictionary & One-Click Reproduction", sec_hand_note: "All 8 JSON files, fp16 demo bundle, code guide & Release v2.0.0 ready",
+        copy_btn: "Copy Commands",
+        footer_txt: "MV-CSN v2 Project Page · Generated directly from verified <code>results/*.json</code> · Hosted on GitHub Pages (<code>1-pluto1/mv-csn</code>)"
       }
     };
-    let curLang = "zh";
-    document.getElementById("lang-toggle").addEventListener("click", () => {
-      curLang = curLang === "zh" ? "en" : "zh";
-      document.documentElement.lang = curLang === "zh" ? "zh-CN" : "en";
-      document.querySelectorAll("[data-i18n]").forEach(el => {
-        const k = el.getAttribute("data-i18n");
-        if (I18N[curLang][k]) el.innerHTML = I18N[curLang][k];
-      });
-      renderArchDetail(activeArchStage);
-    });
 
-    // Tab switcher + Quick Jump buttons from Progress Cards
+    const PROGRESS_ITEMS = [
+      { title_zh:"Exp 1 · 双基准分布内对比 (Bench A & B)", title_en:"Exp 1 · Dual In-Distribution Benchmarks",
+         desc_zh:"审计出课程数据长度捷径（191 vs 53 字），构建去偏 SMS-Matched 16.5K 主基准（3 seeds）。",
+         desc_en:"Exposed BBS/SMS length shortcut (191 vs 53) and built debiased SMS-Matched 16.5K (3 seeds).",
+         badge:"done", goto:"results:tab-curve", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
+      { title_zh:"Exp 2 · Zero-Shot Clean → RealVariant & McNemar", title_en:"Exp 2 · Zero-Shot Clean → RealVariant & McNemar",
+         desc_zh:"仅干净文本训练，直测 3,395 条真实变体；MV-CSN v2 领先 RBT3 +3.83% (McNemar p<1e-42)。",
+         desc_en:"Clean-trained on 3,395 real variants; MV-CSN v2 beats RBT3 by +3.83% (McNemar p<1e-42).",
+         badge:"done", goto:"results:tab-zs", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
+      { title_zh:"Exp 3 · 0%–60% 对抗扰动强度曲线", title_en:"Exp 3 · 0%–60% Adversarial Intensity Curve",
+         desc_zh:"7 档组合噪声压力测试，MV-CSN v2 在最恶劣 60% 扰动下 F1=0.9874 位列第一。",
+         desc_en:"7 noise levels up to 60%; standalone MV-CSN v2 ranks #1 under heaviest attack (0.9874).",
+         badge:"done", goto:"results:tab-curve", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
+      { title_zh:"Exp 4 · 8 行多随机种子消融实验", title_en:"Exp 4 · 8-Row Multi-Seed Ablation Study",
+         desc_zh:"24 次独立训练验证组件贡献：预处理器 (−0.0253) > RoCBert 一致性 (−0.0026) > 门控 (−0.0008)。",
+         desc_en:"24 runs: Preprocessor (−0.0253) > RoCBert Consistency (−0.0026) > Context Gate (−0.0008).",
+         badge:"done", goto:"results:tab-abl", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
+      { title_zh:"Exp 5 · Token 级动态门控可解释性", title_en:"Exp 5 · Token-Level Gate Interpretability",
+         desc_zh:"19,173 token 统计证实混淆字图权重从 6.7% 跃升至 77.3%，附带逐字透视案例。",
+         desc_en:"Across 19,173 tokens, graph weights shift from 6.7% (clean) to 77.3% (obfuscated).",
+         badge:"done", goto:"xray:", btn_zh:"交互体验 ↓", btn_en:"Inspect X-Ray ↓" },
+      { title_zh:"Exp 6 · Qwen3-0.6B/4B 大模型与级联评测", title_en:"Exp 6 · Qwen3 LLM & Cascade Benchmark",
+         desc_zh:"实证 4B 零样本误杀率 59.5%，0.6B LoRA 仅打平却慢 36.5×；Cascade 仅路由 0.71% 样本。",
+         desc_en:"Qwen3-4B Zero-Shot has 59.5% FP; 0.6B LoRA ties at 36.5× cost; Cascade routes only 0.71%.",
+         badge:"done", goto:"results:tab-llm", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
+      { title_zh:"Exp 7 · 全量 3,395 条错判案例审计 (CPU)", title_en:"Exp 7 · Full Error & Failure-Case Audit (CPU)",
+         desc_zh:"总共仅 20 条错判（8 FP + 12 FN），其中 4 条为上游语料标错样本，真实召回率 99.65%。",
+         desc_en:"Only 20/3,395 errors (8 FP + 12 FN); 4 FN are upstream label noise (99.65% true recall).",
+         badge:"done", goto:"results:tab-err", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
+      { title_zh:"工程交付 · 重构 · 一键脚本 · v2.0.0 开源", title_en:"Engineering · Release v2.0.0 · Teammate Handoff",
+         desc_zh:"统一推理门面、./reproduce.sh、12 项测试、Release v2.0.0 与 Drive 已就绪；待队友收尾报告/PPT。",
+         desc_en:"Unified inference facade, ./reproduce.sh, 12 tests, Release v2.0.0 & Drive ready for teammates.",
+         badge:"team", goto:"handoff:", btn_zh:"数据交接 ↓", btn_en:"Handoff Hub ↓" }
+    ];
+
+    function renderProgressGrid() {
+      const wrap = document.getElementById("progress-grid");
+      wrap.innerHTML = PROGRESS_ITEMS.map(it => {
+        const title = curLang === "zh" ? it.title_zh : it.title_en;
+        const desc = curLang === "zh" ? it.desc_zh : it.desc_en;
+        const btn = curLang === "zh" ? it.btn_zh : it.btn_en;
+        const badgeCls = it.badge === "done" ? "done" : "team";
+        const badgeTxt = it.badge === "done" ? "Done" : "Teammates";
+        return `
+          <div class="task-item">
+            <div><div class="task-title">${esc(title)}</div><div class="task-desc">${esc(desc)}</div></div>
+            <div class="task-right">
+              <span class="badge ${badgeCls}">${badgeTxt}</span>
+              <button class="jump-link" data-goto="${it.goto}">${btn}</button>
+            </div>
+          </div>`;
+      }).join("");
+      wrap.querySelectorAll("[data-goto]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const [secId, tabId] = btn.getAttribute("data-goto").split(":");
+          if (tabId) openTab(tabId);
+          document.getElementById(secId).scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+    }
+
+    const HANDOFF_ROWS = [
+      ["results/in_dist_results.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/in_dist_results.json", "24.6 KB",
+       "Bench A & B 长度审计、参数量、3-seed F1/AUC/HamAcc 与推理耗时。",
+       "Bench A & B length audits, parameter counts, 3-seed F1/AUC/HamAcc & inference latency."],
+      ["results/zeroshot_real_variants.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/zeroshot_real_variants.json", "10.1 KB",
+       "Clean → RealVariant 零样本 3-seed 指标与精确 McNemar 检验 p 值。",
+       "Clean -> RealVariant 3-seed metrics + exact McNemar test p-values."],
+      ["results/per_attack_breakdown.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/per_attack_breakdown.json", "5.0 KB",
+       "PHON / GLYPH / SPLIT / SPACE / MIXED / CLEAN 分攻击类型 F1 与召回率。",
+       "Per-attack F1 & recall across PHON, GLYPH, SPLIT, SPACE, MIXED, CLEAN."],
+      ["results/intensity_curve.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/intensity_curve.json", "7.4 KB",
+       "0%–60% 七档扰动强度曲线全部 5 模型 3-seed 数据。",
+       "0%–60% adversarial perturbation intensity curves across all 5 models (3 seeds)."],
+      ["results/ablations.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/ablations.json", "15.4 KB",
+       "8 行消融实验完整 3-seed 数据与精确 delta_f1。",
+       "8-row multi-seed ablation table with exact delta_f1 vs. full MV-CSN v2."],
+      ["results/llm_comparison.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/llm_comparison.json", "14.2 KB",
+       "Qwen3-0.6B/4B Zero-Shot、4-Shot ICL、Clean-LoRA、Cascade 与 McNemar 检验。",
+       "Qwen3-0.6B/4B Zero-Shot, 4-Shot ICL, Clean-LoRA & Cascade benchmarks + McNemar."],
+      ["results/gate_analysis.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/gate_analysis.json", "332.1 KB",
+       "19,173 token 门控分布与 6 条真实测试集逐字透视样本。",
+       "Token-level [ctx, phon, glyph] distributions across 19,173 tokens + 6 real case studies."],
+      ["results/error_analysis.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/error_analysis.json", "35.4 KB",
+       "3,395 测试样本全部 20 条错判（8 FP + 12 FN）清单、分类归纳与不确定带统计。",
+       "Full audit of all 20/3,395 test errors (8 FP + 12 FN), categories & uncertainty capture."],
+      ["docs/EXPERIMENTS_AND_CODE_GUIDE.md", "https://github.com/1-pluto1/mv-csn/blob/main/docs/EXPERIMENTS_AND_CODE_GUIDE.md", "28.2 KB",
+       "中文《代码架构与全部实验说明手册》（含架构讲解、JSON 字段字典、答辩 Q&A）。",
+       "Comprehensive Chinese engineering & experiments handoff guide + defense Q&A."],
+      ["Release v2.0.0 (artifacts/demo_bundle.pt)", "https://github.com/1-pluto1/mv-csn/releases/tag/v2.0.0", "20.5 MB",
+       "Seed-42 fp16 完整权重包 + 压缩 32×32 字形库 + 全部基准/划分/图缓存与 SHA-256。",
+       "Seed-42 fp16 MV-CSN v2 bundle + compressed 32x32 bitmaps + splits, graphs & SHA-256."],
+    ];
+
+    function renderHandoffTable() {
+      const h1 = curLang === "zh" ? "文件 / 资产路径" : "Artifact / Result File";
+      const h2 = curLang === "zh" ? "大小" : "Size";
+      const h3 = curLang === "zh" ? "用途说明（画论文图 / 写报告 / 复现）" : "Contents for Figures, Report & Reproduction";
+      let tbl = `<table><thead><tr><th class="ta-left">${h1}</th><th>${h2}</th><th class="ta-left">${h3}</th></tr></thead><tbody>`;
+      HANDOFF_ROWS.forEach(([label, url, sz, descZh, descEn]) => {
+        const desc = curLang === "zh" ? descZh : descEn;
+        tbl += `<tr><td class="ta-left"><a href="${url}" target="_blank"><code>${esc(label)}</code></a></td><td>${sz}</td><td class="ta-left wrap-cell">${esc(desc)}</td></tr>`;
+      });
+      tbl += `</tbody></table>`;
+      document.getElementById("handoff-table-wrap").innerHTML = tbl;
+    }
+
+    // Tab switcher
     function openTab(tabId) {
       document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tabId));
       document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === tabId));
     }
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-      btn.addEventListener("click", () => openTab(btn.dataset.tab));
-    });
-    document.querySelectorAll("[data-goto]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const [secId, tabId] = btn.getAttribute("data-goto").split(":");
-        if (tabId) openTab(tabId);
-        document.getElementById(secId).scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    });
+    document.querySelectorAll(".tab-btn").forEach(btn => btn.addEventListener("click", () => openTab(btn.dataset.tab)));
 
-    // Section 2: Interactive Architecture Stage Details
+    // Architecture Stage Details (1..5 consistent numbering)
     const ARCH_INFO = {
       "1": {
         zh: "<strong>阶段 1 · 选择性预处理器</strong>：移除零宽字符与夹杂填充符号，仅对全角/圈号数字做 NFKC 折叠 (⑧→8)，刻意保留 <code>髙/穏/え/Ꝗ</code> 跨文字异体字符，并利用 <code>kfcd/chaizi</code> 执行 2/3 字拆字重组（如 <code>氵青→请</code>）。",
@@ -820,48 +844,40 @@
         file: "mvcsn/data/preprocessing.py"
       },
       "2": {
-        zh: "<strong>阶段 2 · 多模态锚点与上下文编码器</strong>：将字符 ID 嵌入与 <code>32×32 GlyphCAE (64d)</code> 字形向量、声母/韵母/声调嵌入经 LayerNorm 锚定相加，送入并行 CNN (k=3,5) + 2 层 Pre-LN Transformer 得到上下文状态 <code>h_ctx</code>。",
+        zh: "<strong>阶段 2 · 多模态锚点与编码</strong>：将字符 ID 嵌入与 <code>32×32 GlyphCAE (64d)</code> 字形向量、声母/韵母/声调嵌入经 LayerNorm 锚定相加，送入并行 CNN (k=3,5) + 2 层 Pre-LN Transformer 得到上下文状态 <code>h_ctx</code>。",
         en: "<strong>Stage 2 · Multimodal Anchor &amp; ContextEncoder</strong>: Sums learned char IDs with projected 64-d rendered glyph CAE embeddings and Pinyin (I/F/T) features, then encodes context <code>h_ctx</code> via parallel k=3,5 CNN + 2L Transformer.",
         file: "mvcsn/model/mvcsn.py · encoder.py"
       },
       "3": {
-        zh: "<strong>阶段 3 · 双视图 GAT + SpellGCN OOV 动态桥接</strong>：分别在 Top-20 语音相似图与跨脚本 32×32 视觉字形图上以 <code>h_ctx</code> 作 Query 聚合邻居；遇未登录新字 (<code>Ꝗ/え</code>) 时实时渲染位图并连入训练词表 Top-20 邻居。",
+        zh: "<strong>阶段 3 · 双视图 GAT + OOV 动态桥</strong>：分别在 Top-20 语音相似图与跨脚本 32×32 视觉字形图上以 <code>h_ctx</code> 作 Query 聚合邻居；遇未登录新字 (<code>Ꝗ/え</code>) 时实时渲染位图并连入训练词表 Top-20 邻居。",
         en: "<strong>Stage 3 · Dual-View GAT + Dynamic OOV Bridge</strong>: Attends over Top-20 phonetic and rendered-glyph neighbors using context queries; unseen test chars are rendered and linked to train neighbors at runtime.",
         file: "mvcsn/model/gat.py · oov_bridge.py"
       },
       "4": {
-        zh: "<strong>阶段 4 · 上下文感知门控与 RoCBert 一致性</strong>：逐字输出 <code>[α_ctx, α_phon, α_glyph]</code>；正常字 93.3% 保持上下文免受邻居污染，混淆字 77.3% 自动切换至音/形图完成纠偏；训练期以 20% GPU 图邻域扰动强制预测一致。",
+        zh: "<strong>阶段 4 · 动态门控与 RoCBert 一致性</strong>：逐字输出 <code>[α_ctx, α_phon, α_glyph]</code>；正常字 93.3% 保持上下文免受邻居污染，混淆字 77.3% 自动切换至音/形图完成纠偏；训练期以 20% GPU 图邻域扰动强制预测一致。",
         en: "<strong>Stage 4 · Context Gate &amp; RoCBert Consistency</strong>: Outputs per-token weights <code>[α_ctx, α_phon, α_glyph]</code> (93.3% context on clean tokens; 77.3% graph on obfuscated tokens) regularized via 20% graph-neighbor consistency.",
         file: "mvcsn/model/gate.py · losses.py"
       },
       "5": {
-        zh: "<strong>阶段 5 · 双输出头与可选融合/级联</strong>：AttentionPooling 汇聚句向量判定 Spam，同步输出逐字混淆概率热力图；可与 <code>hfl/rbt3</code> 跨度对齐融合刷新 <code>0.9964</code> F1，或仅路由 <code>0.71%</code> 不确定样本给 Qwen3-4B。",
+        zh: "<strong>阶段 5 · 双任务输出头与可选级联</strong>：AttentionPooling 汇聚句向量判定 Spam，同步输出逐字混淆概率热力图；可与 <code>hfl/rbt3</code> 跨度对齐融合刷新 <code>0.9964</code> F1，或仅路由 <code>0.71%</code> 不确定样本给 Qwen3-4B。",
         en: "<strong>Stage 5 · Dual Heads &amp; Optional Cascade</strong>: Predicts message spam probability + token obfuscation scores; supports span-aligned RBT3 fusion (<code>0.9964</code> F1) or 0.71%-escalation Qwen3-4B cascade.",
         file: "mvcsn/model/heads.py · finetune.py"
       }
     };
-    let activeArchStage = "4";
     function renderArchDetail(id) {
       activeArchStage = id;
       const info = ARCH_INFO[id];
       document.getElementById("arch-detail").innerHTML = `<div>${info[curLang]}</div><code>${info.file}</code>`;
     }
-    document.querySelectorAll(".arch-node").forEach(g => {
-      g.addEventListener("click", () => renderArchDetail(g.getAttribute("data-stage")));
-    });
-    renderArchDetail("4");
+    document.querySelectorAll(".arch-node").forEach(g => g.addEventListener("click", () => renderArchDetail(g.getAttribute("data-stage"))));
 
-    // Tab 1: Zero-Shot Grouped Bar Chart + Table
+    // Tab 1: Zero-Shot Grouped Bar Chart
     function renderZeroShot() {
       const models = ["LZASD", "RBT3", "TFIDF-SVM", "MV-CSN v2", "RBT3 + MV-CSN v2"];
       const colors = {"LZASD":"#94a3b8", "RBT3":"#60a5fa", "TFIDF-SVM":"#d97706", "MV-CSN v2":"#0f766e", "RBT3 + MV-CSN v2":"#0b5d3b"};
       const metrics = [
-        {key:"OVERALL", label:"Overall F1"},
-        {key:"PHON", label:"PHON"},
-        {key:"GLYPH", label:"GLYPH"},
-        {key:"SPLIT", label:"SPLIT"},
-        {key:"SPACE", label:"SPACE"},
-        {key:"MIXED", label:"MIXED"},
+        {key:"OVERALL", label:"Overall F1"}, {key:"PHON", label:"PHON"}, {key:"GLYPH", label:"GLYPH"},
+        {key:"SPLIT", label:"SPLIT"}, {key:"SPACE", label:"SPACE"}, {key:"MIXED", label:"MIXED"},
       ];
       const W = 960, H = 280, padL = 52, padR = 16, padT = 40, padB = 42;
       const plotW = W - padL - padR, plotH = H - padT - padB;
@@ -878,30 +894,22 @@
         svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e5e3dc" stroke-dasharray="3,3"/>`;
         svg += `<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#787e8a">${yv.toFixed(1)}</text>`;
       });
-      const groupW = plotW / metrics.length;
-      const barW = 21, gap = 3;
+      const groupW = plotW / metrics.length, barW = 21, gap = 3;
       metrics.forEach((mt, gi) => {
         const totalGW = models.length * barW + (models.length - 1) * gap;
         const gx = padL + gi * groupW + (groupW - totalGW) / 2;
         models.forEach((m, mi) => {
           const val = mt.key === "OVERALL" ? DATA.zeroshot.summary[m].f1.mean : DATA.zeroshot.per_attack[m][mt.key];
-          const x = gx + mi * (barW + gap);
-          const y = yScale(val);
-          const h = yScale(yMin) - y;
+          const x = gx + mi * (barW + gap), y = yScale(val), h = yScale(yMin) - y;
           const tip = `<strong>${m}</strong> · ${mt.label}<br/>F1 = <code>${val.toFixed(4)}</code>`;
           svg += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${colors[m]}" data-tip="${esc(tip)}"/>`;
-          if (mi === 3) {
-            svg += `<text x="${x + barW/2 - 2}" y="${y - 13}" text-anchor="middle" font-size="9.3" font-weight="700" fill="#0f766e">${(val*100).toFixed(1)}</text>`;
-          } else if (mi === 4) {
-            svg += `<text x="${x + barW/2 + 2}" y="${y - 4}" text-anchor="middle" font-size="9.3" font-weight="700" fill="#0b5d3b">${(val*100).toFixed(1)}</text>`;
-          }
+          if (mi === 3) svg += `<text x="${x + barW/2 - 2}" y="${y - 13}" text-anchor="middle" font-size="9.3" font-weight="700" fill="#0f766e">${(val*100).toFixed(1)}</text>`;
+          else if (mi === 4) svg += `<text x="${x + barW/2 + 2}" y="${y - 4}" text-anchor="middle" font-size="9.3" font-weight="700" fill="#0b5d3b">${(val*100).toFixed(1)}</text>`;
         });
         svg += `<text x="${padL + gi * groupW + groupW/2}" y="${H - 14}" text-anchor="middle" font-size="11.5" font-weight="700" fill="#181a1f">${mt.label}</text>`;
       });
       svg += `</svg>`;
-      const cbox = document.getElementById("chart-zs");
-      cbox.innerHTML = svg;
-      bindTooltips(cbox);
+      const cbox = document.getElementById("chart-zs"); cbox.innerHTML = svg; bindTooltips(cbox);
 
       let tbl = `<table><thead><tr><th class="ta-left">Model (Clean → RealVariant, 3 Seeds)</th><th>Overall F1</th><th>AUC</th><th>Clean Ham Acc</th><th>PHON</th><th>GLYPH</th><th>SPLIT</th><th>SPACE</th><th>MIXED</th></tr></thead><tbody>`;
       models.forEach(m => {
@@ -913,7 +921,7 @@
       document.getElementById("table-zs").innerHTML = tbl;
     }
 
-    // Tab 2: LLM Latency (log10) vs F1 Scatter with Zero-Overlap Leader-Line Callouts
+    // Tab 2: LLM Latency vs F1 Pareto Scatter
     function renderLLM() {
       const pts = [
         {name:"RBT3 + MV-CSN v2 (40M)", f1:DATA.llm.summary["RBT3 + MV-CSN v2"].f1, ms:DATA.llm.summary["RBT3 + MV-CSN v2"].ms, color:"#0b5d3b", lx:420, ly:42, anchor:"start", lead:true},
@@ -926,18 +934,13 @@
       ];
       const W = 960, H = 330, padL = 62, padR = 36, padT = 30, padB = 46;
       const plotW = W - padL - padR, plotH = H - padT - padB;
-      const xMin = Math.log10(0.14), xMax = Math.log10(95);
-      const yMin = 0.84, yMax = 1.012;
+      const xMin = Math.log10(0.14), xMax = Math.log10(95), yMin = 0.84, yMax = 1.012;
       const xScale = ms => padL + plotW * (Math.log10(ms) - xMin) / (xMax - xMin);
       const yScale = f1 => padT + plotH * (1 - (f1 - yMin) / (yMax - yMin));
       let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:680px;">`;
-
-      // Shaded Pareto Ideal Zone (< 1 ms, F1 > 0.99)
-      const zW = xScale(1.0) - padL;
-      const zH = yScale(0.99) - yScale(1.005);
+      const zW = xScale(1.0) - padL, zH = yScale(0.99) - yScale(1.005);
       svg += `<rect x="${padL}" y="${yScale(1.005)}" width="${zW}" height="${zH}" fill="#e8f3ee" stroke="#86efac" stroke-dasharray="4,3" rx="6"/>`;
       svg += `<text x="${padL+10}" y="${yScale(1.005)-8}" font-size="10.8" font-weight="700" fill="#0b5d3b">Pareto Ideal Zone (&lt; 1 ms/SMS, F1 &gt; 0.99)</text>`;
-
       [0.2, 0.5, 1, 5, 10, 30, 60].forEach(tick => {
         const x = xScale(tick);
         svg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${H-padB}" stroke="#e5e3dc" stroke-dasharray="3,3"/>`;
@@ -948,27 +951,19 @@
         svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e5e3dc" stroke-dasharray="3,3"/>`;
         svg += `<text x="${padL-9}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#787e8a">${tick.toFixed(2)}</text>`;
       });
-      svg += `<text x="${padL + plotW/2}" y="${H-8}" text-anchor="middle" font-size="11.2" font-weight="600" fill="#575c66">Inference Latency per SMS (ms, log10 scale) — 越靠左越快 · 越靠上越准</text>`;
-
-      // Dashed Pareto curve connecting MV-CSN v2 and RBT3 + MV-CSN v2
-      const pMv = pts[1], pFus = pts[0];
-      svg += `<line x1="${xScale(pMv.ms)}" y1="${yScale(pMv.f1)}" x2="${xScale(pFus.ms)}" y2="${yScale(pFus.f1)}" stroke="#0b5d3b" stroke-width="1.6" stroke-dasharray="4,3"/>`;
-
+      const xAxisNote = curLang === "zh" ? "Inference Latency per SMS (ms, log10 scale) — 越靠左越快 · 越靠上越准" : "Inference Latency per SMS (ms, log10 scale) — Faster is Left · More Accurate is Up";
+      svg += `<text x="${padL + plotW/2}" y="${H-8}" text-anchor="middle" font-size="11.2" font-weight="600" fill="#575c66">${xAxisNote}</text>`;
+      svg += `<line x1="${xScale(pts[1].ms)}" y1="${yScale(pts[1].f1)}" x2="${xScale(pts[0].ms)}" y2="${yScale(pts[0].f1)}" stroke="#0b5d3b" stroke-width="1.6" stroke-dasharray="4,3"/>`;
       pts.forEach(p => {
         const cx = xScale(p.ms), cy = yScale(p.f1);
-        const tx = p.lead ? p.lx : (cx + p.dx);
-        const ty = p.lead ? p.ly : (cy + p.dy);
-        if (p.lead) {
-          svg += `<line x1="${cx}" y1="${cy}" x2="${tx}" y2="${ty - 4}" stroke="${p.color}" stroke-width="1.1" opacity="0.65"/>`;
-        }
+        const tx = p.lead ? p.lx : (cx + p.dx), ty = p.lead ? p.ly : (cy + p.dy);
+        if (p.lead) svg += `<line x1="${cx}" y1="${cy}" x2="${tx}" y2="${ty - 4}" stroke="${p.color}" stroke-width="1.1" opacity="0.65"/>`;
         const tip = `<strong>${p.name}</strong><br/>F1 = <code>${p.f1.toFixed(4)}</code> · Latency = <code>${p.ms.toFixed(3)} ms/SMS</code>`;
         svg += `<circle cx="${cx}" cy="${cy}" r="6.5" fill="${p.color}" stroke="#fff" stroke-width="2" data-tip="${esc(tip)}"/>`;
         svg += `<text x="${tx}" y="${ty}" text-anchor="${p.anchor}" font-size="11.2" font-weight="700" fill="${p.color}">${p.name} · ${p.f1.toFixed(4)}</text>`;
       });
       svg += `</svg>`;
-      const cbox = document.getElementById("chart-llm");
-      cbox.innerHTML = svg;
-      bindTooltips(cbox);
+      const cbox = document.getElementById("chart-llm"); cbox.innerHTML = svg; bindTooltips(cbox);
 
       let tbl = `<table><thead><tr><th class="ta-left">Model / Strategy</th><th>Parameters</th><th>Latency (ms)</th><th>Overall F1</th><th>AUC</th><th>Clean Ham Acc</th><th>GLYPH F1</th><th>SPLIT F1</th></tr></thead><tbody>`;
       DATA.llm.order.forEach(m => {
@@ -981,16 +976,14 @@
       document.getElementById("table-llm").innerHTML = tbl;
     }
 
-    // Tab 3: Honest Diverging Delta-F1 Ablation Chart + Table
+    // Tab 3: Honest Diverging Delta-F1 Ablation Chart
     function renderAblations() {
       const rows = DATA.ablations;
       const W = 960, rowH = 34, padL = 235, padR = 165, padT = 36, padB = 34;
       const H = padT + rows.length * rowH + padB;
-      const plotW = W - padL - padR;
-      const xMin = -0.028, xMax = 0.002;
+      const plotW = W - padL - padR, xMin = -0.028, xMax = 0.002;
       const xScale = v => padL + plotW * (v - xMin) / (xMax - xMin);
       const zeroX = xScale(0);
-
       let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:680px;">`;
       svg += `<text x="16" y="20" font-size="11.5" font-weight="700" fill="#181a1f">ΔF1 Relative to Full MV-CSN v2 (0.9958 ± 0.0005, Zero-Shot Benchmark B, 3 Seeds)</text>`;
       [-0.025, -0.020, -0.015, -0.010, -0.005, 0.0].forEach(tick => {
@@ -998,22 +991,17 @@
         svg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${H-padB}" stroke="${tick===0?'#181a1f':'#e5e3dc'}" stroke-width="${tick===0?1.5:1}" stroke-dasharray="${tick===0?'':'3,3'}"/>`;
         svg += `<text x="${x}" y="${H-12}" text-anchor="middle" font-size="10.2" fill="#787e8a">${tick===0?'0.000':tick.toFixed(3)}</text>`;
       });
-
       rows.forEach((r, i) => {
-        const y = padT + i * rowH;
-        const c = i === 0 ? "#0b5d3b" : (r.delta < -0.005 ? "#c83e37" : (r.delta < 0 ? "#d97706" : "#64748b"));
+        const y = padT + i * rowH, c = i === 0 ? "#0b5d3b" : (r.delta < -0.005 ? "#c83e37" : (r.delta < 0 ? "#d97706" : "#64748b"));
         svg += `<text x="${padL-10}" y="${y+20}" text-anchor="end" font-size="11.5" font-weight="${i===0?700:500}" fill="#181a1f">${esc(r.name)}</text>`;
-        const bx = r.delta >= 0 ? zeroX : xScale(r.delta);
-        const bw = Math.max(4, Math.abs(xScale(r.delta) - zeroX));
+        const bx = r.delta >= 0 ? zeroX : xScale(r.delta), bw = Math.max(4, Math.abs(xScale(r.delta) - zeroX));
         const tip = `<strong>${esc(r.name)}</strong><br/>F1 = <code>${r.f1.toFixed(4)} ± ${r.std.toFixed(4)}</code> · ΔF1 = <code>${r.delta>=0?'+':''}${r.delta.toFixed(4)}</code>`;
         svg += `<rect x="${bx}" y="${y+7}" width="${bw}" height="18" rx="4" fill="${c}" data-tip="${esc(tip)}"/>`;
         const lbl = i === 0 ? `${r.f1.toFixed(4)} (baseline)` : `${r.f1.toFixed(4)} (${r.delta>=0?'+':''}${r.delta.toFixed(4)})`;
         svg += `<text x="${W-padR+10}" y="${y+20}" font-size="11.2" font-weight="700" fill="${c}">${lbl}</text>`;
       });
       svg += `</svg>`;
-      const cbox = document.getElementById("chart-abl");
-      cbox.innerHTML = svg;
-      bindTooltips(cbox);
+      const cbox = document.getElementById("chart-abl"); cbox.innerHTML = svg; bindTooltips(cbox);
 
       let tbl = `<table><thead><tr><th class="ta-left">Ablation Configuration (3 Seeds)</th><th>F1 (mean ± std)</th><th>ΔF1 vs. Full</th><th>AUC</th><th>Clean Ham Acc</th></tr></thead><tbody>`;
       rows.forEach((r, i) => {
@@ -1023,12 +1011,12 @@
       document.getElementById("table-abl").innerHTML = tbl;
     }
 
-    // Tab 4: Intensity Curve + Benchmark A/B Length Audit Bars + In-Dist Table
+    // Tab 4: Intensity Curve — Fix Right-Edge Overlap With Explicit Evenly-Spaced Leader Slots!
     function renderCurve() {
       const rates = DATA.intensity.rates;
       const models = ["LZASD", "TFIDF-SVM", "RBT3", "MV-CSN v2", "RBT3 + MV-CSN v2"];
       const colors = {"LZASD":"#94a3b8", "TFIDF-SVM":"#d97706", "RBT3":"#60a5fa", "MV-CSN v2":"#0f766e", "RBT3 + MV-CSN v2":"#0b5d3b"};
-      const W = 960, H = 264, padL = 56, padR = 178, padT = 26, padB = 38;
+      const W = 960, H = 278, padL = 56, padR = 205, padT = 26, padB = 38;
       const plotW = W - padL - padR, plotH = H - padT - padB;
       const yMin = 0.915, yMax = 1.003;
       const xScale = i => padL + plotW * (i / (rates.length - 1));
@@ -1042,44 +1030,45 @@
       rates.forEach((r, i) => {
         svg += `<text x="${xScale(i)}" y="${H-12}" text-anchor="middle" font-size="11" font-weight="600" fill="#575c66">${Math.round(r*100)}%</text>`;
       });
+      // Guaranteed 24px vertical spacing across top-4 tightly clustered endpoints at 60%
       const labelY = {
-        "MV-CSN v2": yScale(0.9874) - 10,
-        "RBT3": yScale(0.9870) + 4,
-        "RBT3 + MV-CSN v2": yScale(0.9858) + 18,
-        "TFIDF-SVM": yScale(0.9789) + 6,
+        "MV-CSN v2": 48,
+        "RBT3": 72,
+        "RBT3 + MV-CSN v2": 96,
+        "TFIDF-SVM": 120,
         "LZASD": yScale(0.9207) + 4
       };
+      const xEnd = xScale(rates.length - 1);
       models.forEach(m => {
         const vals = DATA.intensity.series[m];
         const path = vals.map((v, i) => `${i===0?'M':'L'} ${xScale(i)} ${yScale(v)}`).join(" ");
         svg += `<path d="${path}" fill="none" stroke="${colors[m]}" stroke-width="${m.includes('MV-CSN')?2.8:1.8}"/>`;
         vals.forEach((v, i) => {
-          const tip = `<strong>${m}</strong> @ ${Math.round(rates[i]*100)}% 扰动<br/>F1 = <code>${v.toFixed(4)}</code>`;
+          const tip = `<strong>${m}</strong> @ ${Math.round(rates[i]*100)}%<br/>F1 = <code>${v.toFixed(4)}</code>`;
           svg += `<circle cx="${xScale(i)}" cy="${yScale(v)}" r="4" fill="${colors[m]}" stroke="#fff" stroke-width="1.2" data-tip="${esc(tip)}"/>`;
         });
         const lastV = vals[vals.length - 1];
-        svg += `<line x1="${xScale(rates.length-1)+5}" y1="${yScale(lastV)}" x2="${W-padR+8}" y2="${labelY[m]-3}" stroke="${colors[m]}" stroke-width="1" opacity="0.5"/>`;
-        svg += `<text x="${W-padR+12}" y="${labelY[m]}" font-size="11" font-weight="700" fill="${colors[m]}">${m} (${lastV.toFixed(4)})</text>`;
+        const ly = labelY[m];
+        svg += `<line x1="${xEnd + 5}" y1="${yScale(lastV)}" x2="${W - padR + 24}" y2="${ly - 4}" stroke="${colors[m]}" stroke-width="1.15" opacity="0.6"/>`;
+        svg += `<text x="${W - padR + 28}" y="${ly}" font-size="11" font-weight="700" fill="${colors[m]}">${m} · ${lastV.toFixed(4)}</text>`;
       });
       svg += `</svg>`;
-      const cbox = document.getElementById("chart-curve");
-      cbox.innerHTML = svg;
-      bindTooltips(cbox);
+      const cbox = document.getElementById("chart-curve"); cbox.innerHTML = svg; bindTooltips(cbox);
 
-      // Visual Benchmark A vs B length audit bars
       const la = DATA.in_dist.bench_a.length_audit, lb = DATA.in_dist.bench_b.length_audit;
+      const tA = curLang === "zh" ? "Benchmark A (Course 16K) · 存在长度捷径偏差" : "Benchmark A (Course 16K) · Severe Length Shortcut";
+      const tB = curLang === "zh" ? "Benchmark B (SMS-Matched 16.5K) · 长度直方图严格对齐" : "Benchmark B (SMS-Matched 16.5K) · Matched Length Histogram";
       document.getElementById("length-audit-bars").innerHTML = `
         <div class="audit-card">
-          <div style="font-size:0.83rem;font-weight:700;color:var(--vermilion);">Benchmark A (Course 16K) · 存在长度捷径偏差</div>
+          <div style="font-size:0.83rem;font-weight:700;color:var(--vermilion);">${tA}</div>
           <div class="audit-row"><span style="width:92px;">Ham p50=${la.ham_p50}</span><div class="audit-track"><div class="audit-fill" style="width:${la.ham_p50/2.1}%;background:#0f766e;"></div></div></div>
           <div class="audit-row"><span style="width:92px;">Spam p50=${la.spam_p50}</span><div class="audit-track"><div class="audit-fill" style="width:${la.spam_p50/2.1}%;background:#c83e37;"></div></div></div>
         </div>
         <div class="audit-card">
-          <div style="font-size:0.83rem;font-weight:700;color:var(--emerald);">Benchmark B (SMS-Matched 16.5K) · 长度直方图严格对齐</div>
+          <div style="font-size:0.83rem;font-weight:700;color:var(--emerald);">${tB}</div>
           <div class="audit-row"><span style="width:92px;">Ham p50=${lb.ham_p50}</span><div class="audit-track"><div class="audit-fill" style="width:${lb.ham_p50/2.1}%;background:#0f766e;"></div></div></div>
           <div class="audit-row"><span style="width:92px;">Spam p50=${lb.spam_p50}</span><div class="audit-track"><div class="audit-fill" style="width:${lb.spam_p50/2.1}%;background:#0b5d3b;"></div></div></div>
-        </div>
-      `;
+        </div>`;
 
       let tbl = `<table><thead><tr><th class="ta-left">Model (In-Distribution, 3 Seeds)</th><th>Params</th><th>Bench A (16K) F1</th><th>Bench B (SMS 16.5K) F1</th><th>Bench B AUC</th><th>Bench B Latency (ms)</th></tr></thead><tbody>`;
       ["TFIDF-SVM", "LZASD", "RBT3", "MV-CSN v2", "RBT3 + MV-CSN v2"].forEach(m => {
@@ -1092,31 +1081,31 @@
       document.getElementById("table-indist").innerHTML = tbl;
     }
 
-    // Tab 5: Error Analysis (Strictly inside .card, Left-Aligned Chart Title, All 20 Cases Filterable)
+    // Tab 5: Error Analysis — Generous padL=445 Prevents ANY Left-Edge Clipping
     function renderErrors(filterType = "ALL") {
+      curErrFilter = filterType;
       const ea = DATA.error_analysis;
       const bars = [];
       Object.entries(ea.summary.fp_categories).forEach(([k, v]) => bars.push({label: "FP · " + k, count: v, color: "#b45309"}));
       Object.entries(ea.summary.fn_categories).forEach(([k, v]) => bars.push({label: "FN · " + k, count: v, color: "#c83e37"}));
-      const W = 960, rowH = 34, padL = 400, padR = 95, padT = 36;
+      const W = 960, rowH = 34, padL = 455, padR = 90, padT = 36;
       const H = padT + bars.length * rowH + 14;
-      const plotW = W - padL - padR;
-      const maxC = Math.max(...bars.map(b => b.count), 4);
+      const plotW = W - padL - padR, maxC = Math.max(...bars.map(b => b.count), 4);
       let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:680px;">`;
-      svg += `<text x="16" y="20" font-size="11.5" font-weight="700" fill="#181a1f">Failure-Mode Taxonomy · 全部 20 条错判分布（共 3,395 测试样本，总体错误率 0.59%）</text>`;
+      const chartTitle = curLang === "zh"
+        ? "Failure-Mode Taxonomy · 全部 20 条错判分布（共 3,395 测试样本，总体错误率 0.59%）"
+        : "Failure-Mode Taxonomy · All 20 Errors across 3,395 Benchmark B Test SMS (0.59% Error Rate)";
+      svg += `<text x="16" y="20" font-size="11.5" font-weight="700" fill="#181a1f">${chartTitle}</text>`;
       bars.forEach((b, i) => {
-        const y = padT + i * rowH;
-        const bw = Math.max(12, plotW * (b.count / maxC));
+        const y = padT + i * rowH, bw = Math.max(12, plotW * (b.count / maxC));
         const tip = `<strong>${esc(b.label)}</strong>: ${b.count} cases`;
-        svg += `<text x="${padL - 12}" y="${y + 20}" text-anchor="end" font-size="11.2" font-weight="600" fill="#181a1f">${esc(b.label)}</text>`;
+        svg += `<text x="${padL - 12}" y="${y + 20}" text-anchor="end" font-size="11" font-weight="600" fill="#181a1f">${esc(b.label)}</text>`;
         svg += `<rect x="${padL}" y="${y + 6}" width="${plotW}" height="19" rx="4" fill="#f4f2eb"/>`;
         svg += `<rect x="${padL}" y="${y + 6}" width="${bw}" height="19" rx="4" fill="${b.color}" data-tip="${esc(tip)}"/>`;
         svg += `<text x="${padL + bw + 9}" y="${y + 20}" font-size="11.2" font-weight="700" fill="${b.color}">${b.count} ${b.count > 1 ? "cases" : "case"}</text>`;
       });
       svg += `</svg>`;
-      const cbox = document.getElementById("chart-err");
-      cbox.innerHTML = svg;
-      bindTooltips(cbox);
+      const cbox = document.getElementById("chart-err"); cbox.innerHTML = svg; bindTooltips(cbox);
 
       const rows = ea.errors.filter(e => filterType === "ALL" || e.type === filterType);
       let tbl = `<table><thead><tr><th class="ta-left">Type</th><th class="ta-left">Attack</th><th>P(spam)</th><th class="ta-left">Failure Category</th><th class="ta-left">Real Test SMS (Complete Record)</th></tr></thead><tbody>`;
@@ -1137,12 +1126,16 @@
       });
     });
 
-    // Section 4: Gate Distribution Stacked Bars + Interactive Case Study X-Ray
+    // Section 4: Gate Distribution Stacked Bars + Case Study X-Ray
     function renderGateDist() {
-      const rows = [
+      const rows = curLang === "zh" ? [
         {label: `正常干净字 Clean Tokens (n=${DATA.gate.counts.clean.toLocaleString()})`, vals: DATA.gate.means.clean},
         {label: `谐音/混合混淆 Phonetic / Mixed (n=${DATA.gate.counts.phon_obf.toLocaleString()})`, vals: DATA.gate.means.phon_obf},
         {label: `纯形近混淆 Glyph-Only Obf. (n=${DATA.gate.counts.glyph_obf.toLocaleString()})`, vals: DATA.gate.means.glyph_obf},
+      ] : [
+        {label: `Clean Tokens (n=${DATA.gate.counts.clean.toLocaleString()})`, vals: DATA.gate.means.clean},
+        {label: `Phonetic / Mixed Obf. (n=${DATA.gate.counts.phon_obf.toLocaleString()})`, vals: DATA.gate.means.phon_obf},
+        {label: `Glyph-Only Obf. (n=${DATA.gate.counts.glyph_obf.toLocaleString()})`, vals: DATA.gate.means.glyph_obf},
       ];
       const W = 960, H = 162, padL = 290, padR = 24, padT = 36;
       const plotW = W - padL - padR;
@@ -1162,44 +1155,56 @@
           const w = plotW * v;
           const tip = `<strong>${r.label}</strong><br/>${segLabels[si]}: <code>${(v*100).toFixed(1)}%</code>`;
           svg += `<rect x="${curX}" y="${y+5}" width="${w}" height="22" fill="${segColors[si]}" data-tip="${esc(tip)}"/>`;
-          if (v >= 0.08) {
-            svg += `<text x="${curX + w/2}" y="${y+20}" text-anchor="middle" font-size="10.8" font-weight="700" fill="#fff">${(v*100).toFixed(1)}%</text>`;
-          }
+          if (v >= 0.08) svg += `<text x="${curX + w/2}" y="${y+20}" text-anchor="middle" font-size="10.8" font-weight="700" fill="#fff">${(v*100).toFixed(1)}%</text>`;
           curX += w;
         });
       });
       svg += `</svg>`;
-      const cbox = document.getElementById("chart-gate-dist");
-      cbox.innerHTML = svg;
-      bindTooltips(cbox);
+      const cbox = document.getElementById("chart-gate-dist"); cbox.innerHTML = svg; bindTooltips(cbox);
+    }
+
+    const CASE_LABELS_ZH = ["MIXED 复合攻击 (Spam)", "PHON 谐音攻击 (Spam)", "SPLIT 拆字/域名规避 (Spam)", "GLYPH 形近攻击 (Spam)", "CLEAN 正常短信 (Ham)"];
+    const CASE_LABELS_EN = ["MIXED Attack (Spam)", "PHON Homophone (Spam)", "SPLIT Domain/Radical (Spam)", "GLYPH Lookalike (Spam)", "CLEAN Normal SMS (Ham)"];
+
+    function renderCaseButtons() {
+      const wrap = document.getElementById("case-pills");
+      wrap.innerHTML = "";
+      const labels = curLang === "zh" ? CASE_LABELS_ZH : CASE_LABELS_EN;
+      labels.forEach((lbl, idx) => {
+        const b = document.createElement("button");
+        b.className = "case-pill" + (idx === curCaseIdx ? " active" : "");
+        b.textContent = lbl;
+        b.addEventListener("click", () => renderCaseStudy(idx));
+        wrap.appendChild(b);
+      });
     }
 
     function renderCaseStudy(caseIdx) {
+      curCaseIdx = caseIdx;
       const cs = DATA.gate.cases[caseIdx];
       document.querySelectorAll(".case-pill").forEach((el, i) => el.classList.toggle("active", i === caseIdx));
+      const vTxtSpam = curLang === "zh" ? "判定：SPAM 垃圾短信" : "Verdict: SPAM";
+      const vTxtHam = curLang === "zh" ? "判定：CLEAN HAM 正常短信" : "Verdict: CLEAN HAM";
       const verdict = cs.pred_prob >= 0.5
-        ? '<span class="badge" style="background:var(--vermilion-soft);color:var(--vermilion);border:1px solid rgba(200,62,55,.25);">判定：SPAM 垃圾短信</span>'
-        : '<span class="badge done">判定：CLEAN HAM 正常短信</span>';
+        ? `<span class="badge" style="background:var(--vermilion-soft);color:var(--vermilion);border:1px solid rgba(200,62,55,.25);">${vTxtSpam}</span>`
+        : `<span class="badge done">${vTxtHam}</span>`;
       document.getElementById("case-verdict").innerHTML = `${verdict} &nbsp; <code>P(spam) = ${cs.pred_prob.toFixed(4)}</code> · Attack Tag: <code>${esc(cs.attack_type)}</code>`;
+      const rawH = curLang === "zh" ? "原始输入短信 (Raw SMS)" : "Raw Input SMS";
+      const procH = curLang === "zh" ? "预处理器清洗/重组输出 (Preprocessed)" : "Preprocessed / Recomposed Text";
       document.getElementById("case-compare").innerHTML = `
-        <div class="sms-box"><div style="font-size:0.74rem;color:var(--muted);font-weight:700;">原始输入短信 (Raw SMS)</div><code>${esc(cs.raw_text)}</code></div>
-        <div class="sms-box"><div style="font-size:0.74rem;color:var(--muted);font-weight:700;">预处理器清洗/重组输出 (Preprocessed)</div><code>${esc(cs.proc_text)}</code></div>
-      `;
+        <div class="sms-box"><div style="font-size:0.74rem;color:var(--muted);font-weight:700;">${rawH}</div><code>${esc(cs.raw_text)}</code></div>
+        <div class="sms-box"><div style="font-size:0.74rem;color:var(--muted);font-weight:700;">${procH}</div><code>${esc(cs.proc_text)}</code></div>`;
 
       const box = document.getElementById("heatmap-box");
       box.innerHTML = "";
       let defaultTok = 0, maxObf = -1;
       cs.obf_probs.forEach((p, idx) => { if (p > maxObf) { maxObf = p; defaultTok = idx; } });
-
       cs.chars.forEach((ch, idx) => {
-        const p = cs.obf_probs[idx];
-        const gb = Math.round(Math.max(85, 246 - p * 160));
-        const bg = p >= 0.25 ? `rgb(255,${gb},${gb})` : "#ffffff";
-        const bdr = p >= 0.50 ? "#c83e37" : "#d4d1c7";
+        const p = cs.obf_probs[idx], gb = Math.round(Math.max(85, 246 - p * 160));
         const span = document.createElement("span");
         span.className = "char-tok";
-        span.style.background = bg;
-        span.style.borderColor = bdr;
+        span.style.background = p >= 0.25 ? `rgb(255,${gb},${gb})` : "#ffffff";
+        span.style.borderColor = p >= 0.50 ? "#c83e37" : "#d4d1c7";
         span.innerHTML = `${ch === ' ' ? '␣' : esc(ch)}<small>${Math.round(p*100)}%</small>`;
         span.addEventListener("mouseenter", () => showToken(cs, idx));
         span.addEventListener("click", () => showToken(cs, idx));
@@ -1209,43 +1214,59 @@
     }
 
     function showToken(cs, idx) {
+      curTokIdx = idx;
       document.querySelectorAll(".char-tok").forEach((el, i) => el.classList.toggle("selected", i === idx));
       const ch = cs.chars[idx], obf = cs.obf_probs[idx], ac = cs.alpha_ctx[idx], ap = cs.alpha_phon[idx], ag = cs.alpha_glyph[idx];
+      const lbls = curLang === "zh"
+        ? ["当前选中字符", "字符混淆预测得分", "上下文流权重 (α_ctx)", "语音相似图 (α_phon)", "渲染字形图 (α_glyph)"]
+        : ["Selected Character", "Obfuscation Score", "Context Gate (α_ctx)", "Phonetic GAT (α_phon)", "Glyph GAT (α_glyph)"];
       document.getElementById("tok-inspector").innerHTML = `
-        <div><div style="font-size:0.76rem;color:var(--muted);">当前选中字符 [#${idx}]</div><div style="font-size:1.55rem;font-weight:800;font-family:var(--serif);">${esc(ch)}</div></div>
-        <div><div style="font-size:0.76rem;color:var(--muted);">字符混淆预测得分：<strong>${(obf*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${obf*100}%;background:#c83e37;"></div></div></div>
-        <div><div style="font-size:0.76rem;color:var(--muted);">上下文流权重 (α_ctx)：<strong>${(ac*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${ac*100}%;background:#2b303a;"></div></div></div>
-        <div><div style="font-size:0.76rem;color:var(--muted);">语音相似图 (α_phon)：<strong>${(ap*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${ap*100}%;background:#0b5d3b;"></div></div></div>
-        <div><div style="font-size:0.76rem;color:var(--muted);">渲染字形图 (α_glyph)：<strong>${(ag*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${ag*100}%;background:#c83e37;"></div></div></div>
-      `;
+        <div><div style="font-size:0.76rem;color:var(--muted);">${lbls[0]} [#${idx}]</div><div style="font-size:1.55rem;font-weight:800;font-family:var(--serif);">${esc(ch)}</div></div>
+        <div><div style="font-size:0.76rem;color:var(--muted);">${lbls[1]}：<strong>${(obf*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${obf*100}%;background:#c83e37;"></div></div></div>
+        <div><div style="font-size:0.76rem;color:var(--muted);">${lbls[2]}：<strong>${(ac*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${ac*100}%;background:#2b303a;"></div></div></div>
+        <div><div style="font-size:0.76rem;color:var(--muted);">${lbls[3]}：<strong>${(ap*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${ap*100}%;background:#0b5d3b;"></div></div></div>
+        <div><div style="font-size:0.76rem;color:var(--muted);">${lbls[4]}：<strong>${(ag*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${ag*100}%;background:#c83e37;"></div></div></div>`;
     }
 
-    const caseLabels = ["MIXED 复合攻击 (Spam)", "PHON 谐音攻击 (Spam)", "SPLIT 拆字/域名规避 (Spam)", "GLYPH 形近攻击 (Spam)", "CLEAN 正常短信 (Ham)"];
-    const pillsWrap = document.getElementById("case-pills");
-    caseLabels.forEach((lbl, idx) => {
-      const b = document.createElement("button");
-      b.className = "case-pill";
-      b.textContent = lbl;
-      b.addEventListener("click", () => renderCaseStudy(idx));
-      pillsWrap.appendChild(b);
+    // Language switch handler re-renders ALL localized sections cleanly
+    document.getElementById("lang-toggle").addEventListener("click", () => {
+      curLang = curLang === "zh" ? "en" : "zh";
+      document.documentElement.lang = curLang === "zh" ? "zh-CN" : "en";
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const k = el.getAttribute("data-i18n");
+        if (I18N[curLang][k]) el.innerHTML = I18N[curLang][k];
+      });
+      renderProgressGrid();
+      renderArchDetail(activeArchStage);
+      renderLLM();
+      renderCurve();
+      renderErrors(curErrFilter);
+      renderGateDist();
+      renderCaseButtons();
+      renderCaseStudy(curCaseIdx);
+      renderHandoffTable();
     });
 
-    // Copy quickstart commands
     document.getElementById("copy-cmd-btn").addEventListener("click", async () => {
       const btn = document.getElementById("copy-cmd-btn");
       const txt = document.getElementById("quickstart-code").textContent;
       if (navigator.clipboard) await navigator.clipboard.writeText(txt);
-      btn.textContent = "已复制 ✓";
-      setTimeout(() => { btn.textContent = "复制命令"; }, 1800);
+      btn.textContent = curLang === "zh" ? "已复制 ✓" : "Copied ✓";
+      setTimeout(() => { btn.textContent = I18N[curLang].copy_btn; }, 1800);
     });
 
+    // Initial Render
+    renderProgressGrid();
+    renderArchDetail("4");
     renderZeroShot();
     renderLLM();
     renderAblations();
     renderCurve();
     renderErrors("ALL");
     renderGateDist();
+    renderCaseButtons();
     renderCaseStudy(0);
+    renderHandoffTable();
   </script>
 </body>
 </html>
