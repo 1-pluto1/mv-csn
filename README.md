@@ -1,5 +1,7 @@
 # MV-CSN v2: Multi-View Context-Gated Character Similarity Network
 
+**Interactive Project Page & Progress Dashboard:** https://1-pluto1.github.io/mv-csn/
+
 **Chinese Adversarial Variant Spam Detection** — *Sun Yat-sen University, Data Science & Engineering Capstone Project*
 
 MV-CSN v2 is a ~1.37M-parameter character-level defense network combining phonetic reading priors, 32x32 rendered-glyph convolutional embeddings, context-gated dual-view graph attention, SpellGCN-style dynamic OOV graph bridging, and RoCBert-style consistency regularization.

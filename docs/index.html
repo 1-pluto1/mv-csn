@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MV-CSN v2 | Chinese Adversarial Variant Spam Detection</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --line: #e2e8f0;
+      --sysu: #005826;
+      --sysu-soft: #ecfdf3;
+      --blue: #2563eb;
+      --blue-soft: #eff6ff;
+      --coral: #e11d48;
+      --coral-soft: #fff1f2;
+      --amber: #b45309;
+      --amber-soft: #fffbeb;
+      --purple: #7c3aed;
+      --radius: 14px;
+      --shadow: 0 1px 3px rgba(15,23,42,0.06), 0 8px 24px rgba(15,23,42,0.04);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 72px; }
+
+    /* Top Nav */
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(248, 250, 252, 0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      max-width: 1080px; margin: 0 auto; padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .brand { font-weight: 700; font-size: 0.98rem; color: var(--sysu); letter-spacing: -0.01em; }
+    .nav-links { display: flex; gap: 18px; font-size: 0.88rem; color: var(--muted); flex-wrap: wrap; }
+    .nav-links a { color: var(--muted); font-weight: 500; }
+    .nav-links a:hover { color: var(--ink); text-decoration: none; }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 52px 12px 34px;
+    }
+    .venue-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--sysu-soft); color: var(--sysu);
+      border: 1px solid #bbf7d0; border-radius: 999px;
+      padding: 5px 14px; font-size: 0.82rem; font-weight: 600;
+      margin-bottom: 16px;
+    }
+    h1 {
+      margin: 0 auto 14px; max-width: 860px;
+      font-size: clamp(1.75rem, 3.2vw, 2.55rem);
+      line-height: 1.18; letter-spacing: -0.025em;
+    }
+    .subtitle {
+      margin: 0 auto 24px; max-width: 780px;
+      font-size: 1.03rem; color: var(--muted);
+    }
+    .cta-row {
+      display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 16px; border-radius: 999px; font-size: 0.88rem; font-weight: 600;
+      border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); text-decoration: none; }
+    .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+      gap: 14px; margin: 20px 0 36px;
+    }
+    .kpi {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow);
+    }
+    .kpi-val { font-size: 1.85rem; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
+    .kpi-val.green { color: var(--sysu); }
+    .kpi-val.blue { color: var(--blue); }
+    .kpi-label { font-size: 0.82rem; font-weight: 600; color: var(--muted); margin-top: 2px; }
+    .kpi-sub { font-size: 0.78rem; color: #64748b; margin-top: 4px; }
+
+    /* Section */
+    section { margin-top: 42px; }
+    .sec-head {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    h2 {
+      margin: 0; font-size: 1.38rem; letter-spacing: -0.02em;
+    }
+    .sec-note { font-size: 0.86rem; color: var(--muted); }
+    .card {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow);
+    }
+
+    /* Progress Board */
+    .prog-bar-wrap {
+      background: #e2e8f0; border-radius: 999px; height: 10px; overflow: hidden; margin: 10px 0 18px;
+    }
+    .prog-bar-fill {
+      height: 100%; width: 100%;
+      background: linear-gradient(90deg, var(--sysu), #16a34a);
+    }
+    .status-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px;
+    }
+    .task-item {
+      border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+      background: #fcfdff;
+    }
+    .task-title { font-weight: 650; font-size: 0.92rem; }
+    .task-desc { font-size: 0.81rem; color: var(--muted); margin-top: 3px; }
+    .badge {
+      flex-shrink: 0; font-size: 0.72rem; font-weight: 700; padding: 3px 9px;
+      border-radius: 999px; letter-spacing: 0.02em; text-transform: uppercase;
+    }
+    .badge.done { background: var(--sysu-soft); color: var(--sysu); border: 1px solid #bbf7d0; }
+    .badge.team { background: var(--amber-soft); color: var(--amber); border: 1px solid #fde68a; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+    .tab-btn {
+      padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line);
+      background: #f1f5f9; color: var(--muted); font-weight: 600; font-size: 0.84rem; cursor: pointer;
+    }
+    .tab-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Tables */
+    .table-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; margin-top: 12px; }
+    th, td { padding: 9px 10px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+    th:first-child, td:first-child { text-align: left; }
+    th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); background: #f8fafc; }
+    tr.highlight { background: #f0fdf4; font-weight: 650; }
+    code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.84em; }
+
+    /* Callout */
+    .callout {
+      margin-top: 14px; padding: 13px 16px; border-radius: 10px;
+      background: var(--blue-soft); border-left: 4px solid var(--blue);
+      font-size: 0.88rem; color: #1e3a8a;
+    }
+    .callout.green { background: var(--sysu-soft); border-left-color: var(--sysu); color: #14532d; }
+
+    /* Gate X-Ray */
+    .case-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .case-pill {
+      padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line);
+      background: #f8fafc; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: var(--ink);
+    }
+    .case-pill.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .heatmap-box {
+      display: flex; flex-wrap: wrap; gap: 4px; padding: 14px;
+      border-radius: 10px; background: #f8fafc; border: 1px solid var(--line);
+      margin: 12px 0;
+    }
+    .char-tok {
+      display: inline-flex; flex-direction: column; align-items: center;
+      padding: 5px 8px; border-radius: 7px; cursor: pointer;
+      font-size: 1.08rem; font-weight: 600; border: 1px solid #cbd5e1;
+      transition: transform 0.1s ease;
+    }
+    .char-tok:hover, .char-tok.selected { transform: translateY(-2px); outline: 2px solid var(--blue); }
+    .char-tok small { font-size: 0.65rem; font-weight: 500; color: #475569; margin-top: 1px; }
+    .inspector-bar {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;
+      background: #ffffff; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+    }
+    .meter-track { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 4px; }
+    .meter-fill { height: 100%; border-radius: 999px; }
+
+    /* Charts */
+    .chart-box { width: 100%; overflow-x: auto; margin: 8px 0 12px; }
+    svg text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+    /* Code block */
+    pre {
+      background: #0f172a; color: #e2e8f0; padding: 14px 16px; border-radius: 10px;
+      overflow-x: auto; font-size: 0.82rem; line-height: 1.55;
+    }
+    footer {
+      margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line);
+      text-align: center; font-size: 0.82rem; color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">MV-CSN v2 · SYSU Capstone</div>
+      <div class="nav-links">
+        <a href="#progress">Progress</a>
+        <a href="#architecture">Method</a>
+        <a href="#results">Experiments</a>
+        <a href="#xray">Gate X-Ray Demo</a>
+        <a href="#handoff">Data &amp; Handoff</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <!-- Hero -->
+    <header class="hero">
+      <div class="venue-pill">Sun Yat-sen University · Data Science &amp; Engineering Capstone</div>
+      <h1>MV-CSN v2: Multi-View Context-Gated Character Similarity Network for Chinese Adversarial Variant Spam Detection</h1>
+      <p class="subtitle">
+        A lightweight <strong>1.37M-parameter</strong> character-level defense combining 32×32 Rendered-Glyph CAE embeddings, phonetic reading priors, SpellGCN-style dynamic OOV graph bridging, and RoCBert consistency regularization — matching or outperforming <strong>600M–4B Qwen3 LLMs</strong> at <strong>36×–251× lower latency</strong>.
+      </p>
+      <div class="cta-row">
+        <a class="btn primary" href="https://github.com/1-pluto1/mv-csn" target="_blank">GitHub Repository</a>
+        <a class="btn" href="https://github.com/1-pluto1/mv-csn/blob/main/notebooks/mv_csn_colab_demo.ipynb" target="_blank">Executed Colab Notebook</a>
+        <a class="btn" href="https://github.com/1-pluto1/mv-csn/tree/main/results" target="_blank">Raw JSON Results (7 Files)</a>
+        <a class="btn" href="#xray">Interactive Gate X-Ray</a>
+      </div>
+    </header>
+
+    <!-- Executive KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-val green">0.9964</div>
+        <div class="kpi-label">Best Zero-Shot Evasion F1</div>
+        <div class="kpi-sub">RBT3 + MV-CSN v2 (3-seed mean, AUC 0.9998)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val blue">0.9951</div>
+        <div class="kpi-label">Standalone MV-CSN v2 F1</div>
+        <div class="kpi-sub">Only 1.37M params · +3.83% over RBT3, +4.09% over LZASD</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">0.243 ms</div>
+        <div class="kpi-label">Inference Latency / SMS</div>
+        <div class="kpi-sub">36.5× faster than Qwen3-0.6B LoRA · 126× faster than Qwen3-4B</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">6.7% → 77.3%</div>
+        <div class="kpi-label">Dynamic Graph Gate Shift</div>
+        <div class="kpi-sub">Clean tokens rely 93.3% on context; obfuscated chars shift to graph views</div>
+      </div>
+    </div>
+
+    <!-- Section 1: Experiment & Deliverable Progress Board -->
+    <section id="progress">
+      <div class="sec-head">
+        <h2>Project &amp; Experiment Progress Dashboard</h2>
+        <span class="sec-note">Core Experiments &amp; Engineering: <strong>100% Complete (6/6 Suites · 8/8 Tests Passing)</strong></span>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;font-weight:600;">
+          <span>Experimental &amp; Engineering Pipeline</span>
+          <span style="color:var(--sysu);">All 6 Experiment Suites + Demo + Cloud Sync Verified</span>
+        </div>
+        <div class="prog-bar-wrap"><div class="prog-bar-fill"></div></div>
+        <div class="status-grid">
+          <div class="task-item">
+            <div>
+              <div class="task-title">Exp 1 · Dual In-Distribution Benchmarks</div>
+              <div class="task-desc">Benchmark A (Course 16K) + debiased Benchmark B (SMS-Matched 16.5K, zero cluster overlap, 3 seeds).</div>
+            </div>
+            <span class="badge done">Done</span>
+          </div>
+          <div class="task-item">
+            <div>
+              <div class="task-title">Exp 2 · Zero-Shot Clean → RealVariant &amp; McNemar</div>
+              <div class="task-desc">Clean-trained generalization on 3,395 real variants + 6 attack types (<code>PHON/GLYPH/SPLIT/SPACE/MIXED/CLEAN</code>).</div>
+            </div>
+            <span class="badge done">Done</span>
+          </div>
+          <div class="task-item">
+            <div>
+              <div class="task-title">Exp 3 · 0%–60% Adversarial Intensity Curve</div>
+              <div class="task-desc">Progressive multi-attack stress test across 7 noise levels; MV-CSN v2 ranks #1 at 60% (0.9874).</div>
+            </div>
+            <span class="badge done">Done</span>
+          </div>
+          <div class="task-item">
+            <div>
+              <div class="task-title">Exp 4 · 8-Row Multi-Seed Ablation Study</div>
+              <div class="task-desc">24 runs (3 seeds × 8 variants): Preprocessor (−0.0253), Consistency (−0.0026), Gate (−0.0008), OOV Bridge (−0.0007).</div>
+            </div>
+            <span class="badge done">Done</span>
+          </div>
+          <div class="task-item">
+            <div>
+              <div class="task-title">Exp 5 · Gate Interpretability &amp; Case Studies</div>
+              <div class="task-desc">Token-level <code>[ctx, phon, glyph]</code> distribution across 19,173 tokens + 6 real test case studies.</div>
+            </div>
+            <span class="badge done">Done</span>
+          </div>
+          <div class="task-item">
+            <div>
+              <div class="task-title">Exp 6 · Qwen3-0.6B/4B LLM &amp; Cascade Study</div>
+              <div class="task-desc">Zero-Shot, 4-Shot ICL, Clean-LoRA (3 seeds), and 0.71%-escalation MV-CSN + Qwen3-4B Cascade.</div>
+            </div>
+            <span class="badge done">Done</span>
+          </div>
+          <div class="task-item">
+            <div>
+              <div class="task-title">Engineering · Streamlit Demo, Notebook &amp; Cloud Sync</div>
+              <div class="task-desc">3-tab <code>demo/app.py</code>, executed <code>mv_csn_colab_demo.ipynb</code>, <code>pytest</code> 8/8 pass, GitHub + Google Drive synced.</div>
+            </div>
+            <span class="badge done">Done</span>
+          </div>
+          <div class="task-item">
+            <div>
+              <div class="task-title">Teammate Handoff · Publication Figures, Report &amp; PPT</div>
+              <div class="task-desc">Ready for teammates to plot final figures and write technical report / defense slides from <code>results/*.json</code>.</div>
+            </div>
+            <span class="badge team">Teammates</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Architecture Overview -->
+    <section id="architecture">
+      <div class="sec-head">
+        <h2>MV-CSN v2 Architecture Pipeline</h2>
+        <span class="sec-note">Synthesizing ChineseBERT, SpellGCN, RoCBert &amp; kfcd/chaizi into a 1.37M character graph defense</span>
+      </div>
+      <div class="card">
+        <div class="chart-box">
+          <svg viewBox="0 0 980 205" width="100%" style="min-width:680px;display:block;">
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/>
+              </marker>
+            </defs>
+            <!-- Stage 1 -->
+            <rect x="8" y="62" width="142" height="80" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+            <text x="79" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">1. Preprocessor</text>
+            <text x="79" y="106" text-anchor="middle" font-size="10.5" fill="#475569">Selective NFKC</text>
+            <text x="79" y="122" text-anchor="middle" font-size="10.5" fill="#475569">2/3-char Chaizi Split</text>
+            <line x1="150" y1="102" x2="182" y2="102" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+
+            <!-- Stage 2 -->
+            <rect x="184" y="48" width="160" height="108" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="264" y="74" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">2. Multimodal Anchor</text>
+            <text x="264" y="92" text-anchor="middle" font-size="10.5" fill="#1d4ed8">Char ID + Pinyin (I/F/T)</text>
+            <text x="264" y="108" text-anchor="middle" font-size="10.5" fill="#1d4ed8">+ 32×32 GlyphCAE Emb</text>
+            <text x="264" y="128" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">CNN + 2L Transformer</text>
+            <text x="264" y="143" text-anchor="middle" font-size="10" fill="#475569">→ Context State h_ctx</text>
+
+            <!-- Branches to Dual-View GAT -->
+            <path d="M 344 102 L 376 102 L 376 46 L 402 46" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 344 102 L 402 102" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 344 102 L 376 102 L 376 158 L 402 158" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+
+            <!-- View 1 -->
+            <rect x="404" y="16" width="174" height="58" rx="10" fill="#ecfdf3" stroke="#16a34a" stroke-width="1.5"/>
+            <text x="491" y="39" text-anchor="middle" font-size="11.5" font-weight="700" fill="#14532d">View 1 · Phonetic GAT</text>
+            <text x="491" y="57" text-anchor="middle" font-size="10.2" fill="#166534">Top-20 Pinyin + Reading Priors</text>
+
+            <!-- Context Bypass -->
+            <rect x="404" y="84" width="174" height="36" rx="9" fill="#f1f5f9" stroke="#64748b" stroke-width="1.2"/>
+            <text x="491" y="106" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Direct Context Stream (h_ctx)</text>
+
+            <!-- View 2 -->
+            <rect x="404" y="130" width="174" height="58" rx="10" fill="#fff1f2" stroke="#e11d48" stroke-width="1.5"/>
+            <text x="491" y="153" text-anchor="middle" font-size="11.5" font-weight="700" fill="#881337">View 2 · Glyph CAE GAT</text>
+            <text x="491" y="171" text-anchor="middle" font-size="10.2" fill="#9f1239">32×32 Font + SpellGCN OOV Bridge</text>
+
+            <!-- Merge to Gate -->
+            <path d="M 578 46 L 606 46 L 606 102 L 626 102" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 578 102 L 626 102" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 578 158 L 606 158 L 606 102 L 626 102" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+
+            <!-- Stage 4: Context Gate -->
+            <rect x="628" y="54" width="150" height="96" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/>
+            <text x="703" y="80" text-anchor="middle" font-size="12" font-weight="700" fill="#78350f">3. Context Gate</text>
+            <text x="703" y="99" text-anchor="middle" font-size="10.5" fill="#92400e">Per-Token Softmax</text>
+            <text x="703" y="116" text-anchor="middle" font-size="10.5" font-weight="700" fill="#92400e">[α_ctx, α_phon, α_glyph]</text>
+            <text x="703" y="135" text-anchor="middle" font-size="9.8" fill="#a16207">+ RoCBert Consistency</text>
+
+            <line x1="778" y1="102" x2="808" y2="102" stroke="#64748b" stroke-width="1.6" marker-end="url(#arr)"/>
+
+            <!-- Stage 5: Heads -->
+            <rect x="810" y="48" width="162" height="108" rx="10" fill="#0f172a" stroke="#0f172a" stroke-width="1.5"/>
+            <text x="891" y="75" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">4. Dual Heads</text>
+            <text x="891" y="97" text-anchor="middle" font-size="10.5" fill="#86efac">• Attention-Pooled Spam</text>
+            <text x="891" y="116" text-anchor="middle" font-size="10.5" fill="#fda4af">• Token Obfuscation Loc</text>
+            <text x="891" y="138" text-anchor="middle" font-size="9.8" fill="#cbd5e1">Optional RBT3 Fusion /</text>
+            <text x="891" y="150" text-anchor="middle" font-size="9.8" fill="#cbd5e1">Qwen3-4B Cascade</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Interactive Experimental Results Explorer -->
+    <section id="results">
+      <div class="sec-head">
+        <h2>Interactive Experimental Results (Verified Multi-Seed Data)</h2>
+        <span class="sec-note">All numbers loaded directly from <code>results/*.json</code> (seeds: <code>42, 1024, 2025</code>)</span>
+      </div>
+      <div class="card">
+        <div class="tabs" id="res-tabs">
+          <button class="tab-btn active" data-tab="tab-zs">Zero-Shot Evasion &amp; Attacks</button>
+          <button class="tab-btn" data-tab="tab-llm">Qwen3 LLM vs. MV-CSN v2</button>
+          <button class="tab-btn" data-tab="tab-abl">8-Row Ablation Study</button>
+          <button class="tab-btn" data-tab="tab-curve">Intensity Curve &amp; In-Dist</button>
+        </div>
+
+        <!-- Tab 1: Zero-Shot -->
+        <div class="tab-panel active" id="tab-zs">
+          <div class="chart-box" id="chart-zs"></div>
+          <div class="table-scroll" id="table-zs"></div>
+          <div class="callout green">
+            <strong>Takeaway:</strong> Trained strictly on clean SMS and tested on 3,395 unseen real adversarial variants, standalone <strong>MV-CSN v2 (1.37M)</strong> jumps to <code>F1 = 0.9951</code> (+3.83% over RBT3, +4.09% over LZASD, McNemar <code>p &lt; 1e-6</code>), and <strong>RBT3 + MV-CSN v2</strong> sets the overall peak at <code>0.9964</code> (<code>GLYPH = 0.9827</code>, <code>SPLIT = 0.9551</code>).
+          </div>
+        </div>
+
+        <!-- Tab 2: LLM Comparison -->
+        <div class="tab-panel" id="tab-llm">
+          <div class="chart-box" id="chart-llm"></div>
+          <div class="table-scroll" id="table-llm"></div>
+          <div class="callout">
+            <strong>Do we need a large LLM?</strong> <strong>No.</strong> Zero-Shot <code>Qwen3-4B-Instruct</code> suffers 59.5% false positives on clean SMS (<code>HamAcc = 0.4050</code>, <code>F1 = 0.8671</code>, <code>30.74 ms</code>) and 4-Shot ICL only reaches <code>0.9421</code> at <code>60.98 ms</code>. Even after 3-seed Clean-LoRA fine-tuning, <code>Qwen3-0.6B</code> merely ties <code>MV-CSN v2</code> (<code>0.9951</code> vs. <code>0.9951</code>, McNemar <code>p = 0.3833</code>) at <strong>438× more parameters</strong> and <strong>36.5× slower speed</strong>. If LLM review is desired, an uncertainty-gated <strong>Cascade</strong> routes only <code>0.71%</code> (24/3,395) of ambiguous cases to Qwen3-4B for <code>0.598 ms/SMS</code> average latency.
+          </div>
+        </div>
+
+        <!-- Tab 3: Ablation -->
+        <div class="tab-panel" id="tab-abl">
+          <div class="chart-box" id="chart-abl"></div>
+          <div class="table-scroll" id="table-abl"></div>
+          <div class="callout">
+            <strong>Takeaway:</strong> Removing the <strong>Split/Noise Preprocessor</strong> causes the sharpest degradation (<code>−0.0253 F1</code>, 12× higher variance), followed by <strong>RoCBert Graph Consistency</strong> (<code>−0.0026</code>), <strong>Context Gate</strong> (<code>−0.0008</code>), and <strong>Dynamic OOV Bridge</strong> (<code>−0.0007</code>).
+          </div>
+        </div>
+
+        <!-- Tab 4: Intensity Curve & In-Dist -->
+        <div class="tab-panel" id="tab-curve">
+          <div class="chart-box" id="chart-curve"></div>
+          <div class="table-scroll" id="table-indist"></div>
+          <div class="callout">
+            <strong>Dataset Bias Discovery:</strong> In Course Benchmark A, Ham posts are long BBS messages (median <code>191</code> chars) vs. short Spam SMS (median <code>53</code> chars), allowing TFIDF-SVM to exploit length shortcuts (<code>0.9991</code>). Our debiased <strong>Benchmark B (SMS-Matched 16.5K)</strong> matches length histograms (<code>p50 = 51</code> vs. <code>53</code>) with zero template-cluster leakage.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Interactive Gate X-Ray -->
+    <section id="xray">
+      <div class="sec-head">
+        <h2>Interactive Gate X-Ray &amp; Real Case Studies</h2>
+        <span class="sec-note">Click any real test-set case below, then click/hover individual characters to inspect gate weights</span>
+      </div>
+      <div class="card">
+        <div class="chart-box" id="chart-gate-dist"></div>
+        <hr style="border:none;border-top:1px solid var(--line);margin:18px 0;" />
+        <div class="case-pills" id="case-pills"></div>
+        <div id="case-meta" style="font-size:0.86rem;color:var(--muted);margin-bottom:8px;"></div>
+        <div class="heatmap-box" id="heatmap-box"></div>
+        <div class="inspector-bar" id="tok-inspector"></div>
+      </div>
+    </section>
+
+    <!-- Section 5: Data & Teammate Handoff Hub -->
+    <section id="handoff">
+      <div class="sec-head">
+        <h2>Teammate Handoff: Data Dictionary &amp; Quickstart</h2>
+        <span class="sec-note">All raw JSON metrics, model bundle, and Google Drive sync scripts are ready for plotting &amp; reporting</span>
+      </div>
+      <div class="card">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>Artifact / Result File</th><th>Size</th><th>Contents for Plotting, Report &amp; Slides</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/in_dist_results.json" target="_blank"><code>results/in_dist_results.json</code></a></td><td>24.6 KB</td><td style="text-align:left;white-space:normal;">Bench A &amp; B length audits, parameter counts, 3-seed F1/AUC/HamAcc &amp; latency.</td></tr>
+              <tr><td><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/zeroshot_real_variants.json" target="_blank"><code>results/zeroshot_real_variants.json</code></a></td><td>10.1 KB</td><td style="text-align:left;white-space:normal;">Clean → RealVariant 3-seed metrics + exact McNemar test statistics.</td></tr>
+              <tr><td><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/per_attack_breakdown.json" target="_blank"><code>results/per_attack_breakdown.json</code></a></td><td>5.0 KB</td><td style="text-align:left;white-space:normal;">F1 &amp; recall split across <code>PHON, GLYPH, SPLIT, SPACE, MIXED, CLEAN</code>.</td></tr>
+              <tr><td><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/intensity_curve.json" target="_blank"><code>results/intensity_curve.json</code></a></td><td>7.4 KB</td><td style="text-align:left;white-space:normal;">0%–60% perturbation intensity curves for all 5 models (3 seeds).</td></tr>
+              <tr><td><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/ablations.json" target="_blank"><code>results/ablations.json</code></a></td><td>15.4 KB</td><td style="text-align:left;white-space:normal;">8-row multi-seed ablation table with exact <code>delta_f1</code>.</td></tr>
+              <tr><td><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/llm_comparison.json" target="_blank"><code>results/llm_comparison.json</code></a></td><td>14.2 KB</td><td style="text-align:left;white-space:normal;">Qwen3-0.6B/4B Zero-Shot, 4-Shot ICL, Clean-LoRA &amp; Cascade metrics + McNemar.</td></tr>
+              <tr><td><a href="https://github.com/1-pluto1/mv-csn/blob/main/results/gate_analysis.json" target="_blank"><code>results/gate_analysis.json</code></a></td><td>332 KB</td><td style="text-align:left;white-space:normal;">Token-level gate distributions (<code>clean/phon_obf/glyph_obf</code>) + 6 case studies.</td></tr>
+              <tr><td><a href="https://github.com/1-pluto1/mv-csn/blob/main/artifacts/demo_bundle.pt" target="_blank"><code>artifacts/demo_bundle.pt</code></a></td><td>20.5 MB</td><td style="text-align:left;white-space:normal;">Self-contained fp16 MV-CSN v2 checkpoint + compressed 32×32 glyphs &amp; graphs.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <pre>git clone https://github.com/1-pluto1/mv-csn.git &amp;&amp; cd mv-csn
+pip install -r requirements.txt &amp;&amp; pip install -e . --no-deps
+pytest -v                     # 8/8 tests (pipeline, gdrive_sync, demo inference, Streamlit AppTest)
+streamlit run demo/app.py     # Launch full 3-tab interactive detector &amp; 32x32 glyph inspector</pre>
+      </div>
+    </section>
+
+    <footer>
+      MV-CSN v2 Project Page · Generated directly from verified <code>results/*.json</code> · Hosted on GitHub Pages (<code>1-pluto1/mv-csn</code>)
+    </footer>
+  </div>
+
+  <script>
+    const DATA = {"in_dist": {"bench_a": {"length_audit": {"ham_p50": 191.0, "ham_p90": 224.0, "spam_p50": 53.0, "spam_p90": 69.0}, "summary": {"TFIDF-SVM": {"f1": {"mean": 0.9991177767975298, "std": 0.0}, "auc": 0.9999921458284039, "ham": 0.9966629588431589}, "LZASD": {"f1": {"mean": 0.989794348099028, "std": 0.0005059728710609872}, "auc": 0.9977592702950976, "ham": 0.9699666295884315}, "RBT3": {"f1": {"mean": 0.9975756196462386, "std": 0.00035905539422412903}, "auc": 0.9999487024417638, "ham": 0.9911012235817576}, "MV-CSN v2": {"f1": {"mean": 0.9980124808625229, "std": 0.00018072209680817787}, "auc": 0.9999730012851388, "ham": 0.9970337411939192}, "RBT3 + MV-CSN v2": {"f1": {"mean": 0.998236363020688, "std": 0.0007832796266271727}, "auc": 0.9999788919138357, "ham": 0.9940674823878384}}}, "bench_b": {"length_audit": {"ham_p50": 51.0, "ham_p90": 67.0, "spam_p50": 53.0, "spam_p90": 69.0}, "params": {"TFIDF-SVM": 0, "LZASD": 47105, "RBT3": 38772481, "MV-CSN v2": 1371632, "RBT3 + MV-CSN v2": 40012785}, "summary": {"TFIDF-SVM": {"f1": {"mean": 0.9969203695556533, "std": 0.0}, "auc": 0.9997093153257904, "ham": 0.9946476360392507, "ms": 0.002106323392003789}, "LZASD": {"f1": {"mean": 0.9617106629735758, "std": 0.002875483339115735}, "auc": 0.9888372116134739, "ham": 0.91971454058876, "ms": 0.08923978154777486}, "RBT3": {"f1": {"mean": 0.997436361396978, "std": 0.0006279565033010545}, "auc": 0.9998152328184174, "ham": 0.9940529289325007, "ms": 0.4368353896592842}, "MV-CSN v2": {"f1": {"mean": 0.9966289412727408, "std": 0.0005489859146632578}, "auc": 0.9997063077920493, "ham": 0.9928635147190009, "ms": 0.24324647924978474}, "RBT3 + MV-CSN v2": {"f1": {"mean": 0.9972842230917923, "std": 0.0005536089068480165}, "auc": 0.9993781597084105, "ham": 0.9967291109128754, "ms": 0.4781425028498054}}}}, "zeroshot": {"summary": {"TFIDF-SVM": {"f1": {"mean": 0.9800850302081002, "std": 0.0}, "auc": 0.9979024413589763, "ham": 0.9955396966993756, "recall": 0.9630606860158312}, "LZASD": {"f1": {"mean": 0.9541531469848693, "std": 0.0006653046040700479}, "auc": 0.9864364804950975, "ham": 0.9426107641986321, "recall": 0.9381413075344472}, "RBT3": {"f1": {"mean": 0.9567830878980189, "std": 0.002033224705953265}, "auc": 0.9986760313421631, "ham": 0.9970264644662503, "recall": 0.9184989739079449}, "MV-CSN v2": {"f1": {"mean": 0.9950806483088885, "std": 0.0010563901964473898}, "auc": 0.9996064053669046, "ham": 0.9934582218257507, "recall": 0.9934036939313984}, "RBT3 + MV-CSN v2": {"f1": {"mean": 0.996401846265269, "std": 0.0010864897035818878}, "auc": 0.9998345202630624, "ham": 0.9961344038061255, "recall": 0.9947229551451188}}, "per_attack": {"TFIDF-SVM": {"PHON": 0.9788182831661093, "GLYPH": 0.9049180327868852, "SPLIT": 0.9375, "SPACE": 0.9760479041916167, "MIXED": 0.9844559585492227, "CLEAN": 0.9706959706959707}, "LZASD": {"PHON": 0.9036249623331384, "GLYPH": 0.7657230333534383, "SPLIT": 0.5625219980456913, "SPACE": 0.7986031182228496, "MIXED": 0.9459690277594133, "CLEAN": 0.8700976419923947}, "RBT3": {"PHON": 0.9601188534487867, "GLYPH": 0.9176521058874, "SPLIT": 0.9541595925297113, "SPACE": 0.9789002584183307, "MIXED": 0.9483449157625917, "CLEAN": 0.9652968686265023}, "MV-CSN v2": {"PHON": 0.9890222067650772, "GLYPH": 0.9695863296018978, "SPLIT": 0.9264482324521112, "SPACE": 0.965185833024782, "MIXED": 0.9953107408638795, "CLEAN": 0.9838697373581095}, "RBT3 + MV-CSN v2": {"PHON": 0.9904341427520236, "GLYPH": 0.9826768835313726, "SPLIT": 0.9551094230421414, "SPACE": 0.9790208118566328, "MIXED": 0.9970127413053627, "CLEAN": 0.9903968366995543}}, "mcnemar": {"mvcsn_vs_lzasd": {"b": 192, "c": 9, "p_value": 8.030061032932152e-46}, "mvcsn_vs_rbt3": {"b": 180, "c": 8, "p_value": 1.7745439653638331e-43}, "mvcsn_vs_tfidf": {"b": 78, "c": 9, "p_value": 7.467088418731596e-15}, "fusion_vs_rbt3": {"b": 178, "c": 8, "p_value": 6.508702998883686e-43}}}, "llm": {"order": ["Qwen3-0.6B (Zero-Shot)", "Qwen3-4B-Instruct (Zero-Shot)", "Qwen3-4B-Instruct (4-Shot ICL)", "Qwen3-0.6B (Clean-LoRA)", "MV-CSN v2", "RBT3 + MV-CSN v2", "MV-CSN v2 + Qwen3-4B Cascade"], "summary": {"Qwen3-0.6B (Zero-Shot)": {"f1": 0.0008791208791208791, "std": 0.0, "auc": 0.9230064170309052, "ham": 1.0, "ms": 7.088338433379453, "params": 596049920, "glyph": 0.0, "split": 0.0}, "Qwen3-4B-Instruct (Zero-Shot)": {"f1": 0.8671032357473035, "std": 0.0, "auc": 0.8086951592567573, "ham": 0.4049955396966994, "ms": 30.742450244999073, "params": 4022468096, "glyph": 0.3029682702149437, "split": 0.12121212121212122}, "Qwen3-4B-Instruct (4-Shot ICL)": {"f1": 0.942124231503074, "std": 0.0, "auc": 0.9135550461054922, "ham": 0.8028545941123997, "ms": 60.977307264864535, "params": 4022468096, "glyph": 0.5183752417794971, "split": 0.2829581993569132}, "Qwen3-0.6B (Clean-LoRA)": {"f1": 0.9950673382135656, "std": 0.001850783427641274, "auc": 0.9996413189107708, "ham": 0.9979185251263752, "ms": 8.862707318777423, "params": 600637440, "glyph": 0.9761096518385223, "split": 0.9753631390303715}, "MV-CSN v2": {"f1": 0.9950806483088885, "std": 0.0010563901964473898, "auc": 0.9996064053669046, "ham": 0.9934582218257507, "ms": 0.24324647924978474, "params": 1371632, "glyph": 0.9695863296018978, "split": 0.9264482324521112}, "RBT3 + MV-CSN v2": {"f1": 0.996401846265269, "std": 0.0010864897035818878, "auc": 0.9998345202630624, "ham": 0.9961344038061255, "ms": 0.4781425028498054, "params": 40012785, "glyph": 0.9826768835313726, "split": 0.9551094230421414}, "MV-CSN v2 + Qwen3-4B Cascade": {"f1": 0.9956005279366476, "std": 0.0, "auc": 0.9994678626713019, "ham": 0.991971454058876, "ms": 0.5983229062694162, "params": 4023630576, "glyph": 0.9636363636363636, "split": 0.9108910891089109}}, "qwen06_cal": {"threshold": 0.01769230769230769, "metrics": {"precision": 0.8908930928288605, "recall": 0.8905013192612137, "f1": 0.890697162964592, "macro_f1": 0.8345594597703032, "accuracy": 0.8536082474226804, "auc": 0.8346351377751207, "clean_ham_acc": 0.7787689562890276, "spam_recall": 0.8905013192612137}}, "cascade": {"val_uncertain_rate": 0.0036452004860267314, "test_escalated_count": 24, "test_total": 3395, "test_escalation_rate": 0.007069219440353461, "mvcsn_ms_per_sample": 0.24238524626561925, "qwen4b_ms_per_escalated": 50.350348154703774, "effective_ms_per_sample": 0.5983229062694162, "mvcsn_seed42_metrics": {"precision": 0.9964757709251101, "recall": 0.9947229551451188, "f1": 0.9955985915492958, "macro_f1": 0.9933469360239799, "accuracy": 0.9941089837997055, "auc": 0.9994639398012047, "clean_ham_acc": 0.9928635147190009, "spam_recall": 0.9947229551451188}}, "mcnemar": {"mvcsn_vs_qwen3_06b_zs": {"b": 2261, "c": 8, "p_value": 0.0}, "mvcsn_vs_qwen3_4b_zs": {"b": 684, "c": 14, "p_value": 1.0177152254661792e-181}, "mvcsn_vs_qwen3_4b_4shot": {"b": 268, "c": 15, "p_value": 4.27260581393656e-61}, "mvcsn_vs_qwen3_06b_lora": {"b": 8, "c": 13, "p_value": 0.38331031799316406}, "cascade_vs_qwen3_4b_zs": {"b": 681, "c": 11, "p_value": 3.986960173630063e-185}}}, "ablations": [{"name": "Full MV-CSN v2", "f1": 0.9958178691650494, "std": 0.0004744088507804074, "delta": 0.0, "auc": 0.9997468441163879, "ham": 0.9937555753791257}, {"name": "w/o Phonetic View", "f1": 0.9961841470730848, "std": 0.0005830541178429797, "delta": 0.00036627790803533955, "auc": 0.9997579589149969, "ham": 0.9943502824858758}, {"name": "w/o Glyph Visual View", "f1": 0.9961108113109384, "std": 0.0009222145167982472, "delta": 0.0002929421458889303, "auc": 0.9996846666253458, "ham": 0.9946476360392507}, {"name": "w/o Context Gate (Uniform)", "f1": 0.9950050698458902, "std": 0.00027624796335590956, "delta": -0.0008127993191592298, "auc": 0.9996703481494906, "ham": 0.9943502824858758}, {"name": "w/o RoCBert Consistency", "f1": 0.9932258938923412, "std": 0.0010284962794288078, "delta": -0.002591975272708269, "auc": 0.9995137602514403, "ham": 0.9955396966993755}, {"name": "w/o Multimodal Anchor", "f1": 0.9961124894538971, "std": 0.0005520500170499767, "delta": 0.0002946202888476357, "auc": 0.9996345192692687, "ham": 0.9934582218257507}, {"name": "w/o Dynamic OOV Bridge", "f1": 0.9951540190260237, "std": 0.0006498876633200123, "delta": -0.0006638501390257012, "auc": 0.9997048694063468, "ham": 0.9937555753791257}, {"name": "w/o Split/Noise Preprocessor", "f1": 0.9705635558481681, "std": 0.006256919567302668, "delta": -0.025254313316881327, "auc": 0.9984413129480081, "ham": 0.9928635147190009}], "intensity": {"rates": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6], "series": {"TFIDF-SVM": [0.997139713971397, 0.9966982170372001, 0.9955927721463199, 0.9933745583038869, 0.9913697720734675, 0.986435401378697, 0.978942652329749], "LZASD": [0.9647255987822055, 0.9599669761658053, 0.9568734342930879, 0.9494436492946087, 0.9418344085547133, 0.9353334567834851, 0.9206567994626796], "RBT3": [0.998166966950612, 0.997358411922901, 0.9972111161401106, 0.9951460523918575, 0.9926274561990609, 0.9897969297461199, 0.9869510642185904], "MV-CSN v2": [0.9966276826862535, 0.9958176741708168, 0.9950808419835372, 0.9940456177550363, 0.9928587160473406, 0.9893594911487041, 0.9874038041560822], "RBT3 + MV-CSN v2": [0.9975798865074418, 0.9964755101188426, 0.9969905427267657, 0.9961066374310924, 0.9935930704403444, 0.9906937234456529, 0.9858278364996241]}}, "gate": {"counts": {"clean": 6000, "phon_obf": 13144, "glyph_obf": 29}, "means": {"clean": [0.9333086296341547, 0.05041155929496699, 0.0162798101439577], "phon_obf": [0.22653298822264914, 0.4068334043312759, 0.3666336076689302], "glyph_obf": [0.5625994906266316, 0.2663088167981437, 0.1710916825144648]}, "cases": [{"label": 1, "attack_type": "MIXED", "raw_text": "特  请，住（册）给，（3  8  8 ） ，  记（着）来 ，按 ：94672.cn", "proc_text": "特请,住册给,(388,记着来,按:94672.cn", "clean_text": "特请,注册给388记着来,按:94672.cn", "pred_prob": 0.9999988079071045, "chars": ["特", "请", ",", "住", "册", "给", ",", "(", "3", "8", "8", ",", "记", "着", "来", ",", "按", ":", "9", "4", "6", "7", "2", ".", "c", "n"], "obf_probs": [0.0736, 0.0287, 0.0062, 0.6974, 0.1104, 0.0495, 0.0058, 0.9212, 0.1502, 0.1309, 0.1111, 0.0051, 0.1859, 0.9871, 0.0457, 0.0058, 0.4856, 0.0864, 0.2614, 0.0019, 0.1718, 0.0467, 0.0529, 0.0012, 0.0249, 0.1004], "alpha_ctx": [0.998, 0.9981, 0.9995, 0.6166, 0.9993, 0.9982, 0.9992, 0.4499, 0.9778, 0.9848, 0.9891, 0.9995, 0.9278, 0.2018, 0.9983, 0.9994, 0.6164, 0.9838, 0.9579, 0.9995, 0.9808, 0.9948, 0.9935, 0.9987, 0.9991, 0.998], "alpha_phon": [0.0014, 0.001, 0.0001, 0.0081, 0.0001, 0.0004, 0.0001, 0.074, 0.0111, 0.0045, 0.0029, 0.0001, 0.0631, 0.5269, 0.0007, 0.0001, 0.2301, 0.0026, 0.0181, 0.0002, 0.0064, 0.0005, 0.0019, 0.0001, 0.0002, 0.0005], "alpha_glyph": [0.0006, 0.0009, 0.0004, 0.3753, 0.0006, 0.0015, 0.0007, 0.4761, 0.0111, 0.0107, 0.008, 0.0004, 0.0091, 0.2713, 0.001, 0.0005, 0.1535, 0.0136, 0.024, 0.0003, 0.0128, 0.0046, 0.0047, 0.0012, 0.0007, 0.0016]}, {"label": 1, "attack_type": "PHON", "raw_text": "永丽贵宾VIP，圣但壕礼，回家拿18-888元！点： https://85036.cn/WYq", "proc_text": "永丽贵宾VIP,圣但壕礼,回家拿18-888元!点:https://85036.cn/WYq", "clean_text": "永丽贵宾VIP,圣但豪礼,回家拿18-888元!点:https:85036.cnWYq", "pred_prob": 0.9999974966049194, "chars": ["永", "丽", "贵", "宾", "V", "I", "P", ",", "圣", "但", "壕", "礼", ",", "回", "家", "拿", "1", "8", "-", "8", "8", "8", "元", "!", "点", ":", "h", "t", "t", "p", "s", ":", "/", "/", "8", "5", "0", "3", "6", ".", "c", "n", "/", "W", "Y", "q"], "obf_probs": [0.2793, 0.4675, 0.1151, 0.1188, 0.1147, 0.2821, 0.2413, 0.0061, 0.771, 0.5219, 0.4847, 0.1715, 0.0049, 0.0175, 0.102, 0.1287, 0.0916, 0.1369, 0.0438, 0.1172, 0.0792, 0.0748, 0.145, 0.094, 0.0082, 0.0293, 0.0823, 0.0369, 0.0477, 0.0462, 0.222, 0.0356, 0.0019, 0.0018, 0.3219, 0.2704, 0.3269, 0.1926, 0.3016, 0.0012, 0.0277, 0.1536, 0.0024, 0.1492, 0.2339, 0.1549], "alpha_ctx": [0.924, 0.9035, 0.9765, 0.9925, 0.995, 0.995, 0.9973, 0.9994, 0.8984, 0.9712, 0.8848, 0.9986, 0.9995, 0.9989, 0.9832, 0.9841, 0.9936, 0.9839, 0.9955, 0.9839, 0.9877, 0.9924, 0.9982, 0.9859, 0.997, 0.9951, 0.9952, 0.992, 0.9898, 0.9904, 0.9683, 0.9852, 0.995, 0.9954, 0.9697, 0.9913, 0.9946, 0.994, 0.9881, 0.9997, 0.9977, 0.9964, 0.999, 0.9741, 0.9321, 0.9958], "alpha_phon": [0.0732, 0.0619, 0.02, 0.0065, 0.0027, 0.0021, 0.001, 0.0001, 0.0792, 0.0115, 0.0676, 0.0005, 0.0001, 0.0003, 0.009, 0.0142, 0.0003, 0.0036, 0.0021, 0.0046, 0.004, 0.0018, 0.0015, 0.0003, 0.0022, 0.0008, 0.0022, 0.0009, 0.001, 0.0029, 0.0113, 0.0034, 0.0016, 0.0013, 0.0095, 0.005, 0.0034, 0.0028, 0.0042, 0.0, 0.0006, 0.0012, 0.0002, 0.0014, 0.0103, 0.002], "alpha_glyph": [0.0028, 0.0346, 0.0035, 0.001, 0.0022, 0.0029, 0.0017, 0.0005, 0.0224, 0.0173, 0.0476, 0.0009, 0.0004, 0.0008, 0.0078, 0.0017, 0.0061, 0.0125, 0.0024, 0.0114, 0.0083, 0.0058, 0.0002, 0.0138, 0.0008, 0.0041, 0.0026, 0.0071, 0.0092, 0.0067, 0.0204, 0.0114, 0.0034, 0.0033, 0.0209, 0.0037, 0.002, 0.0032, 0.0077, 0.0003, 0.0017, 0.0024, 0.0008, 0.0245, 0.0576, 0.0022]}, {"label": 1, "attack_type": "SPLIT", "raw_text": "全新线上推广，政府扶持项目，日化率10.88%，速戳 2558836.com:7080 退订T", "proc_text": "全新线上推广,政府扶持项目,日化率10.88%,速戳2558836.com:7080退订T", "clean_text": "全新线上推广,政府扶持项目,日化率10.88%,速戳2558836.com:7080退订T", "pred_prob": 0.9999980926513672, "chars": ["全", "新", "线", "上", "推", "广", ",", "政", "府", "扶", "持", "项", "目", ",", "日", "化", "率", "1", "0", ".", "8", "8", "%", ",", "速", "戳", "2", "5", "5", "8", "8", "3", "6", ".", "c", "o", "m", ":", "7", "0", "8", "0", "退", "订", "T"], "obf_probs": [0.1643, 0.0591, 0.207, 0.0833, 0.2035, 0.5521, 0.0059, 0.7102, 0.3606, 0.988, 0.5569, 0.1981, 0.3705, 0.0059, 0.0715, 0.5647, 0.2939, 0.0598, 0.2075, 0.0016, 0.1204, 0.1229, 0.0384, 0.0052, 0.2509, 0.0194, 0.0526, 0.258, 0.2061, 0.1346, 0.1352, 0.1887, 0.2552, 0.0013, 0.0144, 0.0244, 0.0031, 0.1286, 0.068, 0.3316, 0.3165, 0.3327, 0.0274, 0.0475, 0.38], "alpha_ctx": [0.994, 0.9992, 0.9985, 0.9981, 0.9764, 0.9912, 0.9994, 0.7133, 0.8315, 0.237, 0.991, 0.9896, 0.9927, 0.9994, 0.9946, 0.9103, 0.9836, 0.9965, 0.9984, 0.9989, 0.9833, 0.9842, 0.999, 0.9995, 0.9947, 0.9995, 0.9956, 0.9918, 0.9837, 0.9807, 0.9828, 0.9889, 0.9847, 0.9995, 0.9992, 0.9979, 0.999, 0.9915, 0.9947, 0.9939, 0.9824, 0.9937, 0.9943, 0.977, 0.9946], "alpha_phon": [0.0039, 0.0002, 0.0005, 0.001, 0.0015, 0.0061, 0.0001, 0.014, 0.1182, 0.0827, 0.0028, 0.0094, 0.0059, 0.0001, 0.0025, 0.0029, 0.0035, 0.0002, 0.0008, 0.0001, 0.0053, 0.0045, 0.0004, 0.0001, 0.0036, 0.0003, 0.0012, 0.0036, 0.0073, 0.0069, 0.006, 0.0058, 0.0052, 0.0001, 0.0002, 0.0006, 0.0002, 0.0015, 0.0007, 0.0042, 0.0043, 0.0044, 0.0007, 0.0109, 0.0012], "alpha_glyph": [0.002, 0.0006, 0.001, 0.001, 0.0221, 0.0027, 0.0005, 0.2726, 0.0503, 0.6803, 0.0063, 0.0011, 0.0014, 0.0005, 0.003, 0.0868, 0.0129, 0.0034, 0.0008, 0.0009, 0.0113, 0.0112, 0.0006, 0.0004, 0.0017, 0.0003, 0.0032, 0.0046, 0.009, 0.0125, 0.0111, 0.0054, 0.0101, 0.0004, 0.0006, 0.0015, 0.0009, 0.007, 0.0045, 0.0019, 0.0133, 0.0019, 0.005, 0.0122, 0.0042]}, {"label": 1, "attack_type": "GLYPH", "raw_text": "余额提醒：截止8日3时6分，您预存款金额小于7元。为不影响您的使用，请点击g://1f.q/1r进(...)", "proc_text": "余额提醒:截止8日3时6分,您预存款金额小于7元。为不影响您的使用,请点击g://1f.q/1r进(...", "clean_text": "余额提醒:截止8日3时6分,您预存款金额小于7元.为不影响您的使用,请点击g://1f.q/1r进(...)", "pred_prob": 0.9999970197677612, "chars": ["余", "额", "提", "醒", ":", "截", "止", "8", "日", "3", "时", "6", "分", ",", "您", "预", "存", "款", "金", "额", "小", "于", "7", "元", "。", "为", "不", "影", "响", "您", "的", "使", "用", ",", "请", "点", "击", "g", ":", "/", "/", "1", "f", ".", "q", "/", "1", "r", "进", "(", ".", ".", "."], "obf_probs": [0.55, 0.0799, 0.1402, 0.2755, 0.0573, 0.598, 0.3295, 0.2476, 0.2475, 0.2907, 0.0166, 0.451, 0.0897, 0.005, 0.0077, 0.0789, 0.0745, 0.1688, 0.0791, 0.056, 0.1401, 0.472, 0.169, 0.1702, 0.795, 0.0784, 0.1225, 0.1603, 0.3994, 0.0107, 0.0518, 0.2169, 0.0804, 0.0054, 0.0283, 0.0255, 0.1676, 0.4183, 0.0349, 0.0027, 0.002, 0.1083, 0.3273, 0.0013, 0.0963, 0.002, 0.1494, 0.1287, 0.2857, 0.5001, 0.0023, 0.0019, 0.0016], "alpha_ctx": [0.985, 0.9959, 0.9999, 0.9979, 0.9942, 0.989, 0.9309, 0.9794, 0.9789, 0.9928, 0.9994, 0.9793, 0.9965, 0.9996, 0.9985, 0.9973, 0.9977, 0.9965, 0.9987, 0.9993, 0.9961, 0.9504, 0.9935, 0.998, 0.6794, 0.9924, 0.9985, 0.9953, 0.9587, 0.998, 0.9987, 0.9963, 0.9999, 0.9996, 0.9979, 0.9999, 0.9945, 0.9958, 0.9877, 0.9972, 0.9984, 0.9968, 0.9952, 0.9995, 0.992, 0.9993, 0.9932, 0.9996, 0.9987, 0.959, 0.9996, 0.9996, 0.9996], "alpha_phon": [0.0076, 0.0033, 0.0, 0.0018, 0.0007, 0.0047, 0.0434, 0.0044, 0.0153, 0.0025, 0.0002, 0.0053, 0.0027, 0.0001, 0.0006, 0.0012, 0.0011, 0.0005, 0.0011, 0.0006, 0.0021, 0.0021, 0.0006, 0.0017, 0.052, 0.0063, 0.001, 0.0008, 0.0193, 0.0009, 0.0009, 0.0022, 0.0, 0.0001, 0.0013, 0.0001, 0.0037, 0.0015, 0.002, 0.0006, 0.0003, 0.0002, 0.0005, 0.0001, 0.0032, 0.0001, 0.0004, 0.0001, 0.001, 0.0036, 0.0, 0.0, 0.0001], "alpha_glyph": [0.0073, 0.0008, 0.0001, 0.0004, 0.0051, 0.0063, 0.0257, 0.0162, 0.0059, 0.0047, 0.0004, 0.0154, 0.0008, 0.0003, 0.0009, 0.0015, 0.0011, 0.003, 0.0002, 0.0001, 0.0017, 0.0475, 0.0059, 0.0003, 0.2686, 0.0014, 0.0005, 0.0039, 0.022, 0.0012, 0.0003, 0.0015, 0.0001, 0.0004, 0.0008, 0.0, 0.0017, 0.0027, 0.0103, 0.0022, 0.0014, 0.003, 0.0043, 0.0004, 0.0047, 0.0006, 0.0064, 0.0003, 0.0003, 0.0374, 0.0003, 0.0003, 0.0004]}, {"label": 0, "attack_type": "CLEAN", "raw_text": "这种IT幽默只有搞IT的人才欣赏的了", "proc_text": "这种IT幽默只有搞IT的人才欣赏的了", "clean_text": "这种IT幽默只有搞IT的人才欣赏的了", "pred_prob": 4.677066499425564e-06, "chars": ["这", "种", "I", "T", "幽", "默", "只", "有", "搞", "I", "T", "的", "人", "才", "欣", "赏", "的", "了"], "obf_probs": [0.094, 0.1392, 0.5862, 0.4803, 0.7984, 0.4033, 0.156, 0.033, 0.3071, 0.6522, 0.463, 0.0082, 0.0822, 0.2637, 0.6645, 0.7642, 0.0106, 0.0632], "alpha_ctx": [0.9908, 0.9757, 0.7546, 0.76, 0.7109, 0.8964, 0.9477, 0.9966, 0.9543, 0.7163, 0.7461, 0.9988, 0.9929, 0.937, 0.6924, 0.5863, 0.9986, 0.9928], "alpha_phon": [0.0089, 0.0228, 0.1115, 0.1134, 0.2144, 0.0908, 0.0468, 0.0032, 0.0351, 0.1131, 0.1158, 0.0011, 0.0063, 0.0615, 0.2744, 0.3097, 0.0014, 0.0069], "alpha_glyph": [0.0003, 0.0015, 0.1339, 0.1266, 0.0747, 0.0128, 0.0055, 0.0003, 0.0106, 0.1706, 0.138, 0.0, 0.0008, 0.0015, 0.0332, 0.104, 0.0001, 0.0003]}]}};
+
+    // Tab switcher
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Helper: Grouped Bar Chart for Zero-Shot Per-Attack
+    function renderZeroShot() {
+      const models = ["LZASD", "RBT3", "TFIDF-SVM", "MV-CSN v2", "RBT3 + MV-CSN v2"];
+      const colors = {"LZASD":"#94a3b8","RBT3":"#60a5fa","TFIDF-SVM":"#f59e0b","MV-CSN v2":"#16a34a","RBT3 + MV-CSN v2":"#005826"};
+      const metrics = [
+        {key:"OVERALL", label:"Overall F1"},
+        {key:"PHON", label:"PHON"},
+        {key:"GLYPH", label:"GLYPH"},
+        {key:"SPLIT", label:"SPLIT"},
+        {key:"MIXED", label:"MIXED"},
+      ];
+      const W = 900, H = 260, padL = 52, padR = 16, padT = 34, padB = 42;
+      const plotW = W - padL - padR, plotH = H - padT - padB;
+      const yMin = 0.5, yMax = 1.01;
+      const yScale = v => padT + plotH * (1 - (Math.max(yMin, v) - yMin) / (yMax - yMin));
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:640px;">`;
+      // Legend
+      models.forEach((m, i) => {
+        const lx = padL + i * 168;
+        svg += `<rect x="${lx}" y="8" width="11" height="11" rx="2" fill="${colors[m]}"/>`;
+        svg += `<text x="${lx+16}" y="17.5" font-size="11.5" font-weight="600" fill="#334155">${m}</text>`;
+      });
+      // Grid lines
+      [0.5, 0.6, 0.7, 0.8, 0.9, 1.0].forEach(yv => {
+        const y = yScale(yv);
+        svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e2e8f0" stroke-dasharray="3,3"/>`;
+        svg += `<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#64748b">${yv.toFixed(1)}</text>`;
+      });
+      const groupW = plotW / metrics.length;
+      const barW = Math.min(24, (groupW - 24) / models.length);
+      metrics.forEach((mt, gi) => {
+        const gx = padL + gi * groupW + (groupW - barW * models.length - (models.length - 1) * 3) / 2;
+        models.forEach((m, mi) => {
+          const val = mt.key === "OVERALL" ? DATA.zeroshot.summary[m].f1.mean : DATA.zeroshot.per_attack[m][mt.key];
+          const x = gx + mi * (barW + 3);
+          const y = yScale(val);
+          const h = yScale(yMin) - y;
+          svg += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${colors[m]}"><title>${m} · ${mt.label}: ${val.toFixed(4)}</title></rect>`;
+          if (mi >= 3) {
+            svg += `<text x="${x + barW/2}" y="${y - 4}" text-anchor="middle" font-size="9.2" font-weight="700" fill="#0f172a">${(val*100).toFixed(1)}</text>`;
+          }
+        });
+        svg += `<text x="${padL + gi * groupW + groupW/2}" y="${H - 14}" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1e293b">${mt.label}</text>`;
+      });
+      svg += `</svg>`;
+      document.getElementById("chart-zs").innerHTML = svg;
+
+      let tbl = `<table><thead><tr><th>Model (Clean → RealVariant)</th><th>Overall F1</th><th>AUC</th><th>Clean Ham Acc</th><th>PHON</th><th>GLYPH</th><th>SPLIT</th><th>SPACE</th><th>MIXED</th></tr></thead><tbody>`;
+      models.forEach(m => {
+        const s = DATA.zeroshot.summary[m], a = DATA.zeroshot.per_attack[m];
+        const hi = m.includes("MV-CSN") ? ' class="highlight"' : '';
+        tbl += `<tr${hi}><td>${m}</td><td><code>${s.f1.mean.toFixed(4)} ± ${s.f1.std.toFixed(4)}</code></td><td>${s.auc.toFixed(4)}</td><td>${s.ham.toFixed(4)}</td><td>${a.PHON.toFixed(4)}</td><td>${a.GLYPH.toFixed(4)}</td><td>${a.SPLIT.toFixed(4)}</td><td>${a.SPACE.toFixed(4)}</td><td>${a.MIXED.toFixed(4)}</td></tr>`;
+      });
+      tbl += `</tbody></table>`;
+      document.getElementById("table-zs").innerHTML = tbl;
+    }
+
+    // Tab 2: LLM Latency (log10) vs F1 Scatter + Table
+    function renderLLM() {
+      const pts = [
+        {name:"MV-CSN v2 (1.37M)", f1:DATA.llm.summary["MV-CSN v2"].f1, ms:DATA.llm.summary["MV-CSN v2"].ms, color:"#16a34a", dx:-6, dy:21, anchor:"start"},
+        {name:"RBT3 + MV-CSN v2 (40M)", f1:DATA.llm.summary["RBT3 + MV-CSN v2"].f1, ms:DATA.llm.summary["RBT3 + MV-CSN v2"].ms, color:"#005826", dx:10, dy:-6, anchor:"start"},
+        {name:"MV-CSN + Qwen3-4B Cascade", f1:DATA.llm.summary["MV-CSN v2 + Qwen3-4B Cascade"].f1, ms:DATA.llm.summary["MV-CSN v2 + Qwen3-4B Cascade"].ms, color:"#2563eb", dx:12, dy:18, anchor:"start"},
+        {name:"Qwen3-0.6B Clean-LoRA (600M)", f1:DATA.llm.summary["Qwen3-0.6B (Clean-LoRA)"].f1, ms:DATA.llm.summary["Qwen3-0.6B (Clean-LoRA)"].ms, color:"#7c3aed", dx:-10, dy:5, anchor:"end"},
+        {name:"Qwen3-0.6B Zero-Shot (cal.)", f1:DATA.llm.qwen06_cal.metrics.f1, ms:DATA.llm.summary["Qwen3-0.6B (Zero-Shot)"].ms, color:"#94a3b8", dx:-10, dy:4, anchor:"end"},
+        {name:"Qwen3-4B Zero-Shot (4B)", f1:DATA.llm.summary["Qwen3-4B-Instruct (Zero-Shot)"].f1, ms:DATA.llm.summary["Qwen3-4B-Instruct (Zero-Shot)"].ms, color:"#e11d48", dx:-10, dy:4, anchor:"end"},
+        {name:"Qwen3-4B 4-Shot ICL (4B)", f1:DATA.llm.summary["Qwen3-4B-Instruct (4-Shot ICL)"].f1, ms:DATA.llm.summary["Qwen3-4B-Instruct (4-Shot ICL)"].ms, color:"#f59e0b", dx:-10, dy:-8, anchor:"end"},
+      ];
+      const W = 900, H = 264, padL = 62, padR = 30, padT = 32, padB = 42;
+      const plotW = W - padL - padR, plotH = H - padT - padB;
+      const xMin = Math.log10(0.15), xMax = Math.log10(90);
+      const yMin = 0.84, yMax = 1.006;
+      const xScale = ms => padL + plotW * (Math.log10(ms) - xMin) / (xMax - xMin);
+      const yScale = f1 => padT + plotH * (1 - (f1 - yMin) / (yMax - yMin));
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:640px;">`;
+      // Sweet spot shading
+      svg += `<rect x="${padL}" y="${padT}" width="${xScale(1.0)-padL}" height="${yScale(0.99)-padT}" fill="#ecfdf3" stroke="#86efac" stroke-dasharray="3,3" rx="4"/>`;
+      svg += `<text x="${padL+4}" y="${padT-10}" font-size="10.5" font-weight="700" fill="#15803d">Pareto Ideal Zone (&lt;1 ms, F1 &gt; 0.99)</text>`;
+      [0.2, 0.5, 1, 5, 10, 30, 60].forEach(tick => {
+        const x = xScale(tick);
+        svg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${H-padB}" stroke="#e2e8f0" stroke-dasharray="3,3"/>`;
+        svg += `<text x="${x}" y="${H-padB+16}" text-anchor="middle" font-size="10.5" fill="#64748b">${tick} ms</text>`;
+      });
+      [0.85, 0.90, 0.95, 1.00].forEach(tick => {
+        const y = yScale(tick);
+        svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e2e8f0" stroke-dasharray="3,3"/>`;
+        svg += `<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#64748b">${tick.toFixed(2)}</text>`;
+      });
+      svg += `<text x="${padL + plotW/2}" y="${H-6}" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Inference Latency per SMS (ms, log scale) — Faster is Left ←</text>`;
+      pts.forEach(p => {
+        const cx = xScale(p.ms), cy = yScale(p.f1);
+        svg += `<circle cx="${cx}" cy="${cy}" r="6.5" fill="${p.color}" stroke="#fff" stroke-width="2"><title>${p.name}: F1=${p.f1.toFixed(4)}, ${p.ms.toFixed(3)} ms</title></circle>`;
+        svg += `<text x="${cx + p.dx}" y="${cy + p.dy}" text-anchor="${p.anchor || 'start'}" font-size="11" font-weight="650" fill="#0f172a">${p.name} (${p.f1.toFixed(4)})</text>`;
+      });
+      svg += `</svg>`;
+      document.getElementById("chart-llm").innerHTML = svg;
+
+      let tbl = `<table><thead><tr><th>Model / Strategy</th><th>Parameters</th><th>Latency (ms)</th><th>Overall F1</th><th>AUC</th><th>Clean Ham Acc</th><th>GLYPH F1</th><th>SPLIT F1</th></tr></thead><tbody>`;
+      DATA.llm.order.forEach(m => {
+        const s = DATA.llm.summary[m];
+        const hi = (m === "MV-CSN v2" || m === "RBT3 + MV-CSN v2") ? ' class="highlight"' : '';
+        const note = m === "Qwen3-0.6B (Zero-Shot)" ? ` <small style="color:#64748b">(cal: ${DATA.llm.qwen06_cal.metrics.f1.toFixed(4)})</small>` : "";
+        tbl += `<tr${hi}><td>${m}</td><td>${s.params.toLocaleString()}</td><td><code>${s.ms.toFixed(3)}</code></td><td><code>${s.f1.toFixed(4)}</code>${note}</td><td>${s.auc.toFixed(4)}</td><td>${s.ham.toFixed(4)}</td><td>${s.glyph.toFixed(4)}</td><td>${s.split.toFixed(4)}</td></tr>`;
+      });
+      tbl += `</tbody></table>`;
+      document.getElementById("table-llm").innerHTML = tbl;
+    }
+
+    // Tab 3: Ablation Horizontal Bar Chart + Table
+    function renderAblations() {
+      const rows = DATA.ablations;
+      const W = 900, rowH = 30, padL = 230, padR = 148, padT = 18;
+      const H = padT + rows.length * rowH + 18;
+      const plotW = W - padL - padR;
+      const xMin = 0.960, xMax = 1.000;
+      const xScale = v => padL + plotW * (Math.max(xMin, v) - xMin) / (xMax - xMin);
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:640px;">`;
+      rows.forEach((r, i) => {
+        const y = padT + i * rowH;
+        const barColor = i === 0 ? "#005826" : (r.delta < -0.005 ? "#e11d48" : (r.delta < 0 ? "#f59e0b" : "#64748b"));
+        svg += `<text x="${padL-10}" y="${y+17}" text-anchor="end" font-size="11.5" font-weight="${i===0?700:500}" fill="#1e293b">${r.name}</text>`;
+        svg += `<rect x="${padL}" y="${y+5}" width="${plotW}" height="18" rx="4" fill="#f1f5f9"/>`;
+        svg += `<rect x="${padL}" y="${y+5}" width="${Math.max(4, xScale(r.f1)-padL)}" height="18" rx="4" fill="${barColor}"/>`;
+        const dStr = i === 0 ? "baseline" : (r.delta >= 0 ? `+${r.delta.toFixed(4)}` : r.delta.toFixed(4));
+        svg += `<text x="${W-padR+8}" y="${y+18}" font-size="11" font-weight="700" fill="${barColor}">${r.f1.toFixed(4)} (${dStr})</text>`;
+      });
+      svg += `</svg>`;
+      document.getElementById("chart-abl").innerHTML = svg;
+
+      let tbl = `<table><thead><tr><th>Ablation Configuration (3 Seeds)</th><th>F1 (mean ± std)</th><th>ΔF1 vs. Full</th><th>AUC</th><th>Clean Ham Acc</th></tr></thead><tbody>`;
+      rows.forEach((r, i) => {
+        tbl += `<tr${i===0?' class="highlight"':''}><td>${r.name}</td><td><code>${r.f1.toFixed(4)} ± ${r.std.toFixed(4)}</code></td><td><code>${r.delta>=0?'+':''}${r.delta.toFixed(4)}</code></td><td>${r.auc.toFixed(4)}</td><td>${r.ham.toFixed(4)}</td></tr>`;
+      });
+      tbl += `</tbody></table>`;
+      document.getElementById("table-abl").innerHTML = tbl;
+    }
+
+    // Tab 4: Intensity Curve + In-Distribution Table
+    function renderCurve() {
+      const rates = DATA.intensity.rates;
+      const models = ["LZASD", "TFIDF-SVM", "RBT3", "MV-CSN v2", "RBT3 + MV-CSN v2"];
+      const colors = {"LZASD":"#94a3b8","TFIDF-SVM":"#f59e0b","RBT3":"#60a5fa","MV-CSN v2":"#16a34a","RBT3 + MV-CSN v2":"#005826"};
+      const W = 900, H = 240, padL = 56, padR = 24, padT = 34, padB = 38;
+      const plotW = W - padL - padR, plotH = H - padT - padB;
+      const yMin = 0.915, yMax = 1.002;
+      const xScale = i => padL + plotW * (i / (rates.length - 1));
+      const yScale = v => padT + plotH * (1 - (v - yMin) / (yMax - yMin));
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:640px;">`;
+      models.forEach((m, i) => {
+        const lx = padL + i * 168;
+        svg += `<line x1="${lx}" y1="13" x2="${lx+16}" y2="13" stroke="${colors[m]}" stroke-width="3"/>`;
+        svg += `<text x="${lx+21}" y="17" font-size="11.2" font-weight="600" fill="#334155">${m}</text>`;
+      });
+      [0.92, 0.94, 0.96, 0.98, 1.00].forEach(yv => {
+        const y = yScale(yv);
+        svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e2e8f0" stroke-dasharray="3,3"/>`;
+        svg += `<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#64748b">${yv.toFixed(2)}</text>`;
+      });
+      rates.forEach((r, i) => {
+        const x = xScale(i);
+        svg += `<text x="${x}" y="${H-12}" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">${Math.round(r*100)}%</text>`;
+      });
+      models.forEach(m => {
+        const vals = DATA.intensity.series[m];
+        const path = vals.map((v, i) => `${i===0?'M':'L'} ${xScale(i)} ${yScale(v)}`).join(" ");
+        svg += `<path d="${path}" fill="none" stroke="${colors[m]}" stroke-width="${m.includes('MV-CSN')?2.8:1.8}"/>`;
+        vals.forEach((v, i) => {
+          svg += `<circle cx="${xScale(i)}" cy="${yScale(v)}" r="3.5" fill="${colors[m]}"><title>${m} @ ${Math.round(rates[i]*100)}%: ${v.toFixed(4)}</title></circle>`;
+        });
+      });
+      svg += `</svg>`;
+      document.getElementById("chart-curve").innerHTML = svg;
+
+      let tbl = `<table><thead><tr><th>Model (In-Distribution, 3 Seeds)</th><th>Params</th><th>Bench A (16K) F1</th><th>Bench B (SMS 16.5K) F1</th><th>Bench B AUC</th><th>Bench B Latency (ms)</th></tr></thead><tbody>`;
+      ["TFIDF-SVM", "LZASD", "RBT3", "MV-CSN v2", "RBT3 + MV-CSN v2"].forEach(m => {
+        const sa = DATA.in_dist.bench_a.summary[m], sb = DATA.in_dist.bench_b.summary[m];
+        const p = DATA.in_dist.bench_b.params[m] === 0 ? "sparse" : DATA.in_dist.bench_b.params[m].toLocaleString();
+        const hi = m.includes("MV-CSN") ? ' class="highlight"' : '';
+        tbl += `<tr${hi}><td>${m}</td><td>${p}</td><td><code>${sa.f1.mean.toFixed(4)} ± ${sa.f1.std.toFixed(4)}</code></td><td><code>${sb.f1.mean.toFixed(4)} ± ${sb.f1.std.toFixed(4)}</code></td><td>${sb.auc.toFixed(4)}</td><td><code>${sb.ms.toFixed(3)}</code></td></tr>`;
+      });
+      tbl += `</tbody></table>`;
+      document.getElementById("table-indist").innerHTML = tbl;
+    }
+
+    // Section 4: Gate Distribution Stacked Bars + Interactive Case Study X-Ray
+    function renderGateDist() {
+      const rows = [
+        {label: `Clean Tokens (n=${DATA.gate.counts.clean.toLocaleString()})`, vals: DATA.gate.means.clean},
+        {label: `Phonetic / Mixed Obf. (n=${DATA.gate.counts.phon_obf.toLocaleString()})`, vals: DATA.gate.means.phon_obf},
+        {label: `Glyph-Only Obf. (n=${DATA.gate.counts.glyph_obf.toLocaleString()})`, vals: DATA.gate.means.glyph_obf},
+      ];
+      const W = 900, H = 138, padL = 230, padR = 24, padT = 28;
+      const plotW = W - padL - padR;
+      const segColors = ["#334155", "#16a34a", "#e11d48"];
+      const segLabels = ["Context Gate (α_ctx)", "Phonetic Graph GAT (α_phon)", "Rendered-Glyph GAT (α_glyph)"];
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:600px;">`;
+      segLabels.forEach((lbl, i) => {
+        const lx = padL + i * 215;
+        svg += `<rect x="${lx}" y="6" width="11" height="11" rx="2" fill="${segColors[i]}"/>`;
+        svg += `<text x="${lx+16}" y="15.5" font-size="11.2" font-weight="600" fill="#334155">${lbl}</text>`;
+      });
+      rows.forEach((r, idx) => {
+        const y = padT + idx * 34;
+        svg += `<text x="${padL-10}" y="${y+18}" text-anchor="end" font-size="11.5" font-weight="600" fill="#1e293b">${r.label}</text>`;
+        let curX = padL;
+        r.vals.forEach((v, si) => {
+          const w = plotW * v;
+          svg += `<rect x="${curX}" y="${y+4}" width="${w}" height="22" fill="${segColors[si]}"/>`;
+          if (v >= 0.08) {
+            svg += `<text x="${curX + w/2}" y="${y+19}" text-anchor="middle" font-size="10.8" font-weight="700" fill="#fff">${(v*100).toFixed(1)}%</text>`;
+          }
+          curX += w;
+        });
+      });
+      svg += `</svg>`;
+      document.getElementById("chart-gate-dist").innerHTML = svg;
+    }
+
+    const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+    function renderCaseStudy(caseIdx) {
+      const cs = DATA.gate.cases[caseIdx];
+      document.querySelectorAll('.case-pill').forEach((el, i) => el.classList.toggle('active', i === caseIdx));
+      const verdict = cs.pred_prob >= 0.5 ? '<span style="color:#e11d48;font-weight:700;">SPAM</span>' : '<span style="color:#005826;font-weight:700;">CLEAN HAM</span>';
+      document.getElementById("case-meta").innerHTML =
+        `<strong>Verdict:</strong> ${verdict} (<code>P = ${cs.pred_prob.toFixed(4)}</code>) · ` +
+        `<strong>Attack Type:</strong> <code>${esc(cs.attack_type)}</code><br/>` +
+        `<strong>Raw SMS:</strong> <code>${esc(cs.raw_text)}</code><br/>` +
+        `<strong>Preprocessed / Recomposed:</strong> <code>${esc(cs.proc_text)}</code>`;
+
+      const box = document.getElementById("heatmap-box");
+      box.innerHTML = "";
+      let defaultTok = 0;
+      let maxObf = -1;
+      cs.obf_probs.forEach((p, idx) => { if (p > maxObf) { maxObf = p; defaultTok = idx; } });
+
+      cs.chars.forEach((ch, idx) => {
+        const p = cs.obf_probs[idx];
+        const gb = Math.round(Math.max(85, 248 - p * 165));
+        const bg = p >= 0.30 ? `rgb(255,${gb},${gb})` : "#ffffff";
+        const bdr = p >= 0.50 ? "#e11d48" : "#cbd5e1";
+        const span = document.createElement("span");
+        span.className = "char-tok";
+        span.style.background = bg;
+        span.style.borderColor = bdr;
+        span.innerHTML = `${ch === ' ' ? '␣' : esc(ch)}<small>${Math.round(p*100)}%</small>`;
+        span.addEventListener("mouseenter", () => showToken(cs, idx));
+        span.addEventListener("click", () => showToken(cs, idx));
+        box.appendChild(span);
+      });
+      showToken(cs, defaultTok);
+    }
+
+    function showToken(cs, idx) {
+      document.querySelectorAll('.char-tok').forEach((el, i) => el.classList.toggle('selected', i === idx));
+      const ch = cs.chars[idx], obf = cs.obf_probs[idx], ac = cs.alpha_ctx[idx], ap = cs.alpha_phon[idx], ag = cs.alpha_glyph[idx];
+      document.getElementById("tok-inspector").innerHTML = `
+        <div><div style="font-size:0.78rem;color:#64748b;">Selected Character [#${idx}]</div><div style="font-size:1.45rem;font-weight:800;">${esc(ch)}</div></div>
+        <div><div style="font-size:0.78rem;color:#64748b;">Obfuscation Score: <strong>${(obf*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${obf*100}%;background:#e11d48;"></div></div></div>
+        <div><div style="font-size:0.78rem;color:#64748b;">Context Gate (α_ctx): <strong>${(ac*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${ac*100}%;background:#334155;"></div></div></div>
+        <div><div style="font-size:0.78rem;color:#64748b;">Phonetic GAT (α_phon): <strong>${(ap*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${ap*100}%;background:#16a34a;"></div></div></div>
+        <div><div style="font-size:0.78rem;color:#64748b;">Glyph GAT (α_glyph): <strong>${(ag*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${ag*100}%;background:#e11d48;"></div></div></div>
+      `;
+    }
+
+    const caseLabels = ["MIXED Attack (Spam)", "PHON Homophone (Spam)", "SPLIT / Domain Variant (Spam)", "GLYPH Variant (Spam)", "CLEAN Normal SMS (Ham)"];
+    const pillsWrap = document.getElementById("case-pills");
+    caseLabels.forEach((lbl, idx) => {
+      const b = document.createElement("button");
+      b.className = "case-pill";
+      b.textContent = lbl;
+      b.addEventListener("click", () => renderCaseStudy(idx));
+      pillsWrap.appendChild(b);
+    });
+
+    renderZeroShot();
+    renderLLM();
+    renderAblations();
+    renderCurve();
+    renderGateDist();
+    renderCaseStudy(0);
+  </script>
+</body>
+</html>
