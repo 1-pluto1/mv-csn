@@ -112,26 +112,26 @@ python scripts/gdrive_sync.py --action save --mount-if-colab
 
 ## One-Click Reproduction & Quickstart
 
-Use either `Makefile` shortcuts or `./scripts/reproduce.sh` directly:
+Use `./reproduce.sh` directly from the repository root:
 
 ```bash
 # 1. Install dependencies & editable package
-make setup                 # or: ./scripts/reproduce.sh setup
+./reproduce.sh setup
 
-# 2. Fast CPU verification (~10s, no GPU needed): syntax + 12 tests + live inference + result tables
-make verify                # or: ./scripts/reproduce.sh verify
+# 2. Fast CPU verification (~15s, no GPU needed): syntax + 12 tests + live inference + result tables
+./reproduce.sh verify
 
 # 3. Launch the 3-tab interactive Streamlit Inspector (CPU)
-make demo                  # or: ./scripts/reproduce.sh demo
+./reproduce.sh demo
 
 # 4. Instant verified metrics summary from results/*.json (zero extra dependencies)
-make summary               # or: ./scripts/reproduce.sh summary
+./reproduce.sh summary
 
 # 5. Reproduce Exp 7 CPU Error Analysis (3,395 Benchmark B test SMS)
-make error-analysis        # or: ./scripts/reproduce.sh error-analysis
+./reproduce.sh error-analysis
 
 # 6. Full end-to-end GPU reproduction of Exp 1-7 (~1.5h on A100/L4)
-make full                  # or: ./scripts/reproduce.sh full
+./reproduce.sh full
 ```
 
 Individual experiment scripts: `scripts/run_all.py`, `scripts/run_ablations.py`, `scripts/run_llm_eval.py`, `scripts/run_error_analysis.py`, and executed walkthrough `notebooks/mv_csn_colab_demo.ipynb`.

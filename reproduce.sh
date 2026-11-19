@@ -5,7 +5,7 @@
 # ==============================================================================
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT_DIR"
 
 PYTHON_BIN="${PYTHON_BIN:-python3}"
@@ -20,7 +20,7 @@ warn() {
 
 usage() {
   cat <<'EOF'
-Usage: ./scripts/reproduce.sh <mode>
+Usage: ./reproduce.sh <mode>
 
 Modes:
   verify          [Default, CPU ~10s] Syntax check + pytest suite + live CPU
@@ -41,7 +41,7 @@ cmd_setup() {
   step "Installing Python dependencies and editable mvcsn package"
   "$PYTHON_BIN" -m pip install -r requirements.txt
   "$PYTHON_BIN" -m pip install -e . --no-deps
-  step "Setup complete. Run './scripts/reproduce.sh verify' to validate."
+  step "Setup complete. Run './reproduce.sh verify' to validate."
 }
 
 cmd_summary() {
@@ -108,7 +108,7 @@ cmd_full() {
   step "Checking GPU availability for full multi-seed reproduction"
   if ! "$PYTHON_BIN" -c "import torch, sys; sys.exit(0 if torch.cuda.is_available() else 1)"; then
     warn "No CUDA GPU detected! Full reproduction (Exp 1-6 incl. Qwen3-4B) requires a CUDA GPU (~1.5h on A100/L4)."
-    warn "For fast CPU verification without retraining, run: ./scripts/reproduce.sh verify"
+    warn "For fast CPU verification without retraining, run: ./reproduce.sh verify"
     exit 1
   fi
 
