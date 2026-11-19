@@ -1,6 +1,7 @@
 # MV-CSN v2: Multi-View Context-Gated Character Similarity Network
 
-**Interactive Project Page & Progress Dashboard:** https://1-pluto1.github.io/mv-csn/
+**Interactive Project Page & Progress Dashboard:** https://uestcyz.top/mv-csn/ (`https://1-pluto1.github.io/mv-csn/` redirects automatically)  
+**Code & All-Experiments Handoff Guide (中文代码与实验说明文档):** [docs/EXPERIMENTS_AND_CODE_GUIDE.md](docs/EXPERIMENTS_AND_CODE_GUIDE.md)
 
 **Chinese Adversarial Variant Spam Detection** — *Sun Yat-sen University, Data Science & Engineering Capstone Project*
 
