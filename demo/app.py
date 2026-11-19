@@ -5,21 +5,16 @@ from __future__ import annotations
 import html
 import json
 import sys
-import zlib
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 import numpy as np
-import torch
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
-from mvcsn.data.preprocessing import TextPreprocessor
-from mvcsn.data.vocab import CharVocab
-from mvcsn.graph.oov_bridge import OOVGraphBridge
-from mvcsn.model.mvcsn import MVCSNModel
+from mvcsn.inference import MVCSNInferenceEngine
 from scripts.gdrive_sync import bootstrap_from_gdrive
 
 PRESET_EXAMPLES: Dict[str, str] = {
@@ -27,7 +22,7 @@ PRESET_EXAMPLES: Dict[str, str] = {
     "PHON (Homophone Evasion Spam)": "恭喜中大奖，专员联糸您领取现斤红包，请回复确认",
     "SPLIT (Radical Split & Symbol Bypass)": "氵青联\\/系客服讠主册即送88⑧元彩金，详询薇信",
     "MIXED (Multi-Attack Gambling/Loan)": "免抵押急用钱？Low利息秒到账，手几号讠主册立抢⑧折",
-    "CLEAN Ham (Verified Test SMS)": '我和飞机上一百五十多名旅客眼巴巴期待飞机划破长空腾空而起的时刻',
+    "CLEAN Ham (Verified Test SMS)": "我和飞机上一百五十多名旅客眼巴巴期待飞机划破长空腾空而起的时刻",
 }
 
 
@@ -36,97 +31,24 @@ def build_demo_engine(
     chaizi_path: str | Path = "data/resources/chaizi_map.json.gz",
     font_dir: str | Path = "/content/fonts",
 ) -> Dict[str, object]:
-    """Load MV-CSN v2 weights, multi-view graphs, glyph bitmaps, and OOV Bridge on CPU."""
+    """Load MV-CSN v2 inference facade on CPU, auto-bootstrapping from Drive if missing."""
     bp = Path(bundle_path)
     cp = Path(chaizi_path)
     if not bp.exists() or not cp.exists():
         bootstrap_from_gdrive(font_dir=font_dir)
 
-    bundle = torch.load(bp, map_location="cpu", weights_only=False)
-    vocab = CharVocab(bundle["stoi"])
-    graphs = {k: v.float() if v.is_floating_point() else v for k, v in bundle["graphs"].items()}
-
-    if "bitmaps_zlib" in bundle:
-        raw_bytes = zlib.decompress(bundle["bitmaps_zlib"])
-        bmp_np = np.frombuffer(raw_bytes, dtype=np.uint8).reshape(tuple(bundle["bitmaps_shape"])).copy()
-        bitmaps = torch.from_numpy(bmp_np).float() / 255.0
-    elif "bitmaps_uint8" in bundle:
-        bitmaps = bundle["bitmaps_uint8"].float() / 255.0
-    else:
-        bitmaps = torch.zeros((len(vocab), 32, 32), dtype=torch.float32)
-
-    gmeta = {
-        "bitmaps": bitmaps,
-        "valid_mask": bundle["valid_mask"],
-        "glyph_z": bundle["glyph_z_fp16"].float(),
-        "glyph_pix": bundle["glyph_pix_fp16"].float(),
-        "cae_state": {k: v.float() if v.is_floating_point() else v for k, v in bundle["cae_state"].items()},
-        **bundle["glyph_cfg"],
-    }
-    preproc = TextPreprocessor(cp)
-    bridge = OOVGraphBridge(vocab, graphs, gmeta, chaizi_path=cp, font_dir=font_dir)
-
-    model = MVCSNModel(
-        len(vocab),
-        graphs["phon_nbr_idx"], graphs["phon_nbr_sim"],
-        graphs["glyph_nbr_idx"], graphs["glyph_nbr_sim"],
-        glyph_z=graphs["glyph_z"], pinyin_ids=graphs["pinyin_ids"],
+    engine = MVCSNInferenceEngine.from_bundle(
+        bundle_path=bp, chaizi_path=cp, font_dir=font_dir
     )
-    model.load_state_dict({k: v.float() if v.is_floating_point() else v for k, v in bundle["model_state"].items()})
-    model.eval()
-
-    return {
-        "model": model,
-        "vocab": vocab,
-        "graphs": graphs,
-        "gmeta": gmeta,
-        "bitmaps": bitmaps,
-        "preproc": preproc,
-        "bridge": bridge,
-    }
+    return engine.as_legacy_dict()
 
 
-@torch.no_grad()
-def predict_single_text(text: str, engine: Dict[str, object], max_len: int = 192) -> Dict[str, object]:
-    """Run MV-CSN v2 inference on one message with SpellGCN-style dynamic OOV resolution."""
-    preproc: TextPreprocessor = engine["preproc"]
-    vocab: CharVocab = engine["vocab"]
-    bridge: OOVGraphBridge = engine["bridge"]
-    model: MVCSNModel = engine["model"]
-
-    proc_text = preproc.process(text, enabled=True) or text
-    oov_map, ext_bundle = bridge.build_extended_bundle([proc_text])
-    ids = vocab.encode(proc_text, max_len=max_len, oov_map=oov_map)
-
-    input_ids = torch.tensor([ids], dtype=torch.long)
-    attn_mask = torch.ones((1, len(ids)), dtype=torch.bool)
-
-    model.reset_inference_graph()
-    if oov_map:
-        model.set_inference_graph(ext_bundle)
-    out = model(input_ids, attn_mask)
-    model.reset_inference_graph()
-
-    L = len(ids)
-    chars = list(proc_text[:L]) if proc_text else ["<UNK>"]
-    spam_prob = float(torch.sigmoid(out["spam_logit"][0]).item())
-    obf_probs = [float(x) for x in torch.sigmoid(out["obf_logits"][0, :L]).tolist()]
-    alpha = out["alpha"][0, :L].tolist()
-    pool_w = [float(x) for x in out["pool_weights"][0, :L].tolist()]
-
-    return {
-        "raw_text": text,
-        "proc_text": proc_text,
-        "spam_prob": spam_prob,
-        "pred_label": "SPAM" if spam_prob >= 0.5 else "HAM",
-        "oov_resolved": list(oov_map.keys()),
-        "chars": chars[: len(alpha)],
-        "obf_probs": obf_probs[: len(chars)],
-        "alpha_ctx": [float(a[0]) for a in alpha],
-        "alpha_phon": [float(a[1]) for a in alpha],
-        "alpha_glyph": [float(a[2]) for a in alpha],
-        "pool_weights": pool_w[: len(chars)],
-    }
+def predict_single_text(
+    text: str, engine: Dict[str, object] | MVCSNInferenceEngine, max_len: int = 192
+) -> Dict[str, object]:
+    """Run MV-CSN v2 inference on one message via :class:`MVCSNInferenceEngine`."""
+    facade = engine if isinstance(engine, MVCSNInferenceEngine) else engine["engine"]
+    return facade.predict(text, max_len=max_len).to_dict()
 
 
 def _load_json_safe(path: str | Path) -> Optional[Dict[str, object]]:

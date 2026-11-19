@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import gzip
 import json
+import os
 import random
 import sys
-import os
-import zlib
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 import threading
@@ -40,6 +39,7 @@ from mvcsn.data.splits import SpamRecord, build_or_load_splits
 from mvcsn.data.vocab import CharVocab
 from mvcsn.graph.builder import build_multiview_graphs, load_glyph_meta, load_graphs
 from mvcsn.graph.oov_bridge import OOVGraphBridge
+from mvcsn.inference import save_demo_bundle
 from mvcsn.model.mvcsn import MVCSNModel
 from mvcsn.training.metrics import (
     compute_classification_metrics,
@@ -47,15 +47,19 @@ from mvcsn.training.metrics import (
     mcnemar_test,
 )
 from mvcsn.training.trainer import evaluate_mvcsn, train_mvcsn
+from mvcsn.utils.config import MVCSNConfig, TrainConfig
+from mvcsn.utils.experiment import ABLATION_SPECS, DEFAULT_SEEDS, agg_stats, to_clean_record
 from mvcsn.utils.seed import get_device, seed_everything
 from scripts.gdrive_sync import bootstrap_from_gdrive, persist_to_gdrive
 
-SEEDS = [42, 1024, 2025]
+SEEDS = list(DEFAULT_SEEDS)
 RESULTS_DIR = Path("results")
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 class ProgressMonitor:
+    """Background daemon logging stage transitions and GPU memory during long runs."""
+
     def __init__(self, interval: float = 15.0) -> None:
         self.interval = interval
         self.stage = "init"
@@ -79,27 +83,13 @@ class ProgressMonitor:
         self._stop.set()
 
 
-def agg_stats(items: List[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
-    keys = [k for k in items[0].keys() if isinstance(items[0][k], (int, float))]
-    out: Dict[str, Dict[str, float]] = {}
-    for k in keys:
-        vals = [float(x[k]) for x in items]
-        out[k] = {"mean": float(np.mean(vals)), "std": float(np.std(vals))}
-    return out
-
-
-def measure_latency_ms(fn, n_samples: int) -> float:
+def measure_latency_ms(fn, n_samples: int) -> Tuple[float, object]:
+    """Measure average inference latency in milliseconds per sample."""
     t0 = time.time()
     out = fn()
     if torch.cuda.is_available():
         torch.cuda.synchronize()
     return (time.time() - t0) * 1000.0 / max(1, n_samples), out
-
-
-def to_clean_record(r: SpamRecord, preproc: TextPreprocessor) -> SpamRecord:
-    ct = r.clean_text if r.clean_text else r.raw_text
-    pt = preproc.process(ct, enabled=True) or ct
-    return SpamRecord(r.idx, r.label, ct, pt, ct, r.cluster_id, r.split, "CLEAN", [0] * min(len(pt), 192))
 
 
 def run_in_dist_benchmark(
@@ -446,70 +436,41 @@ def main() -> None:
         }
         (RESULTS_DIR / "intensity_curve.json").write_text(json.dumps({"rates": rates, "summary": int_summary, "raw": int_runs}, indent=2), encoding="utf-8")
 
-        # Save best MV-CSN v2 checkpoint + compact fp16 demo bundle (<15 MB)
+        # Save best MV-CSN v2 checkpoint + compact fp16 demo bundle (~20.5 MB)
         best_mv_model.reset_inference_graph()
         torch.save(best_mv_model.state_dict(), "artifacts/mvcsn_best.pt")
-        demo_bundle = {
-            "stoi": vocab_c.stoi,
-            "graphs": {k: v.half() if v.is_floating_point() else v for k, v in graphs_c.items()},
-            "bitmaps_zlib": zlib.compress((gmeta_c["bitmaps"] * 255.0).clamp(0, 255).to(torch.uint8).numpy().tobytes(), level=6),
-            "bitmaps_shape": list(gmeta_c["bitmaps"].shape),
-            "valid_mask": gmeta_c["valid_mask"],
-            "glyph_z_fp16": gmeta_c["glyph_z"].half(),
-            "glyph_pix_fp16": gmeta_c["glyph_pix"].half(),
-            "cae_state": {k: v.half() if v.is_floating_point() else v for k, v in gmeta_c["cae_state"].items()},
-            "glyph_cfg": {
-                "emb_dim": gmeta_c["emb_dim"],
-                "glyph_size": gmeta_c["glyph_size"],
-                "cnn_weight": gmeta_c["cnn_weight"],
-                "pixel_weight": gmeta_c["pixel_weight"],
-            },
-            "model_state": {k: v.half() if v.is_floating_point() else v for k, v in best_mv_model.state_dict().items()},
-        }
-        torch.save(demo_bundle, "artifacts/demo_bundle.pt")
-        print("Saved artifacts/demo_bundle.pt:", round(Path("artifacts/demo_bundle.pt").stat().st_size / 1e6, 2), "MB", flush=True)
+        bundle_dest = save_demo_bundle(best_mv_model, vocab_c, graphs_c, gmeta_c, "artifacts/demo_bundle.pt")
+        print("Saved artifacts/demo_bundle.pt:", round(bundle_dest.stat().st_size / 1e6, 2), "MB", flush=True)
 
         # Experiment 4: 8-Row Ablation Study on MV-CSN v2 (Zero-Shot Clean -> RealVariants, 3 seeds)
         mon.set_stage("exp4_ablations")
-        ablation_specs = [
-            ("Full MV-CSN v2", dict(use_phonetic=True, use_glyph=True, use_gate=True, use_multimodal_anchor=True, use_consistency=True, use_oov_bridge=True, use_preprocessor=True)),
-            ("w/o Phonetic View", dict(use_phonetic=False, use_glyph=True, use_gate=True, use_multimodal_anchor=True, use_consistency=True, use_oov_bridge=True, use_preprocessor=True)),
-            ("w/o Glyph Visual View", dict(use_phonetic=True, use_glyph=False, use_gate=True, use_multimodal_anchor=True, use_consistency=True, use_oov_bridge=True, use_preprocessor=True)),
-            ("w/o Context Gate (Uniform)", dict(use_phonetic=True, use_glyph=True, use_gate=False, use_multimodal_anchor=True, use_consistency=True, use_oov_bridge=True, use_preprocessor=True)),
-            ("w/o RoCBert Consistency", dict(use_phonetic=True, use_glyph=True, use_gate=True, use_multimodal_anchor=True, use_consistency=False, use_oov_bridge=True, use_preprocessor=True)),
-            ("w/o Multimodal Anchor", dict(use_phonetic=True, use_glyph=True, use_gate=True, use_multimodal_anchor=False, use_consistency=True, use_oov_bridge=True, use_preprocessor=True)),
-            ("w/o Dynamic OOV Bridge", dict(use_phonetic=True, use_glyph=True, use_gate=True, use_multimodal_anchor=True, use_consistency=True, use_oov_bridge=False, use_preprocessor=True)),
-            ("w/o Split/Noise Preprocessor", dict(use_phonetic=True, use_glyph=True, use_gate=True, use_multimodal_anchor=True, use_consistency=True, use_oov_bridge=True, use_preprocessor=False)),
-        ]
         te_mv_no_oov = DataLoader(SpamDataset(te_real, vocab_c, use_preprocessor=True, oov_map=None), batch_size=128, shuffle=False, collate_fn=collate_spam_batch)
         te_raw_recs = [SpamRecord(r.idx, r.label, r.raw_text, r.raw_text, r.clean_text, r.cluster_id, r.split, r.attack_type, []) for r in te_real]
         oov_raw, ext_raw = bridge_c.build_extended_bundle([r.raw_text for r in te_raw_recs])
         te_mv_noprep = DataLoader(SpamDataset(te_raw_recs, vocab_c, use_preprocessor=False, oov_map=oov_raw), batch_size=128, shuffle=False, collate_fn=collate_spam_batch)
 
         abl_runs = defaultdict(list)
-        for abl_name, cfg in ablation_specs:
+        for spec in ABLATION_SPECS:
+            model_cfg = MVCSNConfig(
+                use_phonetic=spec.use_phonetic,
+                use_glyph=spec.use_glyph,
+                use_gate=spec.use_gate,
+                use_multimodal_anchor=spec.use_multimodal_anchor,
+            )
+            train_cfg = TrainConfig(epochs=18, patience=6, use_consistency=spec.use_consistency)
             for seed in SEEDS:
                 seed_everything(seed)
-                m = MVCSNModel(
-                    len(vocab_c),
-                    graphs_c["phon_nbr_idx"], graphs_c["phon_nbr_sim"],
-                    graphs_c["glyph_nbr_idx"], graphs_c["glyph_nbr_sim"],
-                    glyph_z=graphs_c["glyph_z"], pinyin_ids=graphs_c["pinyin_ids"],
-                    use_phonetic=cfg["use_phonetic"],
-                    use_glyph=cfg["use_glyph"],
-                    use_gate=cfg["use_gate"],
-                    use_multimodal_anchor=cfg["use_multimodal_anchor"],
-                )
-                train_mvcsn(m, tr_mv_c, va_mv_c, device, epochs=18, patience=6, use_consistency=cfg["use_consistency"])
-                if not cfg["use_preprocessor"]:
-                    m.set_inference_graph(ext_raw)
-                    res_m, _, _ = evaluate_mvcsn(m, te_mv_noprep, device)
-                elif cfg["use_oov_bridge"]:
-                    m.set_inference_graph(ext_te)
-                    res_m, _, _ = evaluate_mvcsn(m, te_mv_real, device)
+                m = MVCSNModel.from_config(len(vocab_c), graphs_c, model_cfg)
+                train_mvcsn(m, tr_mv_c, va_mv_c, device, config=train_cfg)
+                if not spec.use_preprocessor:
+                    eval_ext, eval_loader = ext_raw, te_mv_noprep
+                elif spec.use_oov_bridge:
+                    eval_ext, eval_loader = ext_te, te_mv_real
                 else:
-                    res_m, _, _ = evaluate_mvcsn(m, te_mv_no_oov, device)
-                abl_runs[abl_name].append(res_m)
+                    eval_ext, eval_loader = None, te_mv_no_oov
+                with m.temporary_inference_graph(eval_ext):
+                    res_m, _, _ = evaluate_mvcsn(m, eval_loader, device)
+                abl_runs[spec.name].append(res_m)
 
         full_f1 = float(np.mean([x["f1"] for x in abl_runs["Full MV-CSN v2"]]))
         abl_summary = {}

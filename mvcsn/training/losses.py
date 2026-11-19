@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Dict, Tuple
+
 import torch
 import torch.nn.functional as F
 
@@ -19,18 +20,40 @@ def generate_gpu_graph_perturbation(
     min_sim: float = 0.60,
     unk_prob: float = 0.20,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
-    """Fast GPU-vectorized RoCBert-style multimodal graph perturbation."""
+    """Generate vectorized RoCBert-style multimodal graph perturbations on-device.
+
+    With probability ``token_prob``, each non-special token is replaced by either
+    a random high-similarity phonetic/visual neighbor (``sim >= min_sim``) or
+    ``<UNK>=1`` (probability ``unk_prob``) to simulate unseen adversarial attacks
+    purely from clean training text.
+
+    Args:
+        input_ids: Clean token IDs, shape ``[B, L]``.
+        attn_mask: Valid-token boolean mask, shape ``[B, L]``.
+        phon_nbr_idx: Phonetic Top-K neighbor indices, shape ``[V, K]``.
+        phon_nbr_sim: Phonetic Top-K neighbor similarities, shape ``[V, K]``.
+        glyph_nbr_idx: Visual glyph Top-K neighbor indices, shape ``[V, K]``.
+        glyph_nbr_sim: Visual glyph Top-K neighbor similarities, shape ``[V, K]``.
+        token_prob: Fraction of valid characters to perturb per sample.
+        min_sim: Minimum graph edge weight required for neighbor substitution.
+        unk_prob: Probability of substituting ``<UNK>`` instead of a graph neighbor.
+
+    Returns:
+        Tuple ``(pert_ids, pert_obf)`` where ``pert_obf`` marks perturbed token
+        positions as float ``1.0`` (shape ``[B, L]``).
+    """
     B, L = input_ids.shape
     dev = input_ids.device
 
-    # Combine phonetic + glyph neighbor candidates: [B, L, 2*K]
+    # Merge phonetic and visual neighbor candidates along the last axis: [B, L, 2*K]
     cand_idx = torch.cat([phon_nbr_idx[input_ids], glyph_nbr_idx[input_ids]], dim=-1)
     cand_sim = torch.cat([phon_nbr_sim[input_ids], glyph_nbr_sim[input_ids]], dim=-1)
     valid_cand = cand_sim >= min_sim
 
-    # Sample random valid neighbor per position via Gumbel/uniform scoring
-    rand_scores = torch.rand_like(cand_sim)
-    rand_scores = torch.where(valid_cand, rand_scores, torch.full_like(rand_scores, -1.0))
+    # Sample one uniformly random valid neighbor per token without Python loops.
+    rand_scores = torch.where(
+        valid_cand, torch.rand_like(cand_sim), torch.full_like(cand_sim, -1.0)
+    )
     best_pos = rand_scores.argmax(dim=-1, keepdim=True)
     sampled_nbr = cand_idx.gather(-1, best_pos).squeeze(-1)
     has_cand = valid_cand.any(dim=-1)
@@ -54,6 +77,17 @@ def compute_mvcsn_loss(
     use_loc_head: bool = True,
     use_gate: bool = True,
 ) -> Dict[str, torch.Tensor]:
+    """Compute the composite supervised objective for MV-CSN v2.
+
+    Combines three terms:
+        1. ``L_spam``: Sequence-level binary cross-entropy with logits.
+        2. ``L_loc``: Class-weighted (4:1) per-token obfuscation localization BCE.
+        3. ``L_gate``: Log-barrier gate prior encouraging ``alpha_ctx -> 1`` on
+           clean characters and ``alpha_phon + alpha_glyph -> 1`` on obfuscated ones.
+
+    Returns:
+        Dictionary of scalar tensors ``{"total", "spam", "loc", "gate"}``.
+    """
     spam_loss = F.binary_cross_entropy_with_logits(outputs["spam_logit"], labels)
     total = spam_loss
     loc_loss = torch.zeros((), device=labels.device)
@@ -63,8 +97,12 @@ def compute_mvcsn_loss(
     denom = torch.clamp(valid.sum(), min=1.0)
 
     if use_loc_head and loc_loss_weight > 0.0:
-        pos_w = torch.where(obf_labels > 0.5, torch.full_like(obf_labels, 4.0), torch.ones_like(obf_labels))
-        bce_tok = F.binary_cross_entropy_with_logits(outputs["obf_logits"], obf_labels, reduction="none")
+        pos_w = torch.where(
+            obf_labels > 0.5, torch.full_like(obf_labels, 4.0), torch.ones_like(obf_labels)
+        )
+        bce_tok = F.binary_cross_entropy_with_logits(
+            outputs["obf_logits"], obf_labels, reduction="none"
+        )
         loc_loss = (bce_tok * pos_w * valid).sum() / denom
         total = total + loc_loss_weight * loc_loss
 
@@ -86,6 +124,11 @@ def compute_consistency_loss(
     out_orig: Dict[str, torch.Tensor],
     out_pert: Dict[str, torch.Tensor],
 ) -> torch.Tensor:
+    """Compute RoCBert-style probability + representation consistency loss.
+
+    Penalizes divergence between clean and graph-perturbed views in both output
+    probability space (MSE) and pooled embedding space (cosine distance).
+    """
     p1 = torch.sigmoid(out_orig["spam_logit"])
     p2 = torch.sigmoid(out_pert["spam_logit"])
     prob_mse = F.mse_loss(p1, p2)

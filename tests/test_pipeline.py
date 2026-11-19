@@ -40,22 +40,41 @@ def test_zero_cluster_leakage_both_benchmarks() -> None:
         assert texts["train"].isdisjoint(texts["val"])
 
 
+from pathlib import Path
+
+from mvcsn.inference import load_demo_bundle
+
+
+def _load_test_graph_artifacts():
+    """Load cached graph artifacts, falling back to the committed demo_bundle.pt on fresh clones."""
+    if Path("artifacts/vocab.json").exists() and Path("artifacts/glyph_meta.pt").exists():
+        return (
+            CharVocab.load("artifacts/vocab.json"),
+            load_graphs("artifacts/graphs_top20.pt"),
+            load_glyph_meta("artifacts/glyph_meta.pt"),
+        )
+    bundle = load_demo_bundle("artifacts/demo_bundle.pt")
+    return bundle.vocab, bundle.graphs, bundle.gmeta
+
+
 def test_multimodal_graph_and_oov_bridge() -> None:
-    vocab = CharVocab.load("artifacts/vocab.json")
-    graphs = load_graphs("artifacts/graphs_top20.pt")
-    gmeta = load_glyph_meta("artifacts/glyph_meta.pt")
+    vocab, graphs, gmeta = _load_test_graph_artifacts()
 
     assert graphs["phon_nbr_idx"].shape[0] == len(vocab)
     assert graphs["glyph_nbr_idx"].shape[0] == len(vocab)
     assert graphs["glyph_z"].shape == (len(vocab), 64)
     assert graphs["pinyin_ids"].shape == (len(vocab), 3)
 
-    ig = vocab.stoi["高"]
-    igv = vocab.stoi["髙"]
-    assert igv in graphs["phon_nbr_idx"][ig].tolist()
-    assert igv in graphs["glyph_nbr_idx"][ig].tolist()
-
     bridge = OOVGraphBridge(vocab, graphs, gmeta)
+    ig = vocab.stoi["高"]
+    if "髙" in vocab.stoi:
+        igv = vocab.stoi["髙"]
+        assert igv in graphs["phon_nbr_idx"][ig].tolist()
+        assert igv in graphs["glyph_nbr_idx"][ig].tolist()
+    else:
+        oov_g, ext_g = bridge.build_extended_bundle(["髙"])
+        assert ig in ext_g["glyph_nbr_idx"][oov_g["髙"]].tolist()
+
     oov_map, ext_bundle = bridge.build_extended_bundle(["50萬Ꝗ送Α"])
     assert "Ꝗ" in oov_map and "Α" in oov_map
     oov_a_id = oov_map["Α"]
@@ -64,9 +83,7 @@ def test_multimodal_graph_and_oov_bridge() -> None:
 
 
 def test_mvcsn_v2_forward_oov_consistency_and_ablations() -> None:
-    vocab = CharVocab.load("artifacts/vocab.json")
-    graphs = load_graphs("artifacts/graphs_top20.pt")
-    gmeta = load_glyph_meta("artifacts/glyph_meta.pt")
+    vocab, graphs, gmeta = _load_test_graph_artifacts()
 
     for cfg in [
         dict(use_phonetic=True, use_glyph=True, use_gate=True, use_multimodal_anchor=True),

@@ -1,11 +1,14 @@
-"""Evaluation metrics, per-attack breakdown, and McNemar significance test."""
+"""Evaluation metrics, per-attack breakdown, and exact McNemar significance test."""
 
 from __future__ import annotations
 
 from typing import Dict, Iterable, List
+
 import numpy as np
 from scipy.stats import binomtest
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
+
+ATTACK_CATEGORIES = ("PHON", "GLYPH", "SPLIT", "SPACE", "MIXED", "CLEAN")
 
 
 def compute_classification_metrics(
@@ -13,6 +16,17 @@ def compute_classification_metrics(
     y_prob: Iterable[float],
     threshold: float = 0.5,
 ) -> Dict[str, float]:
+    """Compute binary spam-detection metrics including clean-ham accuracy and ROC-AUC.
+
+    Args:
+        y_true: Ground-truth binary labels (``0`` = ham, ``1`` = spam).
+        y_prob: Predicted spam probabilities in ``[0, 1]``.
+        threshold: Classification decision threshold (default ``0.5``).
+
+    Returns:
+        Dictionary with ``precision``, ``recall``, ``f1``, ``macro_f1``,
+        ``accuracy``, ``auc``, ``clean_ham_acc``, and ``spam_recall``.
+    """
     yt = np.asarray(list(y_true), dtype=np.int64)
     yp = np.asarray(list(y_prob), dtype=np.float64)
     yhat = (yp >= threshold).astype(np.int64)
@@ -44,6 +58,12 @@ def compute_per_attack_f1(
     attack_types: List[str],
     threshold: float = 0.5,
 ) -> Dict[str, float]:
+    """Evaluate per-attack F1 and recall against the shared clean-ham pool.
+
+    For each evasion category (``PHON``, ``GLYPH``, ``SPLIT``, ``SPACE``,
+    ``MIXED``), pairs spam messages of that category with all clean-ham test
+    samples so precision reflects false positives realistically.
+    """
     yt = np.asarray(y_true, dtype=np.int64)
     yp = np.asarray(y_prob, dtype=np.float64)
     yhat = (yp >= threshold).astype(np.int64)
@@ -51,7 +71,7 @@ def compute_per_attack_f1(
 
     ham_idx = yt == 0
     res: Dict[str, float] = {}
-    for tag in ("PHON", "GLYPH", "SPLIT", "SPACE", "MIXED", "CLEAN"):
+    for tag in ATTACK_CATEGORIES:
         if tag == "CLEAN":
             sel = atks == "CLEAN"
             res[tag] = float(f1_score(yt[sel], yhat[sel], zero_division=0)) if sel.any() else 0.0
@@ -66,7 +86,21 @@ def compute_per_attack_f1(
     return res
 
 
-def mcnemar_test(y_true: Iterable[int], pred_a: Iterable[int], pred_b: Iterable[int]) -> Dict[str, float]:
+def mcnemar_test(
+    y_true: Iterable[int],
+    pred_a: Iterable[int],
+    pred_b: Iterable[int],
+) -> Dict[str, float]:
+    """Run exact two-sided McNemar binomial test comparing paired model predictions.
+
+    Args:
+        y_true: Ground-truth labels.
+        pred_a: Binary predictions of model A.
+        pred_b: Binary predictions of model B.
+
+    Returns:
+        Dictionary ``{"b": A-only correct, "c": B-only correct, "p_value": exact p}``.
+    """
     yt = np.asarray(list(y_true), dtype=np.int64)
     pa = np.asarray(list(pred_a), dtype=np.int64)
     pb = np.asarray(list(pred_b), dtype=np.int64)

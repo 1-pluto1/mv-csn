@@ -88,6 +88,7 @@ def save_graphs(
     graph_path: str | Path = "artifacts/graphs_top20.pt",
     glyph_meta_path: str | Path = "artifacts/glyph_meta.pt",
 ) -> None:
+    """Serialize Top-K multi-view graph tensors and glyph CAE metadata to disk."""
     gp = Path(graph_path)
     gp.parent.mkdir(parents=True, exist_ok=True)
     torch.save(graphs, gp)
@@ -97,8 +98,10 @@ def save_graphs(
 
 
 def load_graphs(path: str | Path = "artifacts/graphs_top20.pt") -> Dict[str, torch.Tensor]:
+    """Load cached multi-view Top-K graph tensors onto CPU."""
     return torch.load(path, map_location="cpu", weights_only=True)
 
 
 def load_glyph_meta(path: str | Path = "artifacts/glyph_meta.pt") -> Dict[str, object]:
+    """Load cached glyph renderer bitmaps, CAE weights, and valid-character mask."""
     return torch.load(path, map_location="cpu", weights_only=False)

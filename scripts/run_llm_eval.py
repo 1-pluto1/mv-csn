@@ -31,57 +31,29 @@ from mvcsn.data.preprocessing import TextPreprocessor
 from mvcsn.data.splits import SpamRecord, build_or_load_splits
 from mvcsn.data.vocab import CharVocab
 from mvcsn.graph.oov_bridge import OOVGraphBridge
+from mvcsn.inference import load_demo_bundle
 from mvcsn.model.mvcsn import MVCSNModel
 from mvcsn.training.metrics import (
     compute_classification_metrics,
     compute_per_attack_f1,
     mcnemar_test,
 )
+from mvcsn.utils.experiment import DEFAULT_SEEDS, agg_stats, to_clean_record
 from mvcsn.utils.seed import get_device, seed_everything
 from scripts.gdrive_sync import bootstrap_from_gdrive, persist_to_gdrive
 
-SEEDS = [42, 1024, 2025]
+SEEDS = list(DEFAULT_SEEDS)
 QWEN_06B_ID = "Qwen/Qwen3-0.6B"
 QWEN_4B_ID = "Qwen/Qwen3-4B-Instruct-2507"
 
 
-def to_clean_record(r: SpamRecord, preproc: TextPreprocessor) -> SpamRecord:
-    ct = r.clean_text if r.clean_text else r.raw_text
-    pt = preproc.process(ct, enabled=True) or ct
-    return SpamRecord(r.idx, r.label, ct, pt, ct, r.cluster_id, r.split, "CLEAN", [0] * min(len(pt), 192))
-
-
-def agg_stats(items: List[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
-    keys = [k for k in items[0].keys() if isinstance(items[0][k], (int, float))]
-    return {
-        k: {
-            "mean": float(np.mean([float(x[k]) for x in items])),
-            "std": float(np.std([float(x[k]) for x in items])),
-        }
-        for k in keys
-    }
-
-
 def load_mvcsn_from_bundle(bundle_path: str = "artifacts/demo_bundle.pt"):
-    bundle = torch.load(bundle_path, map_location="cpu", weights_only=False)
-    vocab = CharVocab(bundle["stoi"])
-    graphs = {k: v.float() if v.is_floating_point() else v for k, v in bundle["graphs"].items()}
-    gmeta = {
-        "valid_mask": bundle["valid_mask"],
-        "glyph_z": bundle["glyph_z_fp16"].float(),
-        "glyph_pix": bundle["glyph_pix_fp16"].float(),
-        "cae_state": {k: v.float() if v.is_floating_point() else v for k, v in bundle["cae_state"].items()},
-        **bundle["glyph_cfg"],
-    }
-    bridge = OOVGraphBridge(vocab, graphs, gmeta)
-    model = MVCSNModel(
-        len(vocab),
-        graphs["phon_nbr_idx"], graphs["phon_nbr_sim"],
-        graphs["glyph_nbr_idx"], graphs["glyph_nbr_sim"],
-        glyph_z=graphs["glyph_z"], pinyin_ids=graphs["pinyin_ids"],
-    )
-    model.load_state_dict({k: v.float() if v.is_floating_point() else v for k, v in bundle["model_state"].items()})
-    return model, vocab, bridge
+    """Load MV-CSN v2 model, vocabulary, and OOV bridge from a packed demo bundle."""
+    bundle = load_demo_bundle(bundle_path)
+    bridge = OOVGraphBridge(bundle.vocab, bundle.graphs, bundle.gmeta)
+    model = MVCSNModel.from_config(len(bundle.vocab), bundle.graphs)
+    model.load_state_dict(bundle.model_state, strict=True)
+    return model, bundle.vocab, bridge
 
 
 @torch.no_grad()

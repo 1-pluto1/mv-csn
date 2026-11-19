@@ -60,6 +60,7 @@ def test_results_json_schemas() -> None:
         "intensity_curve.json",
         "ablations.json",
         "llm_comparison.json",
+        "error_analysis.json",
     ]
     for fn in expected:
         p = Path("results") / fn
@@ -76,6 +77,9 @@ def test_results_json_schemas() -> None:
 
 
 def test_streamlit_app_headless() -> None:
+    import pytest
+
+    pytest.importorskip("streamlit")
     from streamlit.testing.v1 import AppTest
 
     at = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "demo" / "app.py")).run(timeout=60)

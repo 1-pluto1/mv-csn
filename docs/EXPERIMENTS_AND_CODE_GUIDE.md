@@ -32,9 +32,13 @@ mv-csn/
 │   │   └── mvcsn.py               # 完整 MV-CSN v2 主模型（1,371,632 参数，支持所有消融开关与动态 OOV 图挂载）
 │   ├── training/
 │   │   ├── losses.py              # 四项联合损失：Spam BCE + Token 定位 BCE + Gate 先验正则 + GPU 向量化 RoCBert 图一致性损失
-│   │   ├── trainer.py             # 训练循环（AdamW + Cosine 调度 + Early Stopping）与评估测速
+│   │   ├── trainer.py             # 训练循环（AdamW + Cosine 调度 + Early Stopping + TrainConfig）与评估测速
 │   │   └── metrics.py             # F1 / Macro-F1 / AUC / Clean Ham Acc / 分攻击类型 F1 / 精确 McNemar 显著性检验
-│   └── utils/                     # 随机种子固定 (seed_everything) 与配置
+│   ├── inference.py               # 【统一推理门面】fp16/zlib demo_bundle 打包与加载 + MVCSNInferenceEngine（供 Demo/Error/LLM/Ablation 复用）
+│   └── utils/
+│       ├── config.py              # 类型化不可变配置 dataclass（MVCSNConfig / TrainConfig）与 YAML 加载器
+│       ├── experiment.py          # 跨脚本公共实验原语（DEFAULT_SEEDS / ABLATION_SPECS / to_clean_record / aggregate_metric_runs）
+│       └── seed.py                # 跨库随机种子固定 (seed_everything) 与加速器选择 (CUDA > MPS > CPU)
 ├── baselines/                     # 【基线模型库】
 │   ├── tfidf_svm.py               # 字符 n-gram TF-IDF + Calibrated LinearSVC
 │   ├── lzasd/                     # 复现论文基线 LZASD（Word2Vec + SSC 音形编码静态图平滑 + Self-Attention + MLP）
@@ -54,7 +58,7 @@ mv-csn/
 ├── notebooks/mv_csn_colab_demo.ipynb  # 已执行带完整输出的端到端 Colab 复现笔记本
 ├── artifacts/demo_bundle.pt       # 20.5 MB 自包含推理包（Seed-42 fp16 权重 + 压缩 32×32 字形库 + 双视图图 + CAE）
 ├── results/                       # 【全部 8 份真实实验结果 JSON，画图与填表唯一数据源】
-└── tests/                         # 8 个自动化测试（含 Streamlit AppTest 端到端冒烟测试，8/8 通过）
+└── tests/                         # 12 个自动化测试（pipeline + demo + 重构不变量校验，开箱即测）
 ```
 
 ---

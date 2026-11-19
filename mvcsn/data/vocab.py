@@ -12,7 +12,7 @@ UNK_TOKEN = "<UNK>"
 
 
 class CharVocab:
-    """Maps characters to integer IDs with <PAD>=0 and <UNK>=1."""
+    """Character-to-ID bidirectional table with reserved ``<PAD>=0`` and ``<UNK>=1``."""
 
     def __init__(self, stoi: Dict[str, int] | None = None) -> None:
         if stoi is None:
@@ -29,10 +29,12 @@ class CharVocab:
 
     @property
     def pad_id(self) -> int:
+        """Reserved index (``0``) for sequence padding."""
         return 0
 
     @property
     def unk_id(self) -> int:
+        """Reserved index (``1``) for out-of-vocabulary characters."""
         return 1
 
     @classmethod
@@ -42,6 +44,7 @@ class CharVocab:
         min_freq: int = 1,
         max_size: int = 8000,
     ) -> "CharVocab":
+        """Build a frequency-ranked vocabulary strictly from training texts."""
         counter: Counter[str] = Counter()
         for txt in texts:
             counter.update(txt)
@@ -60,6 +63,7 @@ class CharVocab:
         max_len: int = 192,
         oov_map: Optional[Dict[str, int]] = None,
     ) -> List[int]:
+        """Encode a string into token IDs, optionally resolving OOV chars via ``oov_map``."""
         ids: List[int] = []
         for ch in text[:max_len]:
             if ch in self.stoi:
@@ -67,17 +71,19 @@ class CharVocab:
             elif oov_map is not None and ch in oov_map:
                 ids.append(oov_map[ch])
             else:
-                ids.append(1)
-        return ids if ids else [1]
+                ids.append(self.unk_id)
+        return ids if ids else [self.unk_id]
 
     def decode(self, ids: Iterable[int]) -> str:
+        """Decode a sequence of token IDs back to text, skipping ``<PAD>``."""
         return "".join(
             self.itos[i] if 0 <= i < len(self.itos) else UNK_TOKEN
             for i in ids
-            if i != 0
+            if i != self.pad_id
         )
 
     def save(self, path: str | Path) -> None:
+        """Persist the character-to-ID mapping to UTF-8 JSON."""
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         with open(p, "w", encoding="utf-8") as f:
@@ -85,6 +91,7 @@ class CharVocab:
 
     @classmethod
     def load(cls, path: str | Path) -> "CharVocab":
+        """Load a persisted :class:`CharVocab` JSON file."""
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
         return cls(data["stoi"])
