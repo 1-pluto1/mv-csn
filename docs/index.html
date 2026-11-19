@@ -292,6 +292,17 @@
       display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
       font-size: 0.78rem; color: var(--muted);
     }
+    .hm-mode-pills { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .hm-mode-btn {
+      padding: 4px 10px; border-radius: 7px; border: 1px solid var(--line-strong);
+      background: var(--surface); font-size: 0.76rem; font-weight: 600; cursor: pointer; color: var(--muted);
+    }
+    .hm-mode-btn.active { background: var(--emerald); color: #fff; border-color: var(--emerald); }
+    .hm-note {
+      margin-top: 12px; padding: 11px 14px; border-radius: 9px;
+      background: var(--surface-alt); border-left: 3.5px solid var(--line-strong);
+      font-size: 0.81rem; color: var(--muted); line-height: 1.55;
+    }
     .heatmap-box {
       display: flex; flex-wrap: wrap; gap: 4px; padding: 12px;
       border-radius: 10px; background: var(--bg); border: 1px solid var(--line);
@@ -603,11 +614,18 @@
         <div id="case-verdict" style="font-size:0.88rem;margin-bottom:8px;"></div>
         <div class="sms-compare" id="case-compare"></div>
         <div class="heatmap-head">
-          <span data-i18n="hm_hint"><strong>逐字混淆热力图</strong>（颜色越红代表该字越可能被对抗替换/插噪，点击或悬停下方字符查看门控分配）</span>
-          <span data-i18n="hm_scale">低混淆 (0%) ▢ ▢ ▤ ▥ High (100%)</span>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div class="hm-mode-pills" role="tablist" aria-label="Heatmap coloring mode">
+              <button class="hm-mode-btn active" id="hm-mode-gate" data-mode="gate" data-i18n="hm_btn_gate">图门控激活 (1−α_ctx)</button>
+              <button class="hm-mode-btn" id="hm-mode-obf" data-mode="obf" data-i18n="hm_btn_obf">自监督定位分 (obf_prob)</button>
+            </div>
+            <span id="hm-hint-text"></span>
+          </div>
+          <span id="hm-scale-text"></span>
         </div>
         <div class="heatmap-box" id="heatmap-box"></div>
         <div class="inspector-bar" id="tok-inspector"></div>
+        <div class="hm-note" id="hm-limitation-note" data-i18n="hm_note"></div>
       </div>
     </section>
 
@@ -642,6 +660,7 @@
     let curLang = "zh";
     let activeArchStage = "4";
     let curCaseIdx = 0;
+    let curHeatmapMode = "gate";
     let curTokIdx = 0;
     let curErrFilter = "ALL";
 
@@ -690,8 +709,13 @@
         err_subnote: "Seed-42 Clean-Trained MV-CSN v2 · 3,395 测试样本总错误率 <strong>0.59%</strong>",
         call_err: "<strong>错判审计核心发现：</strong> <code>8 条 FP</code> 全部集中于带银行卡/手机号/期货行情的特殊正常短信（零日常闲聊误杀）；<code>12 条 FN</code> 中有 <strong>4 条本身属于上游语料标错样本</strong>（气象台大风预警、防疫戴口罩倡议、炒粉点单、水务招标），扣除后<strong>真实垃圾短信召回率高达 99.65%</strong>。此外，全测试集仅 <code>0.74%</code>（25/3,395）样本落入 <code>(0.05, 0.95)</code> 不确定带，却直接捕获了 <strong>35.0%（7/20）</strong> 的错判（47× 富集度）。",
         sec_xray_h: "交互式 Gate X-Ray · 逐字混淆定位与门控热力图", sec_xray_note: "切换真实测试集攻击样本，悬停或点击任意字符实时查看三路门控权重",
-        hm_hint: "<strong>逐字混淆热力图</strong>（颜色越红代表该字越可能被对抗替换/插噪，点击或悬停下方字符查看门控分配）",
-        hm_scale: "低混淆 (0%) ▢ ▢ ▤ ▥ High (100%)",
+        hm_btn_gate: "图门控激活 (1−α_ctx)",
+        hm_btn_obf: "自监督定位分 (obf_prob)",
+        hm_hint_gate: "<strong>图门控热力图</strong>（颜色越深代表模型越依赖语音/字形图替代上下文；悬停或点击字符查看三路权重）",
+        hm_hint_obf: "<strong>自监督定位头得分</strong>（由 20% 随机图扰动 + 4:1 加权训得，偏向高召回短语提示）",
+        hm_scale_gate: "上下文主导 (0%) ▢ ▢ ▤ ▥ 图通路主导 (100%)",
+        hm_scale_obf: "低分 (0%) ▢ ▢ ▤ ▥ 高分 (100%)",
+        hm_note: "<strong>为何自监督定位分有时会标红正常字（如「圣但」的「圣」或正常短信里的「妻、讼」）？</strong> 零样本训练期间没有人工字符级标注，定位头仅靠 20% 随机图扰动 + 4:1 正类加权自监督学习，因此对<strong>低频字</strong>和<strong>异常二元搭配的邻字外溢</strong>较敏感（例如「圣+但」违和时，高频字「但」反而把异常分外溢给了低频字「圣」）。但该定位头仅起训练期正则与短语提示作用，不等于最终判别——切到默认的「图门控激活」可见「圣」仍有 <code>89.8%</code> 走上下文，且正常短信整体 <code>P(spam) = 0.0000</code> 完全不误杀。",
         sec_hand_h: "队友接力 · 数据字典、开源资产与一键复现", sec_hand_note: "全部 8 份实验 JSON、权重包、代码手册与 Release v2.0.0 已准备就绪",
         copy_btn: "复制命令",
         footer_txt: "MV-CSN v2 Project Page · 直接构建自已验证的 <code>results/*.json</code> · 开源托管于 GitHub Pages (<code>1-pluto1/mv-csn</code>)"
@@ -725,8 +749,13 @@
         err_subnote: "Seed-42 Clean-Trained MV-CSN v2 · <strong>0.59%</strong> overall error rate across 3,395 test SMS",
         call_err: "<strong>Failure Audit:</strong> All <code>8 FP</code> come from benign SMS containing bank card / phone / futures figures (zero casual chat false alarms). Among <code>12 FN</code>, <strong>4 are upstream corpus label errors</strong> (weather alert, COVID health advisory, takeout order, water tender); excluding those yields <strong>99.65% true spam recall</strong>. Meanwhile, the <code>0.74%</code> uncertainty band captures <strong>35.0% (7/20)</strong> of all errors (47× enrichment).",
         sec_xray_h: "Interactive Gate X-Ray & Real Test Case Studies", sec_xray_note: "Select any test case and hover/click characters to inspect token-level gate weights",
-        hm_hint: "<strong>Token Obfuscation Heatmap</strong> (darker red = higher predicted obfuscation; hover or click any character to inspect gate allocation)",
-        hm_scale: "Low (0%) ▢ ▢ ▤ ▥ High (100%)",
+        hm_btn_gate: "Graph Gate (1−α_ctx)",
+        hm_btn_obf: "Self-Sup Obf Head (obf_prob)",
+        hm_hint_gate: "<strong>Graph-Gate Activation Heatmap</strong> (darker = stronger shift from context to phonetic/glyph graphs; hover or click any character)",
+        hm_hint_obf: "<strong>Self-Supervised Obfuscation Head</strong> (trained via 20% random graph perturbations + 4:1 pos-weight; high-recall phrase signal)",
+        hm_scale_gate: "Context-Led (0%) ▢ ▢ ▤ ▥ Graph-Led (100%)",
+        hm_scale_obf: "Low (0%) ▢ ▢ ▤ ▥ High (100%)",
+        hm_note: "<strong>Why can the self-supervised obfuscation head flag clean characters (e.g., 「圣」 in 「圣但」 or 「妻/讼」 in normal SMS)?</strong> Under zero-shot training without manual character labels, the auxiliary head learns from 20% random graph perturbations with 4:1 positive weighting, making it sensitive to <strong>rare characters</strong> and <strong>neighbor spillover</strong> in anomalous bigrams (e.g., high-frequency 「但」 spills anomaly onto rarer 「圣」). It serves as a training regularizer rather than the final verdict: under the default Graph Gate view, 「圣」 still keeps <code>89.8%</code> context weight, and clean ham stays at <code>P(spam) = 0.0000</code> with zero false alarms.",
         sec_hand_h: "Teammate Handoff: Data Dictionary & One-Click Reproduction", sec_hand_note: "All 8 JSON files, fp16 demo bundle, code guide & Release v2.0.0 ready",
         copy_btn: "Copy Commands",
         footer_txt: "MV-CSN v2 Project Page · Generated directly from verified <code>results/*.json</code> · Hosted on GitHub Pages (<code>1-pluto1/mv-csn</code>)"
@@ -1194,6 +1223,11 @@
       curCaseIdx = caseIdx;
       const cs = DATA.gate.cases[caseIdx];
       document.querySelectorAll(".case-pill").forEach((el, i) => el.classList.toggle("active", i === caseIdx));
+      document.querySelectorAll(".hm-mode-btn").forEach(el => el.classList.toggle("active", el.dataset.mode === curHeatmapMode));
+      document.getElementById("hm-hint-text").innerHTML = I18N[curLang][curHeatmapMode === "gate" ? "hm_hint_gate" : "hm_hint_obf"];
+      document.getElementById("hm-scale-text").innerHTML = I18N[curLang][curHeatmapMode === "gate" ? "hm_scale_gate" : "hm_scale_obf"];
+      document.getElementById("hm-limitation-note").innerHTML = I18N[curLang].hm_note;
+
       const vTxtSpam = curLang === "zh" ? "判定：SPAM 垃圾短信" : "Verdict: SPAM";
       const vTxtHam = curLang === "zh" ? "判定：CLEAN HAM 正常短信" : "Verdict: CLEAN HAM";
       const verdict = cs.pred_prob >= 0.5
@@ -1206,16 +1240,25 @@
         <div class="sms-box"><div style="font-size:0.74rem;color:var(--muted);font-weight:700;">${rawH}</div><code>${esc(cs.raw_text)}</code></div>
         <div class="sms-box"><div style="font-size:0.74rem;color:var(--muted);font-weight:700;">${procH}</div><code>${esc(cs.proc_text)}</code></div>`;
 
+      const scores = cs.chars.map((_, idx) =>
+        curHeatmapMode === "gate" ? Math.max(0, Math.min(1, 1 - cs.alpha_ctx[idx])) : cs.obf_probs[idx]
+      );
       const box = document.getElementById("heatmap-box");
       box.innerHTML = "";
-      let defaultTok = 0, maxObf = -1;
-      cs.obf_probs.forEach((p, idx) => { if (p > maxObf) { maxObf = p; defaultTok = idx; } });
+      let defaultTok = 0, maxScore = -1;
+      scores.forEach((p, idx) => { if (p > maxScore) { maxScore = p; defaultTok = idx; } });
       cs.chars.forEach((ch, idx) => {
-        const p = cs.obf_probs[idx], gb = Math.round(Math.max(85, 246 - p * 160));
+        const p = scores[idx];
         const span = document.createElement("span");
         span.className = "char-tok";
-        span.style.background = p >= 0.25 ? `rgb(255,${gb},${gb})` : "#ffffff";
-        span.style.borderColor = p >= 0.50 ? "#c83e37" : "#d4d1c7";
+        if (curHeatmapMode === "gate") {
+          span.style.background = p >= 0.10 ? `rgba(11, 93, 59, ${(0.06 + p * 0.42).toFixed(3)})` : "#ffffff";
+          span.style.borderColor = p >= 0.25 ? "#0b5d3b" : "#d4d1c7";
+        } else {
+          const gb = Math.round(Math.max(85, 246 - p * 160));
+          span.style.background = p >= 0.25 ? `rgb(255,${gb},${gb})` : "#ffffff";
+          span.style.borderColor = p >= 0.50 ? "#c83e37" : "#d4d1c7";
+        }
         span.innerHTML = `${ch === ' ' ? '␣' : esc(ch)}<small>${Math.round(p*100)}%</small>`;
         span.addEventListener("mouseenter", () => showToken(cs, idx));
         span.addEventListener("click", () => showToken(cs, idx));
@@ -1264,6 +1307,13 @@
       if (navigator.clipboard) await navigator.clipboard.writeText(txt);
       btn.textContent = curLang === "zh" ? "已复制 ✓" : "Copied ✓";
       setTimeout(() => { btn.textContent = I18N[curLang].copy_btn; }, 1800);
+    });
+
+    document.querySelectorAll(".hm-mode-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        curHeatmapMode = btn.dataset.mode;
+        renderCaseStudy(curCaseIdx);
+      });
     });
 
     // Initial Render
