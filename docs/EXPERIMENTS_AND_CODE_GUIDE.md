@@ -45,12 +45,15 @@ mv-csn/
 │   ├── roberta/finetune.py        # 预训练中文 RoBERTa (hfl/rbt3, 38.8M) 与融合模型 RBT3 + MV-CSN v2 (40.0M)
 │   └── llm/qwen_eval.py           # Qwen3-0.6B / Qwen3-4B-Instruct 评估（Zero-Shot / 4-Shot ICL / Clean-LoRA）
 ├── scripts/                       # 【可复现实验入口脚本】
+│   ├── reproduce.sh               # 【一键复现入口】支持 setup / verify / summary / demo / error-analysis / full
+│   ├── print_summary.py           # 零额外依赖终端汇总脚本，直接格式化打印全部 results/*.json
 │   ├── download_data.py           # 自动拉取公开语料、拆字表、SSC 编码表，并生成去偏 Benchmark B 数据集
 │   ├── run_all.py                 # 一键运行 Exp 1 ~ Exp 5 并打包 artifacts/demo_bundle.pt
 │   ├── run_ablations.py           # 独立续跑 Exp 4（8 组 × 3 种子 = 24 次训练）与 Exp 5 门控分析
 │   ├── run_llm_eval.py            # 运行 Exp 6（Qwen3-0.6B/4B 全套评测 + 不确定性门控 Cascade 级联）
 │   ├── run_error_analysis.py      # 纯 CPU 运行 Exp 7（对 3,395 条测试样本做全量 FP/FN 错判剖析）
 │   └── gdrive_sync.py             # Colab / Google Drive 双向初始化与持久化同步工具
+├── Makefile                       # 常用命令快捷封装（make setup / verify / demo / summary / full）
 ├── demo/app.py                    # 3-Tab Streamlit 交互式检测与字形/门控检查器（纯 CPU 秒级运行）
 ├── docs/
 │   ├── index.html                 # 静态学术项目主页 & 交互实验进度看板（GitHub Pages）
