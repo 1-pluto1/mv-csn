@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Tuple
+from typing import Dict, Optional, Tuple
 
 import torch
 import torch.nn.functional as F
@@ -76,6 +76,7 @@ def compute_mvcsn_loss(
     gate_prior_weight: float = 0.10,
     use_loc_head: bool = True,
     use_gate: bool = True,
+    unk_mask: Optional[torch.Tensor] = None,
 ) -> Dict[str, torch.Tensor]:
     """Compute the composite supervised objective for MV-CSN v2.
 
@@ -114,7 +115,8 @@ def compute_mvcsn_loss(
         is_clean = 1.0 - is_obf
         g_clean = -torch.log(alpha_ctx) * is_clean
         g_obf = -torch.log(alpha_graph) * is_obf
-        gate_loss = ((g_clean + 2.0 * g_obf) * valid).sum() / denom
+        obf_w = 3.0 + (6.0 * unk_mask.float() if unk_mask is not None else 0.0)
+        gate_loss = ((g_clean + obf_w * g_obf) * valid).sum() / denom
         total = total + gate_prior_weight * gate_loss
 
     return {"total": total, "spam": spam_loss, "loc": loc_loss, "gate": gate_loss}

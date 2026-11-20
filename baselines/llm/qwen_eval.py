@@ -244,3 +244,64 @@ def finetune_qwen_clean_lora(
     gc.collect()
     torch.cuda.empty_cache()
     return te_metrics, te_probs, te_ms, int(total_params)
+
+
+@torch.no_grad()
+def score_binary_llm_with_logits(
+    model,
+    tokenizer,
+    user_texts: Sequence[str],
+    batch_size: int = 32,
+    max_length: int = 384,
+    few_shot_examples: Optional[Sequence[Tuple[str, int]]] = None,
+    raw_prompts: Optional[Sequence[str]] = None,
+    device: torch.device | str = "cuda",
+) -> Tuple[List[float], List[float], float]:
+    """Length-sorted single-forward-pass scoring returning (probs, logit_diffs, infer_ms)."""
+    model.eval()
+    tokenizer.padding_side = "left"
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+    t0_id, t1_id = get_binary_token_ids(tokenizer)
+
+    if raw_prompts is not None:
+        prompts = list(raw_prompts)
+    else:
+        prompts = [format_spam_prompt(tokenizer, txt, few_shot_examples=few_shot_examples) for txt in user_texts]
+
+    if not prompts:
+        return [], [], 0.0
+
+    order = sorted(range(len(prompts)), key=lambda i: len(prompts[i]))
+    sorted_prompts = [prompts[i] for i in order]
+
+    warm = tokenizer(sorted_prompts[: min(2, len(sorted_prompts))], return_tensors="pt", padding=True, truncation=True, max_length=max_length).to(device)
+    with torch.amp.autocast("cuda", enabled=torch.cuda.is_available(), dtype=torch.bfloat16):
+        _ = model(**warm, logits_to_keep=1, use_cache=False).logits[:, -1, [t0_id, t1_id]]
+
+    if torch.cuda.is_available():
+        torch.cuda.synchronize()
+    t_start = time.time()
+
+    s_probs: List[float] = []
+    s_logits: List[float] = []
+    for i in range(0, len(sorted_prompts), batch_size):
+        chunk = sorted_prompts[i : i + batch_size]
+        enc = tokenizer(chunk, return_tensors="pt", padding=True, truncation=True, max_length=max_length).to(device)
+        with torch.amp.autocast("cuda", enabled=torch.cuda.is_available(), dtype=torch.bfloat16):
+            logits = model(**enc, logits_to_keep=1, use_cache=False).logits[:, -1, [t0_id, t1_id]].float()
+            ldiff = logits[:, 1] - logits[:, 0]
+            p = torch.sigmoid(ldiff)
+        s_probs.extend(p.cpu().tolist())
+        s_logits.extend(ldiff.cpu().tolist())
+
+    if torch.cuda.is_available():
+        torch.cuda.synchronize()
+    infer_ms = (time.time() - t_start) * 1000.0 / max(1, len(prompts))
+
+    probs = [0.0] * len(prompts)
+    ldiffs = [0.0] * len(prompts)
+    for pos, orig_i in enumerate(order):
+        probs[orig_i] = s_probs[pos]
+        ldiffs[orig_i] = s_logits[pos]
+    return probs, ldiffs, float(infer_ms)

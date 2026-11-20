@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# MV-CSN v2 One-Click Reproduction & Verification Script
+# MV-CSN v3 One-Click Reproduction & Verification Script
 # Sun Yat-sen University · Data Science & Engineering Capstone
 # ==============================================================================
 set -euo pipefail
@@ -28,8 +28,8 @@ Modes:
   setup           Install Python dependencies and editable mvcsn package.
   summary         Print formatted verified tables directly from results/*.json (instant).
   demo            Launch the 3-tab interactive Streamlit Web Inspector on CPU.
-  error-analysis  Reproduce Exp 7 CPU error analysis (3,395 test SMS -> results/error_analysis.json).
-  full            Full end-to-end GPU reproduction (Exp 1-5 + Exp 6 Qwen3 LLMs + Exp 7 + tests).
+  error-analysis  Reproduce Exp 7 error analysis (3,216 Bench B v2 test SMS -> results/error_analysis.json).
+  full            Full end-to-end Stage 3 GPU reproduction (Track 1/2, 12-row ablations, Olivi-9, LLM & Cascade).
   --help, -h      Show this help message.
 
 Environment overrides:
@@ -85,7 +85,7 @@ PY
 }
 
 cmd_demo() {
-  step "Launching MV-CSN v2 Interactive Streamlit Inspector"
+  step "Launching MV-CSN v3 Interactive Streamlit Inspector"
   exec "$PYTHON_BIN" -m streamlit run demo/app.py
 }
 
@@ -95,36 +95,43 @@ cmd_error_analysis() {
     "$PYTHON_BIN" scripts/download_data.py
   fi
   if [[ ! -f "artifacts/splits_sms_matched.json.gz" ]]; then
-    step "Building deterministic leakage-free Benchmark B splits"
+    step "Building deterministic leakage-free Benchmark B v2 splits"
     "$PYTHON_BIN" -c 'from mvcsn.data.splits import build_or_load_splits; build_or_load_splits(cache_path="artifacts/splits_sms_matched.json.gz", dataset_path="data/resources/variant_spam_sms_matched.tsv.gz")'
   fi
-  step "Running Exp 7 CPU Error Analysis across all 3,395 Benchmark B test SMS"
+  step "Running Exp 7 CPU Error Analysis across 3,216 Benchmark B v2 test SMS"
   FONT_ARG="fonts"
   [[ -f "fonts/unifont.otf" ]] || FONT_ARG="assets/fonts"
   "$PYTHON_BIN" scripts/run_error_analysis.py --font-dir "$FONT_ARG"
 }
 
 cmd_full() {
-  step "Checking GPU availability for full multi-seed reproduction"
+  step "Checking GPU availability for full Stage 3 multi-seed reproduction"
   if ! "$PYTHON_BIN" -c "import torch, sys; sys.exit(0 if torch.cuda.is_available() else 1)"; then
-    warn "No CUDA GPU detected! Full reproduction (Exp 1-6 incl. Qwen3-4B) requires a CUDA GPU (~1.5h on A100/L4)."
+    warn "No CUDA GPU detected! Full Stage 3 reproduction (incl. Qwen3-4B/8B + Dual-Teacher KD) requires a CUDA GPU."
     warn "For fast CPU verification without retraining, run: ./reproduce.sh verify"
     exit 1
   fi
 
-  step "Stage 1/5: Data & Knowledge Resource Acquisition (Bench A + B, chaizi, SSC)"
-  "$PYTHON_BIN" scripts/download_data.py
+  step "Stage 1/5: Data & Dual-Teacher Consensus Transfer Pool Preparation"
+  if [[ ! -f "data/resources/variant_spam_sms_matched.tsv.gz" ]]; then
+    "$PYTHON_BIN" scripts/download_data.py
+  fi
+  if [[ ! -f "artifacts/dual_teacher_22k_pool.json.gz" ]]; then
+    "$PYTHON_BIN" scripts/prepare_v3_unified_and_30k.py
+    "$PYTHON_BIN" scripts/build_dual_teacher_punct_pool.py
+  fi
 
-  step "Stage 2/5: Exp 1-5 (In-Dist, Zero-Shot, Intensity Curve, 8-Row Ablations, Gate X-Ray)"
-  "$PYTHON_BIN" scripts/run_all.py
+  step "Stage 2/5: Track 1 (Clean-Only, 7 Models x 3 Seeds)"
+  "$PYTHON_BIN" scripts/run_v3_stage3_track1.py
 
-  step "Stage 3/5: Exp 6 (Qwen3-0.6B/4B Zero-Shot, 4-Shot ICL, Clean-LoRA, Cascade)"
-  "$PYTHON_BIN" scripts/run_llm_eval.py
+  step "Stage 3/5: Track 2 (Dual-Teacher KD) + Gate/Error Analysis + Demo Bundle"
+  "$PYTHON_BIN" scripts/run_v3_stage3_track2_and_analysis.py
 
-  step "Stage 4/5: Exp 7 (Full Error & Failure-Case Analysis)"
-  cmd_error_analysis
+  step "Stage 4/5: 12-Row Ablations + In-Dist + Olivi-9 In-Domain + Solo Latency"
+  "$PYTHON_BIN" scripts/run_v3_stage3_ablations_indist.py
 
-  step "Stage 5/5: Full Verification & Summary"
+  step "Stage 5/5: Exp 6 (Qwen3-4B/8B + Clean-LoRA + Cascade) & Verification"
+  "$PYTHON_BIN" scripts/run_v3_stage3_llm_eval.py
   cmd_verify
 }
 

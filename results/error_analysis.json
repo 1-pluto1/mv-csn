@@ -1,1262 +1,590 @@
 {
-  "meta": {
-    "model": "MV-CSN v2 (Seed-42 Clean-Trained, artifacts/demo_bundle.pt)",
-    "benchmark": "Benchmark B (SMS-Matched 16.5K) Zero-Shot Clean -> RealVariant Test Split",
-    "test_total": 3395,
-    "test_ham": 1121,
-    "test_spam": 2274,
-    "resolved_oov_vocab_size": 1108,
-    "uncertainty_band": [
-      0.05,
-      0.95
-    ]
+  "model": "MV-CSN v3 (Full Dual-Teacher KD) [Seed 42]",
+  "n_test": 3216,
+  "n_fp": 19,
+  "n_fn": 15,
+  "fp_by_attack": {
+    "CLEAN": 19
   },
-  "overall_metrics": {
-    "precision": 0.9964757709251101,
-    "recall": 0.9947229551451188,
-    "f1": 0.9955985915492958,
-    "macro_f1": 0.9933469360239799,
-    "accuracy": 0.9941089837997055,
-    "auc": 0.9994621745096608,
-    "clean_ham_acc": 0.9928635147190009,
-    "spam_recall": 0.9947229551451188
+  "fn_by_attack": {
+    "PHON": 6,
+    "MIXED": 2,
+    "CLEAN": 4,
+    "SPLIT": 2,
+    "SPACE": 1
   },
-  "error_summary": {
-    "total_errors": 20,
-    "overall_error_rate": 0.00589,
-    "false_positives": 8,
-    "false_negatives": 12,
-    "test_samples_in_uncertainty_band": 25,
-    "errors_in_uncertainty_band": 7,
-    "error_capture_rate_by_uncertainty_band": 0.35,
-    "fp_mean_char_len": 36.4,
-    "fn_mean_char_len": 44.0,
-    "fp_categories": {
-      "Financial / futures market report mimicking spam digits": 3,
-      "Benign SMS with bank card / phone contact cues": 3,
-      "Short structured spec or repeated-digit noise in benign text": 2
-    },
-    "fn_categories": {
-      "Upstream corpus label noise (public advisory / tender / food order)": 4,
-      "Multi-symbol insertion (??) or vertical-column transposition": 4,
-      "Conversational / domain-jargon spam without URL": 3,
-      "Borderline gray-market promotion near 0.50 threshold": 1
-    }
-  },
-  "per_attack_errors": {
-    "CLEAN_HAM": {
-      "total": 1121,
-      "fp": 8,
-      "fn": 0,
-      "correct": 1113,
-      "errors": 8,
-      "error_rate": 0.00714,
-      "accuracy": 0.99286
-    },
-    "MIXED": {
-      "total": 1171,
-      "fp": 0,
-      "fn": 2,
-      "correct": 1169,
-      "errors": 2,
-      "error_rate": 0.00171,
-      "accuracy": 0.99829
-    },
-    "PHON": {
-      "total": 453,
-      "fp": 0,
-      "fn": 2,
-      "correct": 451,
-      "errors": 2,
-      "error_rate": 0.00442,
-      "accuracy": 0.99558
-    },
-    "GLYPH": {
-      "total": 162,
-      "fp": 0,
-      "fn": 3,
-      "correct": 159,
-      "errors": 3,
-      "error_rate": 0.01852,
-      "accuracy": 0.98148
-    },
-    "SPLIT": {
-      "total": 46,
-      "fp": 0,
-      "fn": 0,
-      "correct": 46,
-      "errors": 0,
-      "error_rate": 0.0,
-      "accuracy": 1.0
-    },
-    "SPACE": {
-      "total": 166,
-      "fp": 0,
-      "fn": 4,
-      "correct": 162,
-      "errors": 4,
-      "error_rate": 0.0241,
-      "accuracy": 0.9759
-    },
-    "CLEAN": {
-      "total": 276,
-      "fp": 0,
-      "fn": 1,
-      "correct": 275,
-      "errors": 1,
-      "error_rate": 0.00362,
-      "accuracy": 0.99638
-    }
-  },
-  "false_positives": [
+  "top_fps": [
     {
-      "record_idx": 1855,
-      "error_type": "FP",
-      "category": "Benign SMS with bank card / phone contact cues",
-      "true_label": 0,
-      "pred_label": 1,
-      "spam_prob": 0.99998,
-      "in_uncertainty_band_005_095": false,
+      "idx": 5304,
       "attack_type": "CLEAN",
-      "char_len_raw": 45,
-      "char_len_proc": 45,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9718,
-        "phon": 0.013,
-        "glyph": 0.0151
-      },
-      "max_token_obf_prob": 0.9202,
-      "top_attended_tokens": [
-        {
-          "char": "2",
-          "pool_w": 0.0672,
-          "obf_p": 0.0671,
-          "alpha_ctx": 0.99,
-          "alpha_phon": 0.004,
-          "alpha_glyph": 0.006
-        },
-        {
-          "char": "2",
-          "pool_w": 0.0614,
-          "obf_p": 0.0451,
-          "alpha_ctx": 0.995,
-          "alpha_phon": 0.002,
-          "alpha_glyph": 0.003
-        },
-        {
-          "char": "1",
-          "pool_w": 0.0479,
-          "obf_p": 0.0297,
-          "alpha_ctx": 0.996,
-          "alpha_phon": 0.0,
-          "alpha_glyph": 0.003
-        },
-        {
-          "char": "9",
-          "pool_w": 0.0474,
-          "obf_p": 0.2622,
-          "alpha_ctx": 0.96,
-          "alpha_phon": 0.017,
-          "alpha_glyph": 0.023
-        }
-      ],
-      "raw_text": "梁旭森邮政6221885936001114942建行6216733161410008536",
-      "proc_text": "梁旭森邮政6221885936001114942建行6216733161410008536",
-      "clean_text": "梁旭森邮政6221885936001114942建行6216733161410008536"
+      "prob": 0.99973,
+      "len": 52,
+      "text": "恭喜你中南京bigbang门票一张回复名字电话明天中午12点前联系领取联系电话微信13464655130"
     },
     {
-      "record_idx": 480,
-      "error_type": "FP",
-      "category": "Benign SMS with bank card / phone contact cues",
-      "true_label": 0,
-      "pred_label": 1,
-      "spam_prob": 0.99996,
-      "in_uncertainty_band_005_095": false,
+      "idx": 1844,
       "attack_type": "CLEAN",
-      "char_len_raw": 33,
-      "char_len_proc": 33,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9543,
-        "phon": 0.0267,
-        "glyph": 0.019
-      },
-      "max_token_obf_prob": 0.9852,
-      "top_attended_tokens": [
-        {
-          "char": "2",
-          "pool_w": 0.1262,
-          "obf_p": 0.0849,
-          "alpha_ctx": 0.987,
-          "alpha_phon": 0.005,
-          "alpha_glyph": 0.008
-        },
-        {
-          "char": "1",
-          "pool_w": 0.1137,
-          "obf_p": 0.0314,
-          "alpha_ctx": 0.997,
-          "alpha_phon": 0.0,
-          "alpha_glyph": 0.003
-        },
-        {
-          "char": "7",
-          "pool_w": 0.1031,
-          "obf_p": 0.0424,
-          "alpha_ctx": 0.994,
-          "alpha_phon": 0.001,
-          "alpha_glyph": 0.006
-        },
-        {
-          "char": ":",
-          "pool_w": 0.0837,
-          "obf_p": 0.1378,
-          "alpha_ctx": 0.993,
-          "alpha_phon": 0.002,
-          "alpha_glyph": 0.005
-        }
-      ],
-      "raw_text": "证据请联系：15952951174刘须忠将提供证据包括录音相关证人",
-      "proc_text": "证据请联系:15952951174刘须忠将提供证据包括录音相关证人",
-      "clean_text": "证据请联系：15952951174刘须忠将提供证据包括录音相关证人"
+      "prob": 0.99849,
+      "len": 58,
+      "text": "兹有计算机学报给你的汇款回音卡, 由于FIT物业无法联系并送达你本人, 所以请见此通知后到FIT 3-128室领取."
     },
     {
-      "record_idx": 1967,
-      "error_type": "FP",
-      "category": "Short structured spec or repeated-digit noise in benign text",
-      "true_label": 0,
-      "pred_label": 1,
-      "spam_prob": 0.99995,
-      "in_uncertainty_band_005_095": false,
+      "idx": 1108,
       "attack_type": "CLEAN",
-      "char_len_raw": 45,
-      "char_len_proc": 45,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.8956,
-        "phon": 0.0532,
-        "glyph": 0.0512
-      },
-      "max_token_obf_prob": 0.9897,
-      "top_attended_tokens": [
-        {
-          "char": "2",
-          "pool_w": 0.0442,
-          "obf_p": 0.0845,
-          "alpha_ctx": 0.987,
-          "alpha_phon": 0.004,
-          "alpha_glyph": 0.008
-        },
-        {
-          "char": "2",
-          "pool_w": 0.0439,
-          "obf_p": 0.0889,
-          "alpha_ctx": 0.987,
-          "alpha_phon": 0.005,
-          "alpha_glyph": 0.008
-        },
-        {
-          "char": "2",
-          "pool_w": 0.0438,
-          "obf_p": 0.082,
-          "alpha_ctx": 0.989,
-          "alpha_phon": 0.003,
-          "alpha_glyph": 0.008
-        },
-        {
-          "char": "2",
-          "pool_w": 0.0435,
-          "obf_p": 0.0765,
-          "alpha_ctx": 0.989,
-          "alpha_phon": 0.004,
-          "alpha_glyph": 0.008
-        }
-      ],
-      "raw_text": "奇葩：债主上门逼债奈何无力还债只好盗窃海带22222222222222222222222货",
-      "proc_text": "奇葩:债主上门逼债奈何无力还债只好盗窃海带22222222222222222222222货",
-      "clean_text": "奇葩：债主上门逼债奈何无力还债只好盗窃海带22222222222222222222222货"
+      "prob": 0.99801,
+      "len": 31,
+      "text": "yz:咨询王老师13131130859扣扣1796806031"
     },
     {
-      "record_idx": 34,
-      "error_type": "FP",
-      "category": "Short structured spec or repeated-digit noise in benign text",
-      "true_label": 0,
-      "pred_label": 1,
-      "spam_prob": 0.99945,
-      "in_uncertainty_band_005_095": false,
+      "idx": 2067,
       "attack_type": "CLEAN",
-      "char_len_raw": 16,
-      "char_len_proc": 16,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9336,
-        "phon": 0.0164,
-        "glyph": 0.05
-      },
-      "max_token_obf_prob": 0.9413,
-      "top_attended_tokens": [
-        {
-          "char": ":",
-          "pool_w": 0.2795,
-          "obf_p": 0.0501,
-          "alpha_ctx": 0.982,
-          "alpha_phon": 0.005,
-          "alpha_glyph": 0.013
-        },
-        {
-          "char": "m",
-          "pool_w": 0.15,
-          "obf_p": 0.0045,
-          "alpha_ctx": 0.998,
-          "alpha_phon": 0.001,
-          "alpha_glyph": 0.002
-        },
-        {
-          "char": "1",
-          "pool_w": 0.1002,
-          "obf_p": 0.0395,
-          "alpha_ctx": 0.998,
-          "alpha_phon": 0.001,
-          "alpha_glyph": 0.002
-        },
-        {
-          "char": "7",
-          "pool_w": 0.0942,
-          "obf_p": 0.0806,
-          "alpha_ctx": 0.997,
-          "alpha_phon": 0.0,
-          "alpha_glyph": 0.003
-        }
-      ],
-      "raw_text": "作品尺寸：170cmX110cm",
-      "proc_text": "作品尺寸:170cmX110cm",
-      "clean_text": "作品尺寸：170cmX110cm"
+      "prob": 0.99632,
+      "len": 31,
+      "text": "01秒通过审核,额度最高达15万,最快当天可提车,一年免利息”"
     },
     {
-      "record_idx": 3872,
-      "error_type": "FP",
-      "category": "Benign SMS with bank card / phone contact cues",
-      "true_label": 0,
-      "pred_label": 1,
-      "spam_prob": 0.99587,
-      "in_uncertainty_band_005_095": false,
+      "idx": 2326,
       "attack_type": "CLEAN",
-      "char_len_raw": 62,
-      "char_len_proc": 62,
-      "oov_count": 1,
-      "oov_chars": [
-        "皖"
-      ],
-      "mean_alpha": {
-        "ctx": 0.8135,
-        "phon": 0.1053,
-        "glyph": 0.0812
-      },
-      "max_token_obf_prob": 0.9998,
-      "top_attended_tokens": [
-        {
-          "char": "2",
-          "pool_w": 0.065,
-          "obf_p": 0.1235,
-          "alpha_ctx": 0.991,
-          "alpha_phon": 0.005,
-          "alpha_glyph": 0.004
-        },
-        {
-          "char": "2",
-          "pool_w": 0.0638,
-          "obf_p": 0.1326,
-          "alpha_ctx": 0.973,
-          "alpha_phon": 0.015,
-          "alpha_glyph": 0.012
-        },
-        {
-          "char": "2",
-          "pool_w": 0.0625,
-          "obf_p": 0.1138,
-          "alpha_ctx": 0.987,
-          "alpha_phon": 0.007,
-          "alpha_glyph": 0.006
-        },
-        {
-          "char": "2",
-          "pool_w": 0.0514,
-          "obf_p": 0.0688,
-          "alpha_ctx": 0.989,
-          "alpha_phon": 0.006,
-          "alpha_glyph": 0.005
-        }
-      ],
-      "raw_text": "安徽宿州皖北医院15楼烧伤科43室王思忆小朋友15656741218捐赠卡号：6228480038597132471王旭农行",
-      "proc_text": "安徽宿州皖北医院15楼烧伤科43室王思忆小朋友15656741218捐赠卡号:6228480038597132471王旭农行",
-      "clean_text": "安徽宿州皖北医院15楼烧伤科43室王思忆小朋友15656741218捐赠卡号：6228480038597132471王旭农行"
+      "prob": 0.99369,
+      "len": 33,
+      "text": "加我微信免费发能拿红包的网址随便填就能拿到1到10元的红包十秒不用"
     },
     {
-      "record_idx": 978,
-      "error_type": "FP",
-      "category": "Financial / futures market report mimicking spam digits",
-      "true_label": 0,
-      "pred_label": 1,
-      "spam_prob": 0.95203,
-      "in_uncertainty_band_005_095": false,
+      "idx": 831,
       "attack_type": "CLEAN",
-      "char_len_raw": 39,
-      "char_len_proc": 39,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9417,
-        "phon": 0.0299,
-        "glyph": 0.0285
-      },
-      "max_token_obf_prob": 0.9897,
-      "top_attended_tokens": [
-        {
-          "char": "8",
-          "pool_w": 0.123,
-          "obf_p": 0.2635,
-          "alpha_ctx": 0.979,
-          "alpha_phon": 0.007,
-          "alpha_glyph": 0.014
-        },
-        {
-          "char": "1",
-          "pool_w": 0.1127,
-          "obf_p": 0.0354,
-          "alpha_ctx": 0.995,
-          "alpha_phon": 0.001,
-          "alpha_glyph": 0.004
-        },
-        {
-          "char": "加",
-          "pool_w": 0.058,
-          "obf_p": 0.0203,
-          "alpha_ctx": 0.998,
-          "alpha_phon": 0.001,
-          "alpha_glyph": 0.0
-        },
-        {
-          "char": "增",
-          "pool_w": 0.0578,
-          "obf_p": 0.4526,
-          "alpha_ctx": 0.993,
-          "alpha_phon": 0.005,
-          "alpha_glyph": 0.002
-        }
-      ],
-      "raw_text": "截止2015年7月31日上海期货交易所库存周报铜：103117吨增加1866吨",
-      "proc_text": "截止2015年7月31日上海期货交易所库存周报铜:103117吨增加1866吨",
-      "clean_text": "截止2015年7月31日上海期货交易所库存周报铜：103117吨增加1866吨"
+      "prob": 0.99346,
+      "len": 62,
+      "text": "tsinghua. edu. cn. 王晓浩1989年考入精仪系, 1994年读直博, 1999年毕业, 2001年副教授."
     },
     {
-      "record_idx": 696,
-      "error_type": "FP",
-      "category": "Financial / futures market report mimicking spam digits",
-      "true_label": 0,
-      "pred_label": 1,
-      "spam_prob": 0.90541,
-      "in_uncertainty_band_005_095": true,
+      "idx": 4786,
       "attack_type": "CLEAN",
-      "char_len_raw": 36,
-      "char_len_proc": 36,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9463,
-        "phon": 0.0294,
-        "glyph": 0.0243
-      },
-      "max_token_obf_prob": 0.9754,
-      "top_attended_tokens": [
-        {
-          "char": "2",
-          "pool_w": 0.133,
-          "obf_p": 0.0521,
-          "alpha_ctx": 0.994,
-          "alpha_phon": 0.002,
-          "alpha_glyph": 0.004
-        },
-        {
-          "char": "7",
-          "pool_w": 0.0905,
-          "obf_p": 0.0445,
-          "alpha_ctx": 0.995,
-          "alpha_phon": 0.001,
-          "alpha_glyph": 0.004
-        },
-        {
-          "char": "1",
-          "pool_w": 0.0754,
-          "obf_p": 0.0278,
-          "alpha_ctx": 0.996,
-          "alpha_phon": 0.001,
-          "alpha_glyph": 0.003
-        },
-        {
-          "char": "股",
-          "pool_w": 0.0412,
-          "obf_p": 0.0753,
-          "alpha_ctx": 0.998,
-          "alpha_phon": 0.002,
-          "alpha_glyph": 0.0
-        }
-      ],
-      "raw_text": "无下折条款分级基金：申万菱信深成指B150023和银华H股B150176",
-      "proc_text": "无下折条款分级基金:申万菱信深成指B150023和银华H股B150176",
-      "clean_text": "无下折条款分级基金：申万菱信深成指B150023和银华H股B150176"
+      "prob": 0.99059,
+      "len": 62,
+      "text": "asp? cid=464, 或者 http: //www. lijiababy. com. cn/product. asp?"
     },
     {
-      "record_idx": 74,
-      "error_type": "FP",
-      "category": "Financial / futures market report mimicking spam digits",
-      "true_label": 0,
-      "pred_label": 1,
-      "spam_prob": 0.6789,
-      "in_uncertainty_band_005_095": true,
+      "idx": 5064,
       "attack_type": "CLEAN",
-      "char_len_raw": 15,
-      "char_len_proc": 15,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9015,
-        "phon": 0.0588,
-        "glyph": 0.0397
-      },
-      "max_token_obf_prob": 0.8525,
-      "top_attended_tokens": [
-        {
-          "char": "8",
-          "pool_w": 0.1786,
-          "obf_p": 0.3299,
-          "alpha_ctx": 0.89,
-          "alpha_phon": 0.046,
-          "alpha_glyph": 0.064
-        },
-        {
-          "char": "铁",
-          "pool_w": 0.161,
-          "obf_p": 0.2574,
-          "alpha_ctx": 0.916,
-          "alpha_phon": 0.055,
-          "alpha_glyph": 0.029
-        },
-        {
-          "char": "4",
-          "pool_w": 0.1268,
-          "obf_p": 0.0157,
-          "alpha_ctx": 0.998,
-          "alpha_phon": 0.002,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": "盘",
-          "pool_w": 0.0779,
-          "obf_p": 0.2194,
-          "alpha_ctx": 0.961,
-          "alpha_phon": 0.038,
-          "alpha_glyph": 0.001
-        }
-      ],
-      "raw_text": "铁矿石期货1509开盘价408",
-      "proc_text": "铁矿石期货1509开盘价408",
-      "clean_text": "铁矿石期货1509开盘价408"
+      "prob": 0.98963,
+      "len": 31,
+      "text": "上班太无聊有没有真爱陪我玩卧底??卫星:Cjy19950421"
+    },
+    {
+      "idx": 1942,
+      "attack_type": "CLEAN",
+      "prob": 0.9883,
+      "len": 29,
+      "text": "msn. com/members/zhangxzhang/"
+    },
+    {
+      "idx": 168,
+      "attack_type": "CLEAN",
+      "prob": 0.98355,
+      "len": 70,
+      "text": "不错不错 不过好像发错版了吧, joke版需要你! 【 在 lk409test 测试一下 测试一下 6 (int) 的大作中提到: 】 1."
+    },
+    {
+      "idx": 2178,
+      "attack_type": "CLEAN",
+      "prob": 0.96775,
+      "len": 34,
+      "text": "专业注册外资公司代办融资租赁公司,私募基金公司15994704320"
+    },
+    {
+      "idx": 3152,
+      "attack_type": "CLEAN",
+      "prob": 0.95329,
+      "len": 51,
+      "text": "6g规格:14mm天然绿龙晶圆珠手链绿龙晶手链招财进宝送长辈送朋友~现100元起拍每次出价不得低于10"
+    },
+    {
+      "idx": 1105,
+      "attack_type": "CLEAN",
+      "prob": 0.94509,
+      "len": 42,
+      "text": "就免费了 另外, 你可以用信用卡给自己的帐号冲值, skype打欧洲比打中国便宜1."
+    },
+    {
+      "idx": 5299,
+      "attack_type": "CLEAN",
+      "prob": 0.93165,
+      "len": 30,
+      "text": "亚马逊旗下名品特卖网站MYHABIT正在进行全场额外8折促销"
+    },
+    {
+      "idx": 216,
+      "attack_type": "CLEAN",
+      "prob": 0.92953,
+      "len": 30,
+      "text": "双龙地铁口一手红本商铺租金低月供首付5万当业主值得拥有卖点一"
+    },
+    {
+      "idx": 2051,
+      "attack_type": "CLEAN",
+      "prob": 0.91234,
+      "len": 62,
+      "text": "13311577896, 81937676, 可将简要介绍发短信至手机 信箱: ruicheng2004@sina. com"
+    },
+    {
+      "idx": 2585,
+      "attack_type": "CLEAN",
+      "prob": 0.8568,
+      "len": 36,
+      "text": "待遇优厚高薪+佣金+旅游+150万购房补贴+奥迪A4顶配+15万现金奖励"
+    },
+    {
+      "idx": 3972,
+      "attack_type": "CLEAN",
+      "prob": 0.7009,
+      "len": 25,
+      "text": ". . 崩溃ing! ! ! 敢请大家给出出注意,"
+    },
+    {
+      "idx": 2990,
+      "attack_type": "CLEAN",
+      "prob": 0.63894,
+      "len": 68,
+      "text": "浙江卫视今年夏天犯的最大最大的错误就是请周杰伦当评委,诚心砸场子不是,今年7月每周五晚9:10金罐凉茶领导者加多宝邀您共赏「我选周杰伦」"
     }
   ],
-  "false_negatives": [
+  "top_fns": [
     {
-      "record_idx": 12892,
-      "error_type": "FN",
-      "category": "Upstream corpus label noise (public advisory / tender / food order)",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 3e-05,
-      "in_uncertainty_band_005_095": false,
-      "attack_type": "GLYPH",
-      "char_len_raw": 49,
-      "char_len_proc": 49,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9187,
-        "phon": 0.0674,
-        "glyph": 0.0139
-      },
-      "max_token_obf_prob": 0.7962,
-      "top_attended_tokens": [
-        {
-          "char": ":",
-          "pool_w": 0.0548,
-          "obf_p": 0.089,
-          "alpha_ctx": 0.988,
-          "alpha_phon": 0.009,
-          "alpha_glyph": 0.004
-        },
-        {
-          "char": ":",
-          "pool_w": 0.0398,
-          "obf_p": 0.1441,
-          "alpha_ctx": 0.99,
-          "alpha_phon": 0.007,
-          "alpha_glyph": 0.002
-        },
-        {
-          "char": "量",
-          "pool_w": 0.0372,
-          "obf_p": 0.2846,
-          "alpha_ctx": 0.858,
-          "alpha_phon": 0.133,
-          "alpha_glyph": 0.009
-        },
-        {
-          "char": "工",
-          "pool_w": 0.035,
-          "obf_p": 0.2136,
-          "alpha_ctx": 0.956,
-          "alpha_phon": 0.034,
-          "alpha_glyph": 0.01
-        }
-      ],
-      "raw_text": "营口水务集团有限公司h管材、管件采购项目进行国内公开招标入围数量：三家。估算价约：0万元电话3王工",
-      "proc_text": "营口水务集团有限公司h管材、管件采购项目进行国内公开招标入围数量:三家。估算价约:0万元电话3王工",
-      "clean_text": "营口水务集团有限公司h管材、管件采购项目进行国内公开招标入围数量:三家.估算价约:0万元电话3王工"
-    },
-    {
-      "record_idx": 10852,
-      "error_type": "FN",
-      "category": "Conversational / domain-jargon spam without URL",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 9e-05,
-      "in_uncertainty_band_005_095": false,
-      "attack_type": "SPACE",
-      "char_len_raw": 71,
-      "char_len_proc": 65,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9517,
-        "phon": 0.0343,
-        "glyph": 0.014
-      },
-      "max_token_obf_prob": 0.9904,
-      "top_attended_tokens": [
-        {
-          "char": "1",
-          "pool_w": 0.0366,
-          "obf_p": 0.0841,
-          "alpha_ctx": 0.993,
-          "alpha_phon": 0.005,
-          "alpha_glyph": 0.003
-        },
-        {
-          "char": "8",
-          "pool_w": 0.0318,
-          "obf_p": 0.4612,
-          "alpha_ctx": 0.908,
-          "alpha_phon": 0.059,
-          "alpha_glyph": 0.032
-        },
-        {
-          "char": "2",
-          "pool_w": 0.0315,
-          "obf_p": 0.1131,
-          "alpha_ctx": 0.994,
-          "alpha_phon": 0.006,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": "1",
-          "pool_w": 0.0314,
-          "obf_p": 0.1169,
-          "alpha_ctx": 0.981,
-          "alpha_phon": 0.013,
-          "alpha_glyph": 0.006
-        }
-      ],
-      "raw_text": "国股带票340（每十万2073）国股买断（每十万2300）全国城商350（每十万2134）农商农合电联'票送杭州13148310017、李小雪",
-      "proc_text": "国股带票340每十万2073国股买断每十万2300全国城商350每十万2134农商农合电联'票送杭州13148310017、李小雪",
-      "clean_text": "国股带票340(每十万2073)国股买断(每十万2300)全国城商350(每十万2134)农商农合电联票送杭州13148310017、李小雪"
-    },
-    {
-      "record_idx": 12825,
-      "error_type": "FN",
-      "category": "Conversational / domain-jargon spam without URL",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 0.00011,
-      "in_uncertainty_band_005_095": false,
-      "attack_type": "SPACE",
-      "char_len_raw": 36,
-      "char_len_proc": 26,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9495,
-        "phon": 0.0438,
-        "glyph": 0.0067
-      },
-      "max_token_obf_prob": 0.8863,
-      "top_attended_tokens": [
-        {
-          "char": "收",
-          "pool_w": 0.0765,
-          "obf_p": 0.0832,
-          "alpha_ctx": 0.983,
-          "alpha_phon": 0.014,
-          "alpha_glyph": 0.004
-        },
-        {
-          "char": "了",
-          "pool_w": 0.069,
-          "obf_p": 0.0773,
-          "alpha_ctx": 0.993,
-          "alpha_phon": 0.006,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": "某",
-          "pool_w": 0.0652,
-          "obf_p": 0.0566,
-          "alpha_ctx": 0.996,
-          "alpha_phon": 0.003,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": "某",
-          "pool_w": 0.064,
-          "obf_p": 0.0648,
-          "alpha_ctx": 0.995,
-          "alpha_phon": 0.004,
-          "alpha_glyph": 0.001
-        }
-      ],
-      "raw_text": "王某某   在不在家   能谈加微谈  谈不了兄弟们规矩办  直接家里收",
-      "proc_text": "王某某在不在家能谈加微谈谈不了兄弟们规矩办直接家里收",
-      "clean_text": "王某某在不在家能谈加微谈谈不了兄弟们规矩办直接家里收"
-    },
-    {
-      "record_idx": 15627,
-      "error_type": "FN",
-      "category": "Multi-symbol insertion (??) or vertical-column transposition",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 0.00011,
-      "in_uncertainty_band_005_095": false,
-      "attack_type": "MIXED",
-      "char_len_raw": 46,
-      "char_len_proc": 43,
-      "oov_count": 1,
-      "oov_chars": [
-        "祢"
-      ],
-      "mean_alpha": {
-        "ctx": 0.7861,
-        "phon": 0.131,
-        "glyph": 0.0829
-      },
-      "max_token_obf_prob": 0.9999,
-      "top_attended_tokens": [
-        {
-          "char": "2",
-          "pool_w": 0.0688,
-          "obf_p": 0.1444,
-          "alpha_ctx": 0.93,
-          "alpha_phon": 0.053,
-          "alpha_glyph": 0.017
-        },
-        {
-          "char": "2",
-          "pool_w": 0.0535,
-          "obf_p": 0.1037,
-          "alpha_ctx": 0.958,
-          "alpha_phon": 0.034,
-          "alpha_glyph": 0.008
-        },
-        {
-          "char": "9",
-          "pool_w": 0.0413,
-          "obf_p": 0.3705,
-          "alpha_ctx": 0.742,
-          "alpha_phon": 0.166,
-          "alpha_glyph": 0.091
-        },
-        {
-          "char": "9",
-          "pool_w": 0.0372,
-          "obf_p": 0.3279,
-          "alpha_ctx": 0.753,
-          "alpha_phon": 0.166,
-          "alpha_glyph": 0.08
-        }
-      ],
-      "raw_text": "小姨袋祢 曰入 2??0??0??0???3??0??0??0??扣扣 3007929723",
-      "proc_text": "小姨袋祢曰入2??0??0??0???3??0??0??0??扣扣3007929723",
-      "clean_text": "小姨带你日入20003000QQ3007929723"
-    },
-    {
-      "record_idx": 11384,
-      "error_type": "FN",
-      "category": "Multi-symbol insertion (??) or vertical-column transposition",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 0.00033,
-      "in_uncertainty_band_005_095": false,
-      "attack_type": "MIXED",
-      "char_len_raw": 49,
-      "char_len_proc": 42,
-      "oov_count": 2,
-      "oov_chars": [
-        "兲",
-        "祢"
-      ],
-      "mean_alpha": {
-        "ctx": 0.7557,
-        "phon": 0.1492,
-        "glyph": 0.0952
-      },
-      "max_token_obf_prob": 0.9999,
-      "top_attended_tokens": [
-        {
-          "char": "4",
-          "pool_w": 0.0795,
-          "obf_p": 0.0166,
-          "alpha_ctx": 0.978,
-          "alpha_phon": 0.015,
-          "alpha_glyph": 0.007
-        },
-        {
-          "char": "9",
-          "pool_w": 0.045,
-          "obf_p": 0.3598,
-          "alpha_ctx": 0.731,
-          "alpha_phon": 0.172,
-          "alpha_glyph": 0.097
-        },
-        {
-          "char": "3",
-          "pool_w": 0.04,
-          "obf_p": 0.2016,
-          "alpha_ctx": 0.857,
-          "alpha_phon": 0.103,
-          "alpha_glyph": 0.039
-        },
-        {
-          "char": "7",
-          "pool_w": 0.0358,
-          "obf_p": 0.1565,
-          "alpha_ctx": 0.894,
-          "alpha_phon": 0.057,
-          "alpha_glyph": 0.049
-        }
-      ],
-      "raw_text": "小姨袋祢 兲入 2??0??0??0???3??0??0??0?? 扣扣   3007943669",
-      "proc_text": "小姨袋祢兲入2??0??0??0???3??0??0??0?扣扣3007943669",
-      "clean_text": "小姨带你天入20003000QQ3007943669"
-    },
-    {
-      "record_idx": 8079,
-      "error_type": "FN",
-      "category": "Multi-symbol insertion (??) or vertical-column transposition",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 0.00591,
-      "in_uncertainty_band_005_095": false,
+      "idx": 13691,
       "attack_type": "PHON",
-      "char_len_raw": 17,
-      "char_len_proc": 16,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9552,
-        "phon": 0.0311,
-        "glyph": 0.0136
-      },
-      "max_token_obf_prob": 0.6637,
-      "top_attended_tokens": [
-        {
-          "char": "微",
-          "pool_w": 0.1622,
-          "obf_p": 0.0503,
-          "alpha_ctx": 0.992,
-          "alpha_phon": 0.006,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": ":",
-          "pool_w": 0.1175,
-          "obf_p": 0.0833,
-          "alpha_ctx": 0.985,
-          "alpha_phon": 0.008,
-          "alpha_glyph": 0.007
-        },
-        {
-          "char": "能",
-          "pool_w": 0.1067,
-          "obf_p": 0.0904,
-          "alpha_ctx": 0.992,
-          "alpha_phon": 0.007,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": "十",
-          "pool_w": 0.0888,
-          "obf_p": 0.6522,
-          "alpha_ctx": 0.687,
-          "alpha_phon": 0.203,
-          "alpha_glyph": 0.11
-        }
-      ],
-      "raw_text": "不出门??天能到千十微： 即可工做",
-      "proc_text": "不出门??天能到千十微:即可工做",
-      "clean_text": "不出门天能到千加微:即可工作"
+      "prob": 0.00014,
+      "len": 41,
+      "text": "@毛毛蜂73：11：19牛牛：十赌九死，最后痛的还是自己，千万不能爱上有家的女人，"
     },
     {
-      "record_idx": 16015,
-      "error_type": "FN",
-      "category": "Conversational / domain-jargon spam without URL",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 0.02073,
-      "in_uncertainty_band_005_095": false,
+      "idx": 15321,
       "attack_type": "CLEAN",
-      "char_len_raw": 31,
-      "char_len_proc": 31,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9603,
-        "phon": 0.03,
-        "glyph": 0.0097
-      },
-      "max_token_obf_prob": 0.899,
-      "top_attended_tokens": [
-        {
-          "char": "您",
-          "pool_w": 0.1808,
-          "obf_p": 0.0148,
-          "alpha_ctx": 0.997,
-          "alpha_phon": 0.002,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": "请",
-          "pool_w": 0.0523,
-          "obf_p": 0.0999,
-          "alpha_ctx": 0.998,
-          "alpha_phon": 0.001,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": "们",
-          "pool_w": 0.0451,
-          "obf_p": 0.1024,
-          "alpha_ctx": 0.999,
-          "alpha_phon": 0.001,
-          "alpha_glyph": 0.0
-        },
-        {
-          "char": "满",
-          "pool_w": 0.045,
-          "obf_p": 0.0595,
-          "alpha_ctx": 0.995,
-          "alpha_phon": 0.003,
-          "alpha_glyph": 0.002
-        }
-      ],
-      "raw_text": "启禀小仙女对我们的产品还满意的话请您给予我们5个小星星的鼓励哦",
-      "proc_text": "启禀小仙女对我们的产品还满意的话请您给予我们5个小星星的鼓励哦",
-      "clean_text": "启禀小仙女对我们的产品还满意的话请您给予我们5个小星星的鼓励哦"
+      "prob": 0.00018,
+      "len": 30,
+      "text": "隐患险于明火，防范胜于救灾，生态和谐人人创，林草防火人人防。"
     },
     {
-      "record_idx": 5656,
-      "error_type": "FN",
-      "category": "Upstream corpus label noise (public advisory / tender / food order)",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 0.06175,
-      "in_uncertainty_band_005_095": true,
-      "attack_type": "SPACE",
-      "char_len_raw": 29,
-      "char_len_proc": 25,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.7908,
-        "phon": 0.1195,
-        "glyph": 0.0897
-      },
-      "max_token_obf_prob": 0.9736,
-      "top_attended_tokens": [
-        {
-          "char": "蓉",
-          "pool_w": 0.1893,
-          "obf_p": 0.9206,
-          "alpha_ctx": 0.334,
-          "alpha_phon": 0.203,
-          "alpha_glyph": 0.463
-        },
-        {
-          "char": "芙",
-          "pool_w": 0.0847,
-          "obf_p": 0.9736,
-          "alpha_ctx": 0.175,
-          "alpha_phon": 0.244,
-          "alpha_glyph": 0.58
-        },
-        {
-          "char": "都",
-          "pool_w": 0.0656,
-          "obf_p": 0.0713,
-          "alpha_ctx": 0.994,
-          "alpha_phon": 0.005,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": "瓶",
-          "pool_w": 0.0582,
-          "obf_p": 0.6629,
-          "alpha_ctx": 0.578,
-          "alpha_phon": 0.238,
-          "alpha_glyph": 0.184
-        }
-      ],
-      "raw_text": "6份炒粉 1份炒面都加蛋 5瓶冰红茶 二瓶可乐 一包芙蓉王",
-      "proc_text": "6份炒粉1份炒面都加蛋5瓶冰红茶二瓶可乐一包芙蓉王",
-      "clean_text": "6份炒粉1份炒面都加蛋5瓶冰红茶二瓶可乐一包芙蓉王"
-    },
-    {
-      "record_idx": 7105,
-      "error_type": "FN",
-      "category": "Upstream corpus label noise (public advisory / tender / food order)",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 0.08347,
-      "in_uncertainty_band_005_095": true,
-      "attack_type": "GLYPH",
-      "char_len_raw": 57,
-      "char_len_proc": 57,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9232,
-        "phon": 0.0513,
-        "glyph": 0.0255
-      },
-      "max_token_obf_prob": 0.9281,
-      "top_attended_tokens": [
-        {
-          "char": ",",
-          "pool_w": 0.1835,
-          "obf_p": 0.0116,
-          "alpha_ctx": 0.998,
-          "alpha_phon": 0.0,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": "注",
-          "pool_w": 0.0512,
-          "obf_p": 0.1342,
-          "alpha_ctx": 0.987,
-          "alpha_phon": 0.004,
-          "alpha_glyph": 0.009
-        },
-        {
-          "char": "好",
-          "pool_w": 0.0387,
-          "obf_p": 0.0307,
-          "alpha_ctx": 0.999,
-          "alpha_phon": 0.0,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": ";",
-          "pool_w": 0.0376,
-          "obf_p": 0.6061,
-          "alpha_ctx": 0.748,
-          "alpha_phon": 0.039,
-          "alpha_glyph": 0.213
-        }
-      ],
-      "raw_text": "戴口罩、勤洗手、常消毒、多通风、用公筷；不聚集、少出行、注意饮食健康；倡议大家继续保持良好习惯，遵守疫情防控规定。",
-      "proc_text": "戴口罩、勤洗手、常消毒、多通风、用公筷;不聚集、少出行、注意饮食健康;倡议大家继续保持良好习惯,遵守疫情防控规定。",
-      "clean_text": "戴口罩、勤洗手、常消毒、多通风、用公筷;不聚集、少出行、注意饮食健康;倡议大家继续保持良好习惯,遵守疫情防控规定."
-    },
-    {
-      "record_idx": 12866,
-      "error_type": "FN",
-      "category": "Upstream corpus label noise (public advisory / tender / food order)",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 0.17654,
-      "in_uncertainty_band_005_095": true,
-      "attack_type": "GLYPH",
-      "char_len_raw": 75,
-      "char_len_proc": 75,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9784,
-        "phon": 0.0151,
-        "glyph": 0.0065
-      },
-      "max_token_obf_prob": 0.7946,
-      "top_attended_tokens": [
-        {
-          "char": ",",
-          "pool_w": 0.1407,
-          "obf_p": 0.0088,
-          "alpha_ctx": 0.999,
-          "alpha_phon": 0.0,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": ",",
-          "pool_w": 0.1362,
-          "obf_p": 0.0061,
-          "alpha_ctx": 0.999,
-          "alpha_phon": 0.0,
-          "alpha_glyph": 0.001
-        },
-        {
-          "char": "好",
-          "pool_w": 0.0281,
-          "obf_p": 0.0299,
-          "alpha_ctx": 1.0,
-          "alpha_phon": 0.0,
-          "alpha_glyph": 0.0
-        },
-        {
-          "char": "范",
-          "pool_w": 0.026,
-          "obf_p": 0.297,
-          "alpha_ctx": 0.967,
-          "alpha_phon": 0.031,
-          "alpha_glyph": 0.002
-        }
-      ],
-      "raw_text": "根据天津市气象台发布的陆地大风蓝色预警信号，请相关单位采取相应措施，做好风险防范应对工作。建议有关企业采取防风、防火措施。发生生产安全事故应立即上报。",
-      "proc_text": "根据天津市气象台发布的陆地大风蓝色预警信号,请相关单位采取相应措施,做好风险防范应对工作。建议有关企业采取防风、防火措施。发生生产安全事故应立即上报。",
-      "clean_text": "根据天津市气象台发布的陆地大风蓝色预警信号,请相关单位采取相应措施,做好风险防范应对工作.建议有关企业采取防风、防火措施.发生生产安全事故应立即上报."
-    },
-    {
-      "record_idx": 11867,
-      "error_type": "FN",
-      "category": "Borderline gray-market promotion near 0.50 threshold",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 0.45595,
-      "in_uncertainty_band_005_095": true,
+      "idx": 13724,
       "attack_type": "PHON",
-      "char_len_raw": 65,
-      "char_len_proc": 65,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9775,
-        "phon": 0.0146,
-        "glyph": 0.0079
-      },
-      "max_token_obf_prob": 0.8171,
-      "top_attended_tokens": [
-        {
-          "char": "2",
-          "pool_w": 0.0776,
-          "obf_p": 0.0726,
-          "alpha_ctx": 0.99,
-          "alpha_phon": 0.005,
-          "alpha_glyph": 0.005
-        },
-        {
-          "char": "8",
-          "pool_w": 0.0671,
-          "obf_p": 0.2005,
-          "alpha_ctx": 0.974,
-          "alpha_phon": 0.013,
-          "alpha_glyph": 0.013
-        },
-        {
-          "char": "小",
-          "pool_w": 0.0428,
-          "obf_p": 0.153,
-          "alpha_ctx": 0.998,
-          "alpha_phon": 0.002,
-          "alpha_glyph": 0.0
-        },
-        {
-          "char": "1",
-          "pool_w": 0.0377,
-          "obf_p": 0.038,
-          "alpha_ctx": 0.991,
-          "alpha_phon": 0.004,
-          "alpha_glyph": 0.005
-        }
-      ],
-      "raw_text": "免税香烟零售批发：软云玉溪130/条硬中240/条软中290/条大重就390/条质量保证贷到付款包退包换17358519265小杨",
-      "proc_text": "免税香烟零售批发:软云玉溪130/条硬中240/条软中290/条大重就390/条质量保证贷到付款包退包换17358519265小杨",
-      "clean_text": "免税香烟零售批发:软云玉溪130条硬中240条软中290条大重就390条质量保证贷到付款包退包换17358519265小杨"
+      "prob": 0.00069,
+      "len": 23,
+      "text": "可以的，7号还没结束，我等下葳x跟你说怎么听课"
     },
     {
-      "record_idx": 9377,
-      "error_type": "FN",
-      "category": "Multi-symbol insertion (??) or vertical-column transposition",
-      "true_label": 1,
-      "pred_label": 0,
-      "spam_prob": 0.49464,
-      "in_uncertainty_band_005_095": true,
+      "idx": 10809,
+      "attack_type": "CLEAN",
+      "prob": 0.00542,
+      "len": 57,
+      "text": "建议：多数设施作物夜间一膜保温，明天白天升温较快，适时早开棚，加强通风排气；明天夜里冷空气影响，午后及时闭棚保温。"
+    },
+    {
+      "idx": 13175,
+      "attack_type": "SPLIT",
+      "prob": 0.00773,
+      "len": 70,
+      "text": "过去的人不留恋,过去的事不回头,离开的不遗憾,留下的会珍惜.潇洒才是人的最高级. 8051fy.c0m/t1r1 在FY真的很开心.4072"
+    },
+    {
+      "idx": 11144,
+      "attack_type": "PHON",
+      "prob": 0.01486,
+      "len": 44,
+      "text": "杀跌至2850-2900区域可逐步低吸抄底，产品如有操作将在盘中提示。2/2【山东神光】"
+    },
+    {
+      "idx": 15214,
+      "attack_type": "MIXED",
+      "prob": 0.02856,
+      "len": 16,
+      "text": "我姐垈得好，每天都有好几仟? ?"
+    },
+    {
+      "idx": 12461,
+      "attack_type": "SPLIT",
+      "prob": 0.09282,
+      "len": 59,
+      "text": "6-2号超级会员日，年货商品低至8.5折，医保商品9.2折，鱼胶0元，地址：南山区西丽珠光路北珠光花半里欣苑3号楼0i"
+    },
+    {
+      "idx": 10621,
+      "attack_type": "MIXED",
+      "prob": 0.10934,
+      "len": 63,
+      "text": "唐某某，我司 调 查部 门已经多次通 知你还 款，但你并未按 时还  款，请问你是想要骗  取 招  联 公 司 帒 款是吗？"
+    },
+    {
+      "idx": 13050,
+      "attack_type": "CLEAN",
+      "prob": 0.12523,
+      "len": 14,
+      "text": "米主任13946333575"
+    },
+    {
+      "idx": 8683,
+      "attack_type": "PHON",
+      "prob": 0.1338,
+      "len": 56,
+      "text": "哈https://longba257.com真岀桨吋3OO少下4OOO，眞魜@.G.D.G老稳了店M.G不朽清缘"
+    },
+    {
+      "idx": 13933,
       "attack_type": "SPACE",
-      "char_len_raw": 39,
-      "char_len_proc": 34,
-      "oov_count": 0,
-      "oov_chars": [],
-      "mean_alpha": {
-        "ctx": 0.9483,
-        "phon": 0.0296,
-        "glyph": 0.0221
-      },
-      "max_token_obf_prob": 0.9533,
-      "top_attended_tokens": [
-        {
-          "char": ":",
-          "pool_w": 0.1098,
-          "obf_p": 0.0406,
-          "alpha_ctx": 0.985,
-          "alpha_phon": 0.003,
-          "alpha_glyph": 0.012
-        },
-        {
-          "char": "8",
-          "pool_w": 0.0554,
-          "obf_p": 0.2783,
-          "alpha_ctx": 0.958,
-          "alpha_phon": 0.017,
-          "alpha_glyph": 0.025
-        },
-        {
-          "char": "成",
-          "pool_w": 0.0532,
-          "obf_p": 0.1019,
-          "alpha_ctx": 0.999,
-          "alpha_phon": 0.0,
-          "alpha_glyph": 0.0
-        },
-        {
-          "char": "张",
-          "pool_w": 0.0514,
-          "obf_p": 0.2441,
-          "alpha_ctx": 0.982,
-          "alpha_phon": 0.013,
-          "alpha_glyph": 0.004
-        }
-      ],
-      "raw_text": "成／商／机／手 都／贸／打／写等联系 小张：13980706989【可 **验",
-      "proc_text": "成/商/机/手都/贸/打/写等联系小张:13980706989可*验",
-      "clean_text": "成商机手都贸打写等联系小张:13980706989可验"
+      "prob": 0.17671,
+      "len": 85,
+      "text": "yangcha*@chenkso*.com 已添加到 yangcha*@chenkso*.com。请访问 https://account.live.com/confirm"
+    },
+    {
+      "idx": 14571,
+      "attack_type": "CLEAN",
+      "prob": 0.2113,
+      "len": 156,
+      "text": "新年好，欢迎来到阳澄湖半岛休闲度假。华谊兄弟电影世界“春节牛气活动”、比斯特购物村“赏柿灯选好礼”、纳斯卡丁车、商旅酒店网球中心、老北门柏漾酒店“迎春接福”活动、儿童迷宫乐园、环湖骑行、樱咖网红咖啡馆......邀您畅享春节七天乐！最新信息"
+    },
+    {
+      "idx": 5566,
+      "attack_type": "PHON",
+      "prob": 0.42601,
+      "len": 38,
+      "text": "您还没有查看来自房客炎婷的信息。现在就去爱彼迎，点击「收件箱」查看最新消息。"
+    },
+    {
+      "idx": 9129,
+      "attack_type": "PHON",
+      "prob": 0.48598,
+      "len": 70,
+      "text": "下午好哥，好久没见了，妹子这边换了个新场子，资源丰富，如果有空晚上可以过来坐坐！😊如打扰请见谅，祝您和家人平安快乐每一天😊（华娱会娱乐会所）"
     }
-  ]
+  ],
+  "counterfactual_16_detail": [
+    {
+      "text": "妈，我今晚加班，不用等我吃饭了。",
+      "mvcsn_v3_prob": 0.00013,
+      "mvcsn_v3_correct": true,
+      "rbt3_mvcsn_v3_prob": 0.00063,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "明天上午十点开会，请大家准时到会议室！",
+      "mvcsn_v3_prob": 0.00904,
+      "mvcsn_v3_correct": true,
+      "rbt3_mvcsn_v3_prob": 0.00522,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "你好，你的快递已放丰巢柜，请及时取件。",
+      "mvcsn_v3_prob": 0.99481,
+      "mvcsn_v3_correct": false,
+      "rbt3_mvcsn_v3_prob": 0.98594,
+      "rbt3_mvcsn_v3_correct": false
+    },
+    {
+      "text": "周末有空吗，一起去看电影吧！",
+      "mvcsn_v3_prob": 0.27439,
+      "mvcsn_v3_correct": true,
+      "rbt3_mvcsn_v3_prob": 0.03114,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "收到，谢谢老师，我马上修改完发您邮箱。",
+      "mvcsn_v3_prob": 0.96387,
+      "mvcsn_v3_correct": false,
+      "rbt3_mvcsn_v3_prob": 0.64423,
+      "rbt3_mvcsn_v3_correct": false
+    },
+    {
+      "text": "今天天气真好，我们去操场跑步吧。",
+      "mvcsn_v3_prob": 0.44324,
+      "mvcsn_v3_correct": true,
+      "rbt3_mvcsn_v3_prob": 0.00094,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "提醒：明天截止提交课程作业，请记得上传系统。",
+      "mvcsn_v3_prob": 0.00307,
+      "mvcsn_v3_correct": true,
+      "rbt3_mvcsn_v3_prob": 0.14128,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "您好，您预约的明天下午2点门诊已确认，请携带身份证前往。",
+      "mvcsn_v3_prob": 0.98115,
+      "mvcsn_v3_correct": false,
+      "rbt3_mvcsn_v3_prob": 0.49736,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "晚上一起去食堂吃晚饭吧？我六点半下课。",
+      "mvcsn_v3_prob": 0.00045,
+      "mvcsn_v3_correct": true,
+      "rbt3_mvcsn_v3_prob": 0.00043,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "实验报告我已经写完了，等会儿发到群里大家核对一下。",
+      "mvcsn_v3_prob": 0.00068,
+      "mvcsn_v3_correct": true,
+      "rbt3_mvcsn_v3_prob": 0.00043,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "今天下雨记得带伞，路上注意安全！",
+      "mvcsn_v3_prob": 0.53399,
+      "mvcsn_v3_correct": false,
+      "rbt3_mvcsn_v3_prob": 0.08632,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "恭喜你通过初试，请下周三上午带简历来面试。",
+      "mvcsn_v3_prob": 0.90565,
+      "mvcsn_v3_correct": false,
+      "rbt3_mvcsn_v3_prob": 0.07056,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "火车站人好多啊，我提前半小时到检票口等你。",
+      "mvcsn_v3_prob": 0.00102,
+      "mvcsn_v3_correct": true,
+      "rbt3_mvcsn_v3_prob": 0.00205,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "老师好，请问这周的数据工程课是在东校园上吗？",
+      "mvcsn_v3_prob": 0.00052,
+      "mvcsn_v3_correct": true,
+      "rbt3_mvcsn_v3_prob": 0.00086,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "昨天买的书已经发货了，预计后天上午送到宿舍楼下。",
+      "mvcsn_v3_prob": 0.00042,
+      "mvcsn_v3_correct": true,
+      "rbt3_mvcsn_v3_prob": 0.0008,
+      "rbt3_mvcsn_v3_correct": true
+    },
+    {
+      "text": "我手机快没电了，回去之后再给你回电话。",
+      "mvcsn_v3_prob": 0.00342,
+      "mvcsn_v3_correct": true,
+      "rbt3_mvcsn_v3_prob": 0.0008,
+      "rbt3_mvcsn_v3_correct": true
+    }
+  ],
+  "probes_comparison": {
+    "TFIDF-SVM": {
+      "orig_16_ham_acc": {
+        "mean": 0.6875,
+        "std": 0.0
+      },
+      "balanced_40_acc": {
+        "mean": 0.8000000000000002,
+        "std": 1.1102230246251565e-16
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.9803186504217432,
+        "std": 0.0
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.9841786877617497,
+        "std": 0.0
+      }
+    },
+    "LZASD (Fixed)": {
+      "orig_16_ham_acc": {
+        "mean": 0.6458333333333334,
+        "std": 0.02946278254943948
+      },
+      "balanced_40_acc": {
+        "mean": 0.7666666666666666,
+        "std": 0.011785113019775802
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.9387691346454233,
+        "std": 0.010389434019566306
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.9539320614239181,
+        "std": 0.010577153479902167
+      }
+    },
+    "MV-CSN v2 (Clean)": {
+      "orig_16_ham_acc": {
+        "mean": 0.4791666666666667,
+        "std": 0.02946278254943948
+      },
+      "balanced_40_acc": {
+        "mean": 0.7166666666666667,
+        "std": 0.011785113019775802
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.9815682599187753,
+        "std": 0.006508174525460696
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.9689778191406856,
+        "std": 0.011877890317404466
+      }
+    },
+    "RBT3 (Clean)": {
+      "orig_16_ham_acc": {
+        "mean": 0.5,
+        "std": 0.05103103630798288
+      },
+      "balanced_40_acc": {
+        "mean": 0.7166666666666667,
+        "std": 0.03118047822311616
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.9900031240237426,
+        "std": 0.001925777570437058
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.9385760818985575,
+        "std": 0.026050321083812795
+      }
+    },
+    "MacBERT-base (Clean)": {
+      "orig_16_ham_acc": {
+        "mean": 0.6458333333333334,
+        "std": 0.20623947784607635
+      },
+      "balanced_40_acc": {
+        "mean": 0.7833333333333333,
+        "std": 0.08249579113843053
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.9865666979069041,
+        "std": 0.004214538445245866
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.969908484566465,
+        "std": 0.020482863293777787
+      }
+    },
+    "RBT3 + MV-CSN v2 (Clean)": {
+      "orig_16_ham_acc": {
+        "mean": 0.5833333333333334,
+        "std": 0.19320038532282716
+      },
+      "balanced_40_acc": {
+        "mean": 0.7583333333333334,
+        "std": 0.07728015412913085
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.9903155263980006,
+        "std": 0.0028971004359561615
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.9661858228633472,
+        "std": 0.013119485313349152
+      }
+    },
+    "MacBERT + MV-CSN v3 (Clean)": {
+      "orig_16_ham_acc": {
+        "mean": 0.5833333333333334,
+        "std": 0.17921510973005472
+      },
+      "balanced_40_acc": {
+        "mean": 0.7583333333333333,
+        "std": 0.07168604389202186
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.9903155263980006,
+        "std": 0.0024598587547678425
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.9835582441445633,
+        "std": 0.00837886076380923
+      }
+    },
+    "Plain CNN+Trans (Same KD)": {
+      "orig_16_ham_acc": {
+        "mean": 0.5,
+        "std": 0.05103103630798288
+      },
+      "balanced_40_acc": {
+        "mean": 0.725,
+        "std": 0.02041241452319317
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.9790690409247111,
+        "std": 0.0037747722504200454
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.9835582441445633,
+        "std": 0.0025862156042396594
+      }
+    },
+    "MV-CSN v3 (Clean-KD Only)": {
+      "orig_16_ham_acc": {
+        "mean": 0.6458333333333334,
+        "std": 0.02946278254943948
+      },
+      "balanced_40_acc": {
+        "mean": 0.775,
+        "std": 0.02041241452319317
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.985941893158388,
+        "std": 0.0027590630635201127
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.9643244920117885,
+        "std": 0.012406933305922912
+      }
+    },
+    "MV-CSN v3 (Full Dual-Teacher KD)": {
+      "orig_16_ham_acc": {
+        "mean": 0.625,
+        "std": 0.05103103630798288
+      },
+      "balanced_40_acc": {
+        "mean": 0.775,
+        "std": 0.02041241452319317
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.9843798812870977,
+        "std": 0.003926836954069552
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.986195129517605,
+        "std": 0.0011607437216609
+      }
+    },
+    "RBT3 (Same Data+Aug)": {
+      "orig_16_ham_acc": {
+        "mean": 0.8125,
+        "std": 0.08838834764831845
+      },
+      "balanced_40_acc": {
+        "mean": 0.8583333333333334,
+        "std": 0.047140452079103216
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.9878163074039362,
+        "std": 0.0013254110237798788
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.973165813556693,
+        "std": 0.006473906236919247
+      }
+    },
+    "RBT3 + MV-CSN v3 (Dual-Teacher)": {
+      "orig_16_ham_acc": {
+        "mean": 0.8125,
+        "std": 0.05103103630798288
+      },
+      "balanced_40_acc": {
+        "mean": 0.85,
+        "std": 0.02041241452319317
+      },
+      "bench_ham_plus_comma_period_acc": {
+        "mean": 0.9865666979069041,
+        "std": 0.0019257775704370579
+      },
+      "bench_spam_stripped_punct_recall": {
+        "mean": 0.956879168605553,
+        "std": 0.03536188446109728
+      }
+    }
+  }
 }

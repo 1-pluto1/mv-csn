@@ -126,14 +126,14 @@ def create_template_cluster_splits(
             rows.append((lbl, raw_t, proc_t, clean_t))
 
     N = len(rows)
-    canon_texts = [canonical_for_clustering(r[2]) for r in rows]
+    canon_texts = [canonical_for_clustering(r[3] or r[2]) for r in rows]
     vec = TfidfVectorizer(analyzer="char", ngram_range=(2, 3), min_df=2)
     X = vec.fit_transform(canon_texts)
     sim = (X @ X.T).tocsr()
     adj = (sim >= sim_threshold).tolil()
 
     # Explicitly link identical proc_text, raw_text, or canon_texts even if short/unique
-    for key_fn in (lambda r: r[2], lambda r: r[1]):
+    for key_fn in (lambda r: r[3] or r[2], lambda r: r[2], lambda r: r[1]):
         seen: Dict[str, int] = {}
         for i, r in enumerate(rows):
             k = key_fn(r)

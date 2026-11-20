@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MV-CSN v2 | 中文对抗变体垃圾短信检测 · 项目主页与实验看板</title>
+  <title>MV-CSN v3 | 中文对抗变体垃圾短信检测 · 项目主页与实验看板</title>
   <style>
     :root {
       --bg: #faf9f5;
@@ -116,15 +116,15 @@
 
     /* Single-Row Defense Flow Teaser Strip */
     .teaser {
-      max-width: 1020px; margin: 0 auto;
+      max-width: 1080px; margin: 0 auto;
       background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
-      padding: 11px 14px;
-      display: flex; align-items: center; justify-content: center; gap: 7px; flex-wrap: wrap;
-      font-size: 0.8rem;
+      padding: 9px 12px;
+      display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: nowrap;
+      overflow-x: auto; font-size: 0.76rem;
     }
     .t-chip {
-      padding: 4px 9px; border-radius: 7px; border: 1px solid var(--line);
-      background: var(--surface-alt); font-family: var(--mono); font-size: 0.77rem; white-space: nowrap;
+      padding: 3px 8px; border-radius: 7px; border: 1px solid var(--line);
+      background: var(--surface-alt); font-family: var(--mono); font-size: 0.72rem; white-space: nowrap;
     }
     .t-chip.spam { background: var(--vermilion-soft); border-color: rgba(200, 62, 55, 0.25); color: var(--vermilion); font-weight: 700; }
     .t-chip.ok { background: var(--emerald-soft); border-color: rgba(11, 93, 59, 0.25); color: var(--emerald); font-weight: 700; }
@@ -142,12 +142,16 @@
     @media (max-width: 520px) { .kpi-grid { grid-template-columns: 1fr; } }
     .kpi {
       background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--emerald);
-      border-radius: 12px; padding: 16px 18px;
+      border-radius: 12px; padding: 15px 14px;
     }
     .kpi.blue { border-top-color: var(--teal); }
     .kpi.dark { border-top-color: var(--ink); }
     .kpi.amber { border-top-color: var(--vermilion); }
-    .kpi-val { font-family: var(--serif); font-size: 1.95rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+    .kpi-val {
+      font-family: var(--serif); font-size: clamp(1.32rem, 1.8vw, 1.62rem);
+      font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;
+      font-variant-numeric: tabular-nums; white-space: nowrap;
+    }
     .kpi-val.emerald { color: var(--emerald); }
     .kpi-val.teal { color: var(--teal); }
     .kpi-val.vermilion { color: var(--vermilion); }
@@ -222,8 +226,8 @@
       border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px;
     }
     .tab-btn {
-      padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line);
-      background: var(--surface-alt); color: var(--muted); font-weight: 600; font-size: 0.81rem; cursor: pointer;
+      padding: 5px 10.5px; border-radius: 999px; border: 1px solid var(--line);
+      background: var(--surface-alt); color: var(--muted); font-weight: 600; font-size: 0.79rem; cursor: pointer;
       transition: all 0.14s ease; white-space: nowrap;
     }
     .tab-btn:hover { color: var(--ink); border-color: var(--line-strong); }
@@ -235,6 +239,9 @@
     .table-scroll { overflow-x: auto; margin-top: 12px; }
     table { width: 100%; border-collapse: collapse; font-size: 0.84rem; font-variant-numeric: tabular-nums; }
     th, td { padding: 9px 11px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+    table.compact-tbl { font-size: 0.76rem; }
+    table.compact-tbl th, table.compact-tbl td { padding: 7px 5px; }
+    table.compact-tbl th { font-size: 0.69rem; letter-spacing: 0.02em; }
     th:first-child, td:first-child, th.ta-left, td.ta-left { text-align: left; }
     td.wrap-cell { white-space: normal; min-width: 200px; }
     th {
@@ -350,6 +357,21 @@
       margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line);
       text-align: center; font-size: 0.81rem; color: var(--muted);
     }
+  
+    .subpill-note { font-size: 0.78rem; color: var(--muted); }
+    .split-head {
+      background: var(--surface-alt); font-size: 0.75rem; font-weight: 700;
+      color: var(--emerald); text-align: left !important; letter-spacing: 0.03em;
+    }
+    .split-head td { text-align: left !important; padding: 7px 11px; }
+    .oov-pill {
+      display: inline-block; padding: 2px 8px; border-radius: 999px;
+      background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(180,83,9,.28);
+      font-size: 0.75rem; font-weight: 700; font-family: var(--mono);
+    }
+    @media (max-width: 960px) {
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
   </style>
 </head>
 <body>
@@ -357,7 +379,7 @@
 
   <nav class="topbar">
     <div class="topbar-inner">
-      <div class="brand"><span class="brand-dot"></span>MV-CSN v2 · SYSU DSE Capstone</div>
+      <div class="brand"><span class="brand-dot"></span>MV-CSN v3 · SYSU DSE Capstone</div>
       <div class="nav-right">
         <div class="nav-links">
           <a href="#progress" data-i18n="nav_prog">实验进度</a>
@@ -374,26 +396,26 @@
   <div class="hero-band">
     <header class="hero">
       <div class="eyebrow" data-i18n="hero_eyebrow">中山大学计算机学院 · 《数据科学与工程》课程大作业项目主页</div>
-      <h1 data-i18n="hero_title">MV-CSN v2：面向中文对抗变体垃圾短信检测的<br/>多视图上下文门控字符相似性网络</h1>
+      <h1 data-i18n="hero_title">MV-CSN v3：双师跨视图蒸馏的中文对抗变体<br/>垃圾短信检测多视图图注意力网络</h1>
       <p class="subtitle" data-i18n="hero_sub">
-        仅 <strong>1.37M 参数</strong> 的字符级双视图图注意力防御网络，融合 32×32 渲染字形卷积嵌入、多音字读音先验、SpellGCN 动态未登录字图桥接与 RoCBert 一致性正则——在去偏 Benchmark B 零样本跨攻击评测中以 <strong>0.243&nbsp;ms/条</strong> 延迟比肩或超越 <strong>600M–4B Qwen3 大模型</strong>（快 <strong>36.5×–251×</strong>）。
+        仅 <strong>2.35M 参数</strong> 的字符级双视图图注意力防御学生网络，经由 <code>MacBERT + MV-CSN v3</code> 与 <code>Qwen3-8B</code> 双师共识跨越 <strong>22,028 条</strong> 无标注短信蒸馏对齐——在去泄露 Benchmark B v2 上取得 <code>Fair F1 = 0.9924</code> / <code>Raw F1 = 0.9916</code>（Raw 较 v2 跃升 <strong>+7.16%</strong>），在 60% 纯同音/形近替换压测下达 <code>0.9848</code>（领先 RBT3 Clean <strong>+1.88%</strong>），单卡批推理仅 <strong>0.097&nbsp;ms/条</strong>。
       </p>
       <div class="cta-row">
         <a class="btn primary" href="https://github.com/1-pluto1/mv-csn" target="_blank" data-i18n="cta_repo">GitHub 源码仓库</a>
-        <a class="btn" href="https://github.com/1-pluto1/mv-csn/releases/tag/v2.0.0" target="_blank" data-i18n="cta_rel">开源权重与数据集 v2.0.0</a>
+        <a class="btn" href="https://github.com/1-pluto1/mv-csn/releases" target="_blank" data-i18n="cta_rel">开源权重与归档 (Releases)</a>
         <a class="btn" href="https://github.com/1-pluto1/mv-csn/blob/main/docs/EXPERIMENTS_AND_CODE_GUIDE.md" target="_blank" data-i18n="cta_guide">代码与实验说明手册</a>
-        <a class="btn" href="https://github.com/1-pluto1/mv-csn/blob/main/notebooks/mv_csn_colab_demo.ipynb" target="_blank" data-i18n="cta_nb">Colab 实跑 Notebook</a>
-        <a class="btn" href="https://github.com/1-pluto1/mv-csn/tree/main/results" target="_blank" data-i18n="cta_json">原始数据 (8 JSON)</a>
+        <a class="btn" href="https://github.com/1-pluto1/mv-csn/tree/main/scripts" target="_blank" data-i18n="cta_scripts">Stage 3 实验脚本</a>
+        <a class="btn" href="https://github.com/1-pluto1/mv-csn/tree/main/results" target="_blank" data-i18n="cta_json">原始数据 (11 JSON)</a>
         <a class="btn" href="#xray" data-i18n="cta_xray">交互式 Gate X-Ray</a>
       </div>
       <div class="teaser">
-        <span class="t-chip">特 请，住（册）给 388</span>
+        <span class="t-chip">特惠充100送200え，髙额返利...</span>
         <span class="t-arrow">→</span>
-        <span class="t-chip" data-i18n="t_step2">预处理器重组 + 32×32 字形/拼音图</span>
+        <span class="t-chip" data-i18n="t_step2">OOV 桥 [え,髙] + 22K 蒸馏</span>
         <span class="t-arrow">→</span>
-        <span class="t-chip" data-i18n="t_step3">门控 6.7% → 77.3%</span>
+        <span class="t-chip" data-i18n="t_step3">门控 11.3%→88.5% (0 未桥接)</span>
         <span class="t-arrow">→</span>
-        <span class="t-chip spam" data-i18n="t_step4">SPAM P = 1.0000 · 0.243 ms (Zero-Shot)</span>
+        <span class="t-chip spam" data-i18n="t_step4">SPAM P=0.9999 · 0.097 ms</span>
       </div>
     </header>
   </div>
@@ -402,53 +424,53 @@
     <!-- KPI Cards -->
     <div class="kpi-grid">
       <div class="kpi">
-        <div class="kpi-val emerald">0.9964</div>
-        <div class="kpi-label" data-i18n="kpi1_lbl">零样本融合峰值 F1</div>
-        <div class="kpi-sub">RBT3 + MV-CSN v2 (3-seed, AUC 0.9998)</div>
+        <div class="kpi-val emerald">0.9924 / 0.9916</div>
+        <div class="kpi-label" data-i18n="kpi1_lbl">MV-CSN v3 Fair / Raw F1 (2.35M)</div>
+        <div class="kpi-sub" data-i18n="kpi1_sub">Raw 较 v2 Clean +7.16% · 参数仅 RBT3 的 1/16.5</div>
       </div>
       <div class="kpi blue">
-        <div class="kpi-val teal">0.9951</div>
-        <div class="kpi-label" data-i18n="kpi2_lbl">独立 MV-CSN v2 F1 (1.37M)</div>
-        <div class="kpi-sub">+3.83% vs RBT3 · +4.09% vs LZASD (p&lt;1e-6)</div>
+        <div class="kpi-val teal">0.9848</div>
+        <div class="kpi-label" data-i18n="kpi2_lbl">60% 重度替换下抗扰 F1 (sub_only)</div>
+        <div class="kpi-sub" data-i18n="kpi2_sub">较 RBT3 Clean +1.88% · 较同蒸馏 Plain +1.70%</div>
       </div>
       <div class="kpi dark">
-        <div class="kpi-val">0.243 ms</div>
-        <div class="kpi-label" data-i18n="kpi3_lbl">单条短信推理延迟</div>
-        <div class="kpi-sub">36.5× faster than Qwen3-0.6B LoRA · 126× vs 4B</div>
+        <div class="kpi-val">0.097 ms</div>
+        <div class="kpi-label" data-i18n="kpi3_lbl">A100 批推理延迟 (编译 bs1: 0.788 ms)</div>
+        <div class="kpi-sub" data-i18n="kpi3_sub">级联 Qwen3-4B LoRA 达 0.9951 F1 (仅上送 1.31%)</div>
       </div>
       <div class="kpi amber">
-        <div class="kpi-val vermilion">0.59%</div>
-        <div class="kpi-label" data-i18n="kpi4_lbl">全测试集总错判率 (20/3,395)</div>
-        <div class="kpi-sub" data-i18n="kpi4_sub">SPLIT 0/46 errors · 含 4 条上游语料标注噪声</div>
+        <div class="kpi-val vermilion">11.3% → 88.5%</div>
+        <div class="kpi-label" data-i18n="kpi4_lbl">159,760 Token 图门控动态路由</div>
+        <div class="kpi-sub" data-i18n="kpi4_sub">Unbridged OOV = 0 · 无标注 KD 拉升 Olivi-9 +6.40%</div>
       </div>
     </div>
 
-    <!-- Section 1: Experiment & Milestone Progress Dashboard -->
+    <!-- Section 1: Progress Dashboard -->
     <section id="progress">
       <div class="sec-head">
-        <h2 data-i18n="sec_prog_h">实验进度与交付看板</h2>
-        <span class="sec-note" data-i18n="sec_prog_note">代码、全部 7 组实验、12 项测试与开源发布已完成 · 待队友接力配图与报告</span>
+        <h2 data-i18n="sec_prog_h">Stage 3 实验进度与交付看板</h2>
+        <span class="sec-note" data-i18n="sec_prog_note">全量双赛道 12 模型 × 3 种子、12 行消融、Olivi-9 外域、Qwen3-4B/8B 级联、11 个 JSON 与 11 项通过测试已同步完成</span>
       </div>
       <div class="card">
         <div class="stepper">
-          <div class="step-pill done"><span class="step-icon">✓</span><span class="step-text" data-i18n="step1">1. 数据去偏 · 12,992 簇划分</span></div>
-          <div class="step-pill done"><span class="step-icon">✓</span><span class="step-text" data-i18n="step2">2. 7 组多随机种子实验</span></div>
-          <div class="step-pill done"><span class="step-icon">✓</span><span class="step-text" data-i18n="step3">3. 重构 · 12 测试 · v2.0.0</span></div>
-          <div class="step-pill pending"><span class="step-icon">⏳</span><span class="step-text" data-i18n="step4">4. 队友：配图 · 报告 · PPT</span></div>
+          <div class="step-pill done"><span class="step-icon">✓</span><span class="step-text" data-i18n="step1">1. 去泄露 12,125 簇 + 22K 双师共识池</span></div>
+          <div class="step-pill done"><span class="step-icon">✓</span><span class="step-text" data-i18n="step2">2. 双赛道 12 模型 × 3 种子 + 压力曲线</span></div>
+          <div class="step-pill done"><span class="step-icon">✓</span><span class="step-text" data-i18n="step3">3. 12 行消融 + Olivi-9 + Qwen3-4B/8B 级联</span></div>
+          <div class="step-pill done"><span class="step-icon">✓</span><span class="step-text" data-i18n="step4">4. 11 项测试全过 · Drive &amp; GitHub 已同步</span></div>
         </div>
         <div class="status-grid" id="progress-grid"></div>
       </div>
     </section>
 
-    <!-- Section 2: Interactive Architecture Pipeline (Consistent 5-Stage Numbering) -->
+    <!-- Section 2: Interactive Architecture Pipeline -->
     <section id="architecture">
       <div class="sec-head">
-        <h2 data-i18n="sec_arch_h">MV-CSN v2 五阶段模型架构（点击模块查看工程实现细节）</h2>
-        <span class="sec-note" data-i18n="sec_arch_note">融合 ChineseBERT · SpellGCN · RoCBert · kfcd/chaizi，总参数量仅 1,371,632</span>
+        <h2 data-i18n="sec_arch_h">MV-CSN v3 五阶段协同与双师蒸馏架构（点击模块查看详情）</h2>
+        <span class="sec-note" data-i18n="sec_arch_note">hidden=192 · 空洞卷积 + 3L Transformer · Top-20 音/形双图 GAT · 22K 跨视图共识蒸馏（2,352,240 参数）</span>
       </div>
       <div class="card">
         <div class="chart-box">
-          <svg viewBox="0 0 1080 256" width="100%" style="min-width:740px;display:block;">
+          <svg viewBox="0 0 1080 264" width="100%" style="min-width:740px;display:block;">
             <defs>
               <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                 <path d="M 0 1 L 10 5 L 0 9 z" fill="#787e8a"/>
@@ -457,45 +479,46 @@
 
             <!-- Stage 1 -->
             <g class="arch-node" data-stage="1">
-              <rect x="10" y="78" width="164" height="100" rx="12" fill="#faf9f5" stroke="#94a3b8" stroke-width="1.6"/>
-              <text x="92" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#181a1f" data-i18n="a1_t">1. 预处理器 Preproc</text>
-              <text x="92" y="128" text-anchor="middle" font-size="11.2" fill="#575c66" data-i18n="a1_1">选择性 NFKC (⑧→8)</text>
-              <text x="92" y="146" text-anchor="middle" font-size="11.2" fill="#575c66" data-i18n="a1_2">保留跨字形 (髙/え/Ꝗ)</text>
-              <text x="92" y="164" text-anchor="middle" font-size="11.2" fill="#575c66" data-i18n="a1_3">Chaizi 2/3 字拆字重组</text>
+              <rect x="10" y="68" width="170" height="122" rx="12" fill="#faf9f5" stroke="#94a3b8" stroke-width="1.6"/>
+              <text x="95" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#181a1f" data-i18n="a1_t">1. 预处理与跨视角增强</text>
+              <text x="95" y="118" text-anchor="middle" font-size="11" fill="#575c66" data-i18n="a1_1">选择性 NFKC + 空格防插</text>
+              <text x="95" y="136" text-anchor="middle" font-size="11" fill="#575c66" data-i18n="a1_2">保留跨文字形近 (髙/え/Ꝗ)</text>
+              <text x="95" y="154" text-anchor="middle" font-size="11" fill="#575c66" data-i18n="a1_3">Chaizi 拆字重组 + Space Aug</text>
+              <text x="95" y="172" text-anchor="middle" font-size="10.2" font-weight="700" fill="#0f766e" data-i18n="a1_4">支撑 Raw F1 +7.16%</text>
             </g>
-            <line x1="174" y1="128" x2="206" y2="128" stroke="#787e8a" stroke-width="1.6" marker-end="url(#arr)"/>
+            <line x1="180" y1="128" x2="210" y2="128" stroke="#787e8a" stroke-width="1.6" marker-end="url(#arr)"/>
 
             <!-- Stage 2 -->
             <g class="arch-node" data-stage="2">
-              <rect x="210" y="58" width="194" height="140" rx="12" fill="#f0f9f8" stroke="#0f766e" stroke-width="1.6"/>
-              <text x="307" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#0f766e" data-i18n="a2_t">2. 多模态锚点与编码</text>
-              <text x="307" y="110" text-anchor="middle" font-size="11.2" fill="#115e59" data-i18n="a2_1">Char ID + 声母/韵母/声调</text>
-              <text x="307" y="128" text-anchor="middle" font-size="11.2" fill="#115e59">+ 32×32 GlyphCAE (64d)</text>
-              <line x1="230" y1="142" x2="384" y2="142" stroke="#ccfbf1" stroke-width="1"/>
-              <text x="307" y="162" text-anchor="middle" font-size="11.5" font-weight="700" fill="#181a1f">CNN (k=3,5) + 2L Transformer</text>
-              <text x="307" y="181" text-anchor="middle" font-size="11" fill="#575c66" data-i18n="a2_2">输出上下文表征 h_ctx</text>
+              <rect x="214" y="54" width="194" height="148" rx="12" fill="#f0f9f8" stroke="#0f766e" stroke-width="1.6"/>
+              <text x="311" y="84" text-anchor="middle" font-size="13" font-weight="700" fill="#0f766e" data-i18n="a2_t">2. 预训练字嵌入与多模态编码</text>
+              <text x="311" y="106" text-anchor="middle" font-size="11" fill="#115e59" data-i18n="a2_1">MacBERT SVD 字初值 + 拼音</text>
+              <text x="311" y="124" text-anchor="middle" font-size="11" fill="#115e59">+ 32×32 GlyphCAE (64d)</text>
+              <line x1="232" y1="138" x2="390" y2="138" stroke="#ccfbf1" stroke-width="1"/>
+              <text x="311" y="158" text-anchor="middle" font-size="11.2" font-weight="700" fill="#181a1f">Multi-Scale CNN + 3L Trans</text>
+              <text x="311" y="177" text-anchor="middle" font-size="10.8" fill="#575c66" data-i18n="a2_2">hidden=192 · 上下文流 h_ctx</text>
             </g>
 
             <!-- Connectors into Stage 3 -->
-            <path d="M 404 128 C 424 128, 424 58, 444 58" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
-            <line x1="404" y1="128" x2="444" y2="128" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
-            <path d="M 404 128 C 424 128, 424 198, 444 198" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 408 128 C 426 128, 426 58, 444 58" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
+            <line x1="408" y1="128" x2="444" y2="128" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 408 128 C 426 128, 426 198, 444 198" fill="none" stroke="#787e8a" stroke-width="1.5" marker-end="url(#arr)"/>
 
-            <!-- Stage 3: Grouped Dual-View GAT + Context Stream -->
+            <!-- Stage 3 -->
             <g class="arch-node" data-stage="3">
-              <rect x="444" y="6" width="248" height="240" rx="14" fill="none" stroke="#cbd5e1" stroke-dasharray="4,3" stroke-width="1.2"/>
-              <text x="568" y="23" text-anchor="middle" font-size="10.8" font-weight="700" fill="#575c66" data-i18n="a3_hdr">3. 双视图 GAT 与 OOV 动态桥</text>
+              <rect x="444" y="6" width="248" height="248" rx="14" fill="none" stroke="#cbd5e1" stroke-dasharray="4,3" stroke-width="1.2"/>
+              <text x="568" y="23" text-anchor="middle" font-size="10.8" font-weight="700" fill="#575c66" data-i18n="a3_hdr">3. 4-Head 双视图 GAT 与 OOV 桥</text>
 
-              <rect x="454" y="32" width="228" height="60" rx="10" fill="#e8f3ee" stroke="#0b5d3b" stroke-width="1.6"/>
-              <text x="568" y="55" text-anchor="middle" font-size="12.2" font-weight="700" fill="#0b5d3b" data-i18n="a3_v1t">View 1 · 语音相似图 GAT</text>
-              <text x="568" y="76" text-anchor="middle" font-size="11" fill="#14532d" data-i18n="a3_v1s">Top-20 多音字加权读音先验</text>
+              <rect x="454" y="34" width="228" height="60" rx="10" fill="#e8f3ee" stroke="#0b5d3b" stroke-width="1.6"/>
+              <text x="568" y="57" text-anchor="middle" font-size="12.2" font-weight="700" fill="#0b5d3b" data-i18n="a3_v1t">View 1 · 语音相似图 GAT</text>
+              <text x="568" y="78" text-anchor="middle" font-size="11" fill="#14532d" data-i18n="a3_v1s">Top-20 多音字加权 + 残差门</text>
 
-              <rect x="454" y="106" width="228" height="44" rx="10" fill="#f4f2eb" stroke="#94a3b8" stroke-width="1.3"/>
-              <text x="568" y="133" text-anchor="middle" font-size="11.6" font-weight="650" fill="#181a1f">Direct Context Stream (h_ctx)</text>
+              <rect x="454" y="108" width="228" height="44" rx="10" fill="#f4f2eb" stroke="#94a3b8" stroke-width="1.3"/>
+              <text x="568" y="135" text-anchor="middle" font-size="11.5" font-weight="650" fill="#181a1f">Direct Context Stream (h_ctx)</text>
 
-              <rect x="454" y="164" width="228" height="68" rx="10" fill="#fdf0ef" stroke="#c83e37" stroke-width="1.6"/>
-              <text x="568" y="189" text-anchor="middle" font-size="12.2" font-weight="700" fill="#991b1b" data-i18n="a3_v2t">View 2 · 渲染字形图 GAT</text>
-              <text x="568" y="211" text-anchor="middle" font-size="11" fill="#991b1b" data-i18n="a3_v2s">32×32 Font + SpellGCN OOV 桥</text>
+              <rect x="454" y="166" width="228" height="72" rx="10" fill="#fdf0ef" stroke="#c83e37" stroke-width="1.6"/>
+              <text x="568" y="191" text-anchor="middle" font-size="12.2" font-weight="700" fill="#991b1b" data-i18n="a3_v2t">View 2 · 渲染字形图 GAT</text>
+              <text x="568" y="213" text-anchor="middle" font-size="10.8" fill="#991b1b" data-i18n="a3_v2s">32×32 Font + 动态 OOV 桥 (0 未桥接)</text>
             </g>
 
             <!-- Connectors into Stage 4 -->
@@ -505,25 +528,25 @@
 
             <!-- Stage 4 -->
             <g class="arch-node" data-stage="4">
-              <rect x="728" y="68" width="160" height="120" rx="12" fill="#fef6e7" stroke="#b45309" stroke-width="1.6"/>
-              <text x="808" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e" data-i18n="a4_t">4. 动态门控 Gate</text>
-              <text x="808" y="118" text-anchor="middle" font-size="11.2" fill="#78350f" data-i18n="a4_1">逐字 Softmax 单形权</text>
-              <text x="808" y="138" text-anchor="middle" font-size="11.2" font-weight="700" fill="#92400e">[α_ctx, α_phon, α_glyph]</text>
-              <text x="808" y="160" text-anchor="middle" font-size="10.8" fill="#b45309" data-i18n="a4_2">+ RoCBert 图一致性损失</text>
-              <text x="808" y="177" text-anchor="middle" font-size="10.2" fill="#787e8a" data-i18n="a4_3">正常字稳ctx · 变体切双图</text>
+              <rect x="728" y="64" width="160" height="128" rx="12" fill="#fef6e7" stroke="#b45309" stroke-width="1.6"/>
+              <text x="808" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e" data-i18n="a4_t">4. 动态门控 Gate</text>
+              <text x="808" y="114" text-anchor="middle" font-size="11" fill="#78350f" data-i18n="a4_1">逐字 Softmax 三路权重</text>
+              <text x="808" y="134" text-anchor="middle" font-size="11.2" font-weight="700" fill="#92400e">[α_ctx, α_phon, α_glyph]</text>
+              <text x="808" y="156" text-anchor="middle" font-size="10.5" fill="#b45309" data-i18n="a4_2">+ RoCBert 图一致性正则</text>
+              <text x="808" y="175" text-anchor="middle" font-size="10.1" fill="#787e8a" data-i18n="a4_3">正常 11.3% 图 · OOV 88.5% 图</text>
             </g>
 
             <line x1="888" y1="128" x2="914" y2="128" stroke="#787e8a" stroke-width="1.6" marker-end="url(#arr)"/>
 
             <!-- Stage 5 -->
             <g class="arch-node" data-stage="5">
-              <rect x="918" y="62" width="152" height="132" rx="12" fill="#181a1f" stroke="#181a1f" stroke-width="1.5"/>
-              <text x="994" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff" data-i18n="a5_t">5. 双任务输出头</text>
-              <text x="994" y="116" text-anchor="middle" font-size="11.2" fill="#86efac" data-i18n="a5_1">• Attention-Pooled 判别</text>
-              <text x="994" y="137" text-anchor="middle" font-size="11.2" fill="#fca5a5" data-i18n="a5_2">• Token 级混淆定位</text>
-              <line x1="934" y1="152" x2="1054" y2="152" stroke="#374151" stroke-width="1"/>
-              <text x="994" y="170" text-anchor="middle" font-size="10.2" fill="#d1d5db" data-i18n="a5_3">可选 RBT3 跨度融合 /</text>
-              <text x="994" y="185" text-anchor="middle" font-size="10.2" fill="#d1d5db" data-i18n="a5_4">Qwen3-4B 不确定性级联</text>
+              <rect x="918" y="54" width="152" height="148" rx="12" fill="#181a1f" stroke="#181a1f" stroke-width="1.5"/>
+              <text x="994" y="84" text-anchor="middle" font-size="12.8" font-weight="700" fill="#ffffff" data-i18n="a5_t">5. 双师蒸馏与级联</text>
+              <text x="994" y="108" text-anchor="middle" font-size="10.6" fill="#86efac" data-i18n="a5_1">• 域内 MacBERT+v3 KD</text>
+              <text x="994" y="128" text-anchor="middle" font-size="10.6" fill="#93c5fd" data-i18n="a5_2">• 22K Qwen3-8B 共识 KD</text>
+              <text x="994" y="148" text-anchor="middle" font-size="10.6" fill="#fca5a5" data-i18n="a5_3">• 分类 + 逐字定位双头</text>
+              <line x1="934" y1="160" x2="1054" y2="160" stroke="#374151" stroke-width="1"/>
+              <text x="994" y="182" text-anchor="middle" font-size="10.2" fill="#e5e7eb" data-i18n="a5_4">可选 1.31% Qwen3-4B 级联</text>
             </g>
           </svg>
         </div>
@@ -531,72 +554,87 @@
       </div>
     </section>
 
-    <!-- Section 3: Interactive Experimental Results Explorer (ALL 5 PANELS STRICTLY INSIDE .card) -->
+    <!-- Section 3: Interactive Experimental Results Explorer -->
     <section id="results">
       <div class="sec-head">
-        <h2 data-i18n="sec_res_h">全部实验结果总览（7 组多随机种子验证数据）</h2>
-        <span class="sec-note" data-i18n="sec_res_note">所有数值直接由 <code>results/*.json</code> 渲染生成（seeds: <code>42, 1024, 2025</code>）</span>
+        <h2 data-i18n="sec_res_h">全部 Stage 3 实验结果总览（11 份结果 JSON 全量同步）</h2>
+        <span class="sec-note" data-i18n="sec_res_note">主赛道与消融为 <code>seeds: 42, 1024, 2025</code> 均值±标准差；LLM 级联与错误分析为 Seed-42 单次对照</span>
       </div>
       <div class="card">
         <div class="tabs" id="res-tabs">
-          <button class="tab-btn active" data-tab="tab-zs" data-i18n="tab_zs">Exp 2 · 零样本对抗与分类</button>
-          <button class="tab-btn" data-tab="tab-llm" data-i18n="tab_llm">Exp 6 · Qwen3 大模型对比</button>
-          <button class="tab-btn" data-tab="tab-abl" data-i18n="tab_abl">Exp 4 · 8 行消融实验</button>
-          <button class="tab-btn" data-tab="tab-curve" data-i18n="tab_curve">Exp 1&amp;3 · 强度曲线与基准</button>
-          <button class="tab-btn" data-tab="tab-err" data-i18n="tab_err">Exp 7 · 错判审计 (20)</button>
+          <button class="tab-btn active" data-tab="tab-zs" data-i18n="tab_zs">Track 1&amp;2 · 12 模型主评测与分攻击</button>
+          <button class="tab-btn" data-tab="tab-llm" data-i18n="tab_llm">Exp 6 · Qwen3-4B/8B 级联与延迟</button>
+          <button class="tab-btn" data-tab="tab-abl" data-i18n="tab_abl">Exp 4 · 12 行消融实验</button>
+          <button class="tab-btn" data-tab="tab-curve" data-i18n="tab_curve">Exp 1/3/8b · 强度曲线与跨域</button>
+          <button class="tab-btn" data-tab="tab-err" data-i18n="tab_err">Exp 7 · 错判与反事实审计</button>
         </div>
 
-        <!-- Tab 1: Zero-Shot -->
+        <!-- Tab 1: Track 1 & Track 2 Zero-Shot + Per-Attack -->
         <div class="tab-panel active" id="tab-zs">
           <div class="chart-box" id="chart-zs"></div>
           <div class="table-scroll" id="table-zs"></div>
           <div class="callout emerald" data-i18n="call_zs">
-            <strong>核心结论：</strong>仅在干净文本上训练、直接零样本测试 3,395 条真实变体短信时，<strong>RBT3</strong> F1 跌至 <code>0.9568</code>（漏报率超 8%），<strong>LZASD</strong> 的 <code>GLYPH/SPLIT</code> 跌至 <code>0.7657 / 0.5625</code>；而独立 <strong>MV-CSN v2 (1.37M)</strong> 跃升至 <code>F1 = 0.9951</code>（领先 RBT3 <code>+3.83%</code>，McNemar <code>p &lt; 1e-42</code>），<strong>RBT3 + MV-CSN v2</strong> 达到峰值 <code>0.9964</code>（<code>GLYPH = 0.9827</code>）。
+            <strong>核心对比结论（含诚实基线对照）：</strong> ① 相比未加蒸馏的 <code>MV-CSN v2 (Clean)</code>（Raw F1 仅 <code>0.9200</code>），<strong>MV-CSN v3 (2.35M)</strong> 将未清洗 Raw F1 拉升至 <code>0.9916</code>（<strong>+7.16%</strong>），去标点 <code>-P</code> 达全场最高 <code>0.9862</code>，并显著优于固定图 <code>LZASD</code>（McNemar <code>p = 4.11e-11</code>）；② 22K 双师无标注 KD 使跨库零样本 <code>Olivi-9</code> 从 <code>0.6960</code>（Clean-KD Only）跃升至 <code>0.7600</code>（<strong>+6.40%</strong>）；③ 在同 22K 数据与增强赛道上，<code>RBT3 (Same Data+Aug)</code> 与 <code>RBT3 + MV-CSN v3</code> 总体均值在 1 个标准差内持平（<code>0.9937</code> vs. <code>0.9932</code>），但均显著超越 <code>RBT3 (Clean)</code>（<code>p = 0.0107</code>），验证了 22K 双师共识迁移池本身对中轻量编码器均有显著增益，而 <strong>MV-CSN v3</strong> 则以 <strong>1/16.5 的参数量（2.35M vs. 38.8M）</strong> 守住了极窄部署成本与抗重度替代韧性。
           </div>
         </div>
 
-        <!-- Tab 2: LLM Comparison -->
+        <!-- Tab 2: LLM Comparison, Cascade & Solo A100 Latency -->
         <div class="tab-panel" id="tab-llm">
           <div class="chart-box" id="chart-llm"></div>
           <div class="table-scroll" id="table-llm"></div>
+          <div class="table-scroll" id="table-latency" style="margin-top:18px;"></div>
           <div class="callout" data-i18n="call_llm">
-            <strong>到底需不需要调大模型？不需要。</strong> 零样本 <code>Qwen3-4B-Instruct</code> 在正常短信上误杀率高达 59.5%（<code>HamAcc = 0.4050</code>, <code>F1 = 0.8671</code>, <code>30.74 ms</code>），4-Shot ICL 也仅 <code>0.9421</code>（<code>60.98 ms</code>）；即使做 3-seed LoRA 微调，<code>Qwen3-0.6B</code> 也仅仅与 1.37M 的 <code>MV-CSN v2</code> <strong>打平</strong>（<code>0.9951</code> vs. <code>0.9951</code>, McNemar <code>p = 0.3833</code>），却付出 <strong>438× 参数</strong> 和 <strong>36.5× 延迟</strong>。若确需大模型复核，仅送 <code>0.71%</code>（24/3,395）疑难样本进入 <strong>Cascade 级联</strong> 即可保持 <code>0.598 ms/条</code> 平均延迟。
+            <strong>Qwen3 大模型实测与不确定性级联前沿：</strong> 零样本 <code>Qwen3-4B</code> 与 <code>Qwen3-8B</code> 虽然因不依赖关键词捷径而在合成礼貌反事实 <code>CF16/CF40</code> 上拿 <code>1.000</code>，但在真实对抗扰动 <code>Sym40</code> 下将几乎所有混淆正常短信误判为垃圾（Ham Acc 崩至 <strong>0.09% / 0.19%</strong>）；即使经 15 分钟 Clean-LoRA 微调，<code>Qwen3-4B Clean-LoRA</code> 在 <code>Sym40</code> 上的 Ham Acc 仍跌至 <strong>68.88%</strong>（<code>F1 = 0.9278</code>），单条 GPU 延迟达 <code>98.0 ms</code>。相反，以 <strong>MV-CSN v3</strong> 作前置守门员的 <strong>Uncertainty Cascade（τ=0.45）</strong> 仅上送 <code>1.31%</code>（Bench B v2）/ <code>2.39%</code>（Sym40）样本，即以 <strong>0.200 ms</strong> 批有效延迟取得 <code>0.9951 F1</code>，并把 <code>Olivi-9</code> 从 <code>0.7658</code> 拉升至 <code>0.8353</code>。
           </div>
         </div>
 
-        <!-- Tab 3: Ablation -->
+        <!-- Tab 3: 12-Row Ablation -->
         <div class="tab-panel" id="tab-abl">
+          <div class="filter-bar" style="margin-top:0;margin-bottom:10px;">
+            <div class="filter-pills" id="abl-mode-pills">
+              <button class="pill-btn active" data-ablmode="cross" data-i18n="abl_btn_cross">跨域 &amp; 未清洗退化 (ΔOlivi-9 / ΔRaw)</button>
+              <button class="pill-btn" data-ablmode="fair" data-i18n="abl_btn_fair">域内对抗退化 (ΔFair / ΔSym40)</button>
+            </div>
+            <span class="subpill-note" data-i18n="abl_subnote">点击左侧标签切换可视化视图 · 下表完整展示全 12 行 × 4 维指标</span>
+          </div>
           <div class="chart-box" id="chart-abl"></div>
           <div class="table-scroll" id="table-abl"></div>
           <div class="callout" data-i18n="call_abl">
-            <strong>消融解读：</strong> 去掉 <strong>Split/Noise 预处理器</strong> 损失最大（<code>−0.0253 F1</code>，方差放大 12 倍）；去掉 <strong>RoCBert 图一致性正则</strong> 下降 <code>−0.0026</code>（关键的 Clean → Variant 泛化桥）；去掉 <strong>Context Gate</strong> 或 <strong>动态 OOV 桥</strong> 分别下降 <code>−0.0008 / −0.0007</code>。单去 Phonetic 或 Glyph 视图整体 F1 变动处于 3 种子方差内（<code>+0.0003~0.0004</code>），因 <code>MIXED</code> 攻击中双视图互为冗余；Exp 5 则证实模型在混淆字上真实同时依赖双视图提供归因与防御冗余。
+            <strong>12 行消融关键发现（含诚实权衡）：</strong> ① 移除 <strong>Unlabeled Transfer KD</strong> 导致跨数据集 <code>Olivi-9</code> 暴跌 <code>−0.0641</code>，是跨库泛化的最大支柱；② 移除 <strong>Cross-View &amp; Space Aug</strong> 导致未清洗 <code>Raw F1</code> 暴跌 <code>−0.0124</code>，直接证实其在对抗空格/插噪攻击上的决定性作用；③ 移除 <strong>Multimodal Anchor</strong>、<strong>Domain KD</strong> 与 <strong>Context Gate</strong> 均一致损伤多维鲁棒性；④ <strong>两项诚实观察：</strong>(a) 移除 <code>Split/Noise Preprocessor</code> 虽使 Fair F1 下降 <code>−0.0016</code>，却使零样本 <code>Olivi-9</code> 反升 <code>+0.0312</code>（规则清洗清除了域内拆字噪音，但也过滤了外域部分原始格式线索）；(b) <code>w/o Dynamic OOV Bridge</code> 在宏观 F1 均值仅差 <code>−0.0002</code>，只因测试集真实 OOV 仅占 2.78%，而 Exp 5 门控剖析证实模型在这些真 OOV 上以 <code>88.54%</code> 权重依赖图桥接。
           </div>
         </div>
 
-        <!-- Tab 4: Intensity Curve & In-Dist -->
+        <!-- Tab 4: Symmetric Intensity Curve, In-Dist & Olivi-9 -->
         <div class="tab-panel" id="tab-curve">
+          <div class="filter-bar" style="margin-top:0;margin-bottom:10px;">
+            <div class="filter-pills" id="curve-mode-pills">
+              <button class="pill-btn active" data-curvemode="sub_only" data-i18n="cm_sub">sub_only · 纯同音/形近字替换 (0%→60%)</button>
+              <button class="pill-btn" data-curvemode="mixed" data-i18n="cm_mix">mixed · 混合拆字/插空/音形扰动 (0%→60%)</button>
+            </div>
+            <span class="subpill-note" data-i18n="curve_subnote">Benchmark B v2 测试集 (N=3,216) · 3 随机种子均值</span>
+          </div>
           <div class="chart-box" id="chart-curve"></div>
-          <div class="audit-grid" id="length-audit-bars"></div>
           <div class="table-scroll" id="table-indist"></div>
           <div class="callout" data-i18n="call_curve">
-            <strong>数据集长度捷径发现：</strong> 原始课程 Benchmark A 的 Ham 是长达 <code>191</code> 字的 BBS 论坛长帖，而 Spam 仅 <code>53</code> 字，导致 TFIDF-SVM 只需数长度就能拿到 <code>0.9991</code>；我们按 Spam 长度直方图重新配对采样出 <strong>Benchmark B（SMS-Matched 16.5K，p50 = 51 vs. 53，12,992 簇零泄漏划分）</strong>，彻底封死了长度捷径。
+            <strong>高强度对抗与域外泛化对照：</strong> 在 60% 字符被篡改的最严苛 <code>sub_only=0.6</code> 压力下，<code>RBT3 (Clean)</code> 跌至 <code>0.9660</code>（-3.00%）、同蒸馏无图 <code>Plain CNN+Trans</code> 跌至 <code>0.9678</code>，而 <strong>MV-CSN v3</strong> 保持 <code>0.9848</code>（<code>Clean-KD Only</code> 达 <code>0.9871</code>），领先 <code>RBT3 (Clean)</code> <strong>+1.88%</strong> 与 <code>Plain</code> <strong>+1.70%</strong>。在外部 12,011 条 <code>Olivi-9</code> 语料上，零样本跨库由 Clean-KD 的 <code>0.6960</code> 通过 22K 双师蒸馏拉升至 <code>0.7600</code>，若放开同源 70/10/20 域内微调则直接达到 <code>0.9336</code>（AUC <code>0.9794</code>），证明架构表达力充足，剩余差距主源于源/目标域先验漂移。
           </div>
         </div>
 
-        <!-- Tab 5: Error Analysis (STRICTLY INSIDE .card!) -->
+        <!-- Tab 5: Error Analysis & CF16 -->
         <div class="tab-panel" id="tab-err">
           <div class="chart-box" id="chart-err"></div>
           <div class="filter-bar">
             <div class="filter-pills" id="err-filter-pills">
-              <button class="pill-btn active" data-errfilter="ALL" data-i18n="ef_all">全部错判 (20)</button>
-              <button class="pill-btn" data-errfilter="FP" data-i18n="ef_fp">误报 FP (8)</button>
-              <button class="pill-btn" data-errfilter="FN" data-i18n="ef_fn">漏报 FN (12)</button>
+              <button class="pill-btn active" data-errfilter="CF16" data-i18n="ef_cf16">CF16 礼貌反事实对照 (16)</button>
+              <button class="pill-btn" data-errfilter="ALL" data-i18n="ef_all">全量测试错判 (34)</button>
+              <button class="pill-btn" data-errfilter="FP" data-i18n="ef_fp">误报 FP (19)</button>
+              <button class="pill-btn" data-errfilter="FN" data-i18n="ef_fn">漏报 FN (15)</button>
             </div>
-            <span style="font-size:0.79rem;color:var(--muted);" data-i18n="err_subnote">Seed-42 Clean-Trained MV-CSN v2 · 3,395 测试样本总错误率 <strong>0.59%</strong></span>
+            <span style="font-size:0.79rem;color:var(--muted);" data-i18n="err_subnote">Seed-42 MV-CSN v3 · 3,216 条测试样本：19 FP (1.78% Ham) + 15 FN (0.70% Spam)</span>
           </div>
           <div class="table-scroll" id="table-err"></div>
           <div class="callout emerald" data-i18n="call_err">
-            <strong>错判审计核心发现：</strong> <code>8 条 FP</code> 全部集中于带银行卡/手机号/期货行情的特殊正常短信（零日常闲聊误杀）；<code>12 条 FN</code> 中有 <strong>4 条本身属于上游语料标错样本</strong>（气象台大风预警、防疫戴口罩倡议、炒粉点单、水务招标），扣除后<strong>真实垃圾短信召回率高达 99.65%</strong>。此外，全测试集仅 <code>0.74%</code>（25/3,395）样本落入 <code>(0.05, 0.95)</code> 不确定带，却直接捕获了 <strong>35.0%（7/20）</strong> 的错判（47× 富集度）。
+            <strong>诚实局限与错判洞察：</strong> ① <code>19 条 FP</code> 全部发生在未经攻击的 <code>CLEAN</code> 正常短信（如中奖领票回复、高校/客服通知、房产与促销文案）；② <code>15 条 FN</code> 集中于 <code>PHON(6)</code>、纯无链接黑话 <code>CLEAN(4)</code>（含生态防火、大棚保温等疑似上游边界样本）及竖排/短域名；③ 在专门构造的 <code>CF16</code> 礼貌短通知反事实探针上，2.35M 单模型 <code>MV-CSN v3</code> 仍对 5/16 条快递柜/医院预约/邮箱回复/初试通知产生高置信误判（<code>CF16 = 68.75%</code> Seed-42，3-seed <code>0.6250</code>），而联合模型 <code>RBT3 + MV-CSN v3</code> 正确识别其中 3 条（3-seed <code>0.8125</code>），是明确可继续通过服务类负例难挖掘改进的方向。
           </div>
         </div>
       </div>
@@ -605,8 +643,8 @@
     <!-- Section 4: Interactive Gate X-Ray -->
     <section id="xray">
       <div class="sec-head">
-        <h2 data-i18n="sec_xray_h">交互式 Gate X-Ray · 逐字混淆定位与门控热力图</h2>
-        <span class="sec-note" data-i18n="sec_xray_note">切换真实测试集攻击样本，悬停或点击任意字符实时查看三路门控权重</span>
+        <h2 data-i18n="sec_xray_h">交互式 Gate X-Ray · 159,760 Token 路由分布与逐字热力图</h2>
+        <span class="sec-note" data-i18n="sec_xray_note">覆盖真实 OOV 动态图桥接、同音/拆字/插空混淆，以及 1 条诚实礼貌正常短信误报案例</span>
       </div>
       <div class="card">
         <div class="chart-box" id="chart-gate-dist"></div>
@@ -632,8 +670,8 @@
     <!-- Section 5: Data & Teammate Handoff Hub -->
     <section id="handoff">
       <div class="sec-head">
-        <h2 data-i18n="sec_hand_h">队友接力 · 数据字典、开源资产与一键复现</h2>
-        <span class="sec-note" data-i18n="sec_hand_note">全部 8 份实验 JSON、权重包、代码手册与 Release v2.0.0 已准备就绪</span>
+        <h2 data-i18n="sec_hand_h">资产交付 · 11 份结果 JSON、代码字典与一键复现</h2>
+        <span class="sec-note" data-i18n="sec_hand_note">全部 11 份最终 Stage 3 JSON、fp16 推理包 demo_bundle.pt、文档与 Drive 云端归档已同步至 main</span>
       </div>
       <div class="card">
         <div class="table-scroll" id="handoff-table-wrap"></div>
@@ -641,28 +679,30 @@
           <button class="copy-btn" id="copy-cmd-btn" data-i18n="copy_btn">复制命令</button>
           <pre id="quickstart-code">git clone https://github.com/1-pluto1/mv-csn.git &amp;&amp; cd mv-csn
 ./reproduce.sh setup          # 安装 Python 依赖与可编辑 mvcsn 包
-./reproduce.sh verify         # 12 项 pytest + 语法校验 + CPU 实时推理 + 终端结果表
+./reproduce.sh verify         # pytest 全套单测 + 语法校验 + CPU 实时推理 + Stage 3 结果表
 ./reproduce.sh demo           # 启动 3-Tab Streamlit 交互式检测与 32×32 字形检查器</pre>
         </div>
       </div>
     </section>
 
     <footer data-i18n="footer_txt">
-      MV-CSN v2 Project Page · 直接构建自已验证的 <code>results/*.json</code> · 开源托管于 GitHub Pages (<code>1-pluto1/mv-csn</code>)
+      MV-CSN v3 Project Page · 全部指标由 Stage 3 <code>results/*.json</code> 程序化生成 · 托管于 GitHub Pages (<code>1-pluto1/mv-csn</code>)
     </footer>
   </div>
 
   <script>
-    const DATA = {"in_dist": {"bench_a": {"length_audit": {"ham_p50": 191.0, "ham_p90": 224.0, "spam_p50": 53.0, "spam_p90": 69.0}, "summary": {"LZASD": {"f1": {"mean": 0.989794348099028, "std": 0.0005059728710609872}, "auc": 0.9977592702950976, "ham": 0.9699666295884315, "recall": 0.9914680788467196, "ms": 0.09033698794589412}, "RBT3": {"f1": {"mean": 0.9975756196462386, "std": 0.00035905539422412903}, "auc": 0.9999487024417638, "ham": 0.9911012235817576, "recall": 0.9986760812003531, "ms": 0.5990918276497036}, "TFIDF-SVM": {"f1": {"mean": 0.9991177767975298, "std": 0.0}, "auc": 0.9999921458284039, "ham": 0.9966629588431589, "recall": 0.999558693733451, "ms": 0.00263292454241953}, "MV-CSN v2": {"f1": {"mean": 0.9980124808625229, "std": 0.00018072209680817787}, "auc": 0.9999730012851388, "ham": 0.9970337411939192, "recall": 0.9972050603118564, "ms": 0.3438598046245043}, "RBT3 + MV-CSN v2": {"f1": {"mean": 0.998236363020688, "std": 0.0007832796266271727}, "auc": 0.9999788919138357, "ham": 0.9940674823878384, "recall": 0.9988231832892026, "ms": 0.685598977055281}}}, "bench_b": {"length_audit": {"ham_p50": 51.0, "ham_p90": 67.0, "spam_p50": 53.0, "spam_p90": 69.0}, "params": {"TFIDF-SVM": 0, "LZASD": 47105, "RBT3": 38772481, "MV-CSN v2": 1371632, "RBT3 + MV-CSN v2": 40012785}, "summary": {"LZASD": {"f1": {"mean": 0.9617106629735758, "std": 0.002875483339115735}, "auc": 0.9888372116134739, "ham": 0.91971454058876, "recall": 0.9629141014365289, "ms": 0.08923978154777486}, "RBT3": {"f1": {"mean": 0.997436361396978, "std": 0.0006279565033010545}, "auc": 0.9998152328184174, "ham": 0.9940529289325007, "recall": 0.9978012313104662, "ms": 0.4368353896592842}, "TFIDF-SVM": {"f1": {"mean": 0.9969203695556533, "std": 0.0}, "auc": 0.9997093153257904, "ham": 0.9946476360392507, "recall": 0.9964819700967458, "ms": 0.002106323392003789}, "MV-CSN v2": {"f1": {"mean": 0.9966289412727408, "std": 0.0005489859146632578}, "auc": 0.9997063077920493, "ham": 0.9928635147190009, "recall": 0.9967751392553503, "ms": 0.24324647924978474}, "RBT3 + MV-CSN v2": {"f1": {"mean": 0.9972842230917923, "std": 0.0005536089068480165}, "auc": 0.9993781597084105, "ham": 0.9967291109128754, "recall": 0.9961888009381412, "ms": 0.4781425028498054}}}}, "zeroshot": {"summary": {"LZASD": {"f1": {"mean": 0.9541531469848693, "std": 0.0006653046040700479}, "auc": 0.9864364804950975, "ham": 0.9426107641986321, "recall": 0.9381413075344472, "ms": 0.0}, "RBT3": {"f1": {"mean": 0.9567830878980189, "std": 0.002033224705953265}, "auc": 0.9986760313421631, "ham": 0.9970264644662503, "recall": 0.9184989739079449, "ms": 0.0}, "TFIDF-SVM": {"f1": {"mean": 0.9800850302081002, "std": 0.0}, "auc": 0.9979024413589763, "ham": 0.9955396966993756, "recall": 0.9630606860158312, "ms": 0.0017986850054988572}, "MV-CSN v2": {"f1": {"mean": 0.9950806483088885, "std": 0.0010563901964473898}, "auc": 0.9996064053669046, "ham": 0.9934582218257507, "recall": 0.9934036939313984, "ms": 0.0}, "RBT3 + MV-CSN v2": {"f1": {"mean": 0.996401846265269, "std": 0.0010864897035818878}, "auc": 0.9998345202630624, "ham": 0.9961344038061255, "recall": 0.9947229551451188, "ms": 0.0}}, "per_attack": {"LZASD": {"PHON": 0.9036249623331384, "GLYPH": 0.7657230333534383, "SPLIT": 0.5625219980456913, "SPACE": 0.7986031182228496, "MIXED": 0.9459690277594133, "CLEAN": 0.8700976419923947}, "RBT3": {"PHON": 0.9601188534487867, "GLYPH": 0.9176521058874, "SPLIT": 0.9541595925297113, "SPACE": 0.9789002584183307, "MIXED": 0.9483449157625917, "CLEAN": 0.9652968686265023}, "TFIDF-SVM": {"PHON": 0.9788182831661093, "GLYPH": 0.9049180327868852, "SPLIT": 0.9375, "SPACE": 0.9760479041916167, "MIXED": 0.9844559585492227, "CLEAN": 0.9706959706959707}, "MV-CSN v2": {"PHON": 0.9890222067650772, "GLYPH": 0.9695863296018978, "SPLIT": 0.9264482324521112, "SPACE": 0.965185833024782, "MIXED": 0.9953107408638795, "CLEAN": 0.9838697373581095}, "RBT3 + MV-CSN v2": {"PHON": 0.9904341427520236, "GLYPH": 0.9826768835313726, "SPLIT": 0.9551094230421414, "SPACE": 0.9790208118566328, "MIXED": 0.9970127413053627, "CLEAN": 0.9903968366995543}}, "mcnemar": {"mvcsn_vs_lzasd": {"b": 192, "c": 9, "p_value": 8.030061032932152e-46}, "mvcsn_vs_rbt3": {"b": 180, "c": 8, "p_value": 1.7745439653638331e-43}, "mvcsn_vs_tfidf": {"b": 78, "c": 9, "p_value": 7.467088418731596e-15}, "fusion_vs_rbt3": {"b": 178, "c": 8, "p_value": 6.508702998883686e-43}}}, "llm": {"order": ["Qwen3-0.6B (Zero-Shot)", "Qwen3-4B-Instruct (Zero-Shot)", "Qwen3-4B-Instruct (4-Shot ICL)", "Qwen3-0.6B (Clean-LoRA)", "MV-CSN v2", "RBT3 + MV-CSN v2", "MV-CSN v2 + Qwen3-4B Cascade"], "summary": {"Qwen3-0.6B (Zero-Shot)": {"f1": 0.0008791208791208791, "std": 0.0, "auc": 0.9230064170309052, "ham": 1.0, "ms": 7.088338433379453, "params": 596049920, "glyph": 0.0, "split": 0.0}, "Qwen3-4B-Instruct (Zero-Shot)": {"f1": 0.8671032357473035, "std": 0.0, "auc": 0.8086951592567573, "ham": 0.4049955396966994, "ms": 30.742450244999073, "params": 4022468096, "glyph": 0.3029682702149437, "split": 0.12121212121212122}, "Qwen3-4B-Instruct (4-Shot ICL)": {"f1": 0.942124231503074, "std": 0.0, "auc": 0.9135550461054922, "ham": 0.8028545941123997, "ms": 60.977307264864535, "params": 4022468096, "glyph": 0.5183752417794971, "split": 0.2829581993569132}, "Qwen3-0.6B (Clean-LoRA)": {"f1": 0.9950673382135656, "std": 0.001850783427641274, "auc": 0.9996413189107708, "ham": 0.9979185251263752, "ms": 8.862707318777423, "params": 600637440, "glyph": 0.9761096518385223, "split": 0.9753631390303715}, "MV-CSN v2": {"f1": 0.9950806483088885, "std": 0.0010563901964473898, "auc": 0.9996064053669046, "ham": 0.9934582218257507, "ms": 0.24324647924978474, "params": 1371632, "glyph": 0.9695863296018978, "split": 0.9264482324521112}, "RBT3 + MV-CSN v2": {"f1": 0.996401846265269, "std": 0.0010864897035818878, "auc": 0.9998345202630624, "ham": 0.9961344038061255, "ms": 0.4781425028498054, "params": 40012785, "glyph": 0.9826768835313726, "split": 0.9551094230421414}, "MV-CSN v2 + Qwen3-4B Cascade": {"f1": 0.9956005279366476, "std": 0.0, "auc": 0.9994678626713019, "ham": 0.991971454058876, "ms": 0.5983229062694162, "params": 4023630576, "glyph": 0.9636363636363636, "split": 0.9108910891089109}}, "qwen06_cal": {"threshold": 0.01769230769230769, "metrics": {"precision": 0.8908930928288605, "recall": 0.8905013192612137, "f1": 0.890697162964592, "macro_f1": 0.8345594597703032, "accuracy": 0.8536082474226804, "auc": 0.8346351377751207, "clean_ham_acc": 0.7787689562890276, "spam_recall": 0.8905013192612137}}, "cascade": {"val_uncertain_rate": 0.0036452004860267314, "test_escalated_count": 24, "test_total": 3395, "test_escalation_rate": 0.007069219440353461, "mvcsn_ms_per_sample": 0.24238524626561925, "qwen4b_ms_per_escalated": 50.350348154703774, "effective_ms_per_sample": 0.5983229062694162, "mvcsn_seed42_metrics": {"precision": 0.9964757709251101, "recall": 0.9947229551451188, "f1": 0.9955985915492958, "macro_f1": 0.9933469360239799, "accuracy": 0.9941089837997055, "auc": 0.9994639398012047, "clean_ham_acc": 0.9928635147190009, "spam_recall": 0.9947229551451188}}, "mcnemar": {"mvcsn_vs_qwen3_06b_zs": {"b": 2261, "c": 8, "p_value": 0.0}, "mvcsn_vs_qwen3_4b_zs": {"b": 684, "c": 14, "p_value": 1.0177152254661792e-181}, "mvcsn_vs_qwen3_4b_4shot": {"b": 268, "c": 15, "p_value": 4.27260581393656e-61}, "mvcsn_vs_qwen3_06b_lora": {"b": 8, "c": 13, "p_value": 0.38331031799316406}, "cascade_vs_qwen3_4b_zs": {"b": 681, "c": 11, "p_value": 3.986960173630063e-185}}}, "ablations": [{"name": "Full MV-CSN v2", "f1": 0.9958178691650494, "std": 0.0004744088507804074, "delta": 0.0, "auc": 0.9997468441163879, "ham": 0.9937555753791257}, {"name": "w/o Phonetic View", "f1": 0.9961841470730848, "std": 0.0005830541178429797, "delta": 0.00036627790803533955, "auc": 0.9997579589149969, "ham": 0.9943502824858758}, {"name": "w/o Glyph Visual View", "f1": 0.9961108113109384, "std": 0.0009222145167982472, "delta": 0.0002929421458889303, "auc": 0.9996846666253458, "ham": 0.9946476360392507}, {"name": "w/o Context Gate (Uniform)", "f1": 0.9950050698458902, "std": 0.00027624796335590956, "delta": -0.0008127993191592298, "auc": 0.9996703481494906, "ham": 0.9943502824858758}, {"name": "w/o RoCBert Consistency", "f1": 0.9932258938923412, "std": 0.0010284962794288078, "delta": -0.002591975272708269, "auc": 0.9995137602514403, "ham": 0.9955396966993755}, {"name": "w/o Multimodal Anchor", "f1": 0.9961124894538971, "std": 0.0005520500170499767, "delta": 0.0002946202888476357, "auc": 0.9996345192692687, "ham": 0.9934582218257507}, {"name": "w/o Dynamic OOV Bridge", "f1": 0.9951540190260237, "std": 0.0006498876633200123, "delta": -0.0006638501390257012, "auc": 0.9997048694063468, "ham": 0.9937555753791257}, {"name": "w/o Split/Noise Preprocessor", "f1": 0.9705635558481681, "std": 0.006256919567302668, "delta": -0.025254313316881327, "auc": 0.9984413129480081, "ham": 0.9928635147190009}], "intensity": {"rates": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6], "series": {"LZASD": [0.9647255987822055, 0.9599669761658053, 0.9568734342930879, 0.9494436492946087, 0.9418344085547133, 0.9353334567834851, 0.9206567994626796], "RBT3": [0.998166966950612, 0.997358411922901, 0.9972111161401106, 0.9951460523918575, 0.9926274561990609, 0.9897969297461199, 0.9869510642185904], "TFIDF-SVM": [0.997139713971397, 0.9966982170372001, 0.9955927721463199, 0.9933745583038869, 0.9913697720734675, 0.986435401378697, 0.978942652329749], "MV-CSN v2": [0.9966276826862535, 0.9958176741708168, 0.9950808419835372, 0.9940456177550363, 0.9928587160473406, 0.9893594911487041, 0.9874038041560822], "RBT3 + MV-CSN v2": [0.9975798865074418, 0.9964755101188426, 0.9969905427267657, 0.9961066374310924, 0.9935930704403444, 0.9906937234456529, 0.9858278364996241]}}, "gate": {"counts": {"clean": 6000, "phon_obf": 13144, "glyph_obf": 29}, "means": {"clean": [0.9333086296341547, 0.05041155929496699, 0.0162798101439577], "phon_obf": [0.22653298822264914, 0.4068334043312759, 0.3666336076689302], "glyph_obf": [0.5625994906266316, 0.2663088167981437, 0.1710916825144648]}, "cases": [{"label": 1, "attack_type": "MIXED", "raw_text": "特  请，住（册）给，（3  8  8 ） ，  记（着）来 ，按 ：94672.cn", "proc_text": "特请,住册给,(388,记着来,按:94672.cn", "clean_text": "特请,注册给388记着来,按:94672.cn", "pred_prob": 0.9999988079071045, "chars": ["特", "请", ",", "住", "册", "给", ",", "(", "3", "8", "8", ",", "记", "着", "来", ",", "按", ":", "9", "4", "6", "7", "2", ".", "c", "n"], "obf_probs": [0.0736, 0.0287, 0.0062, 0.6974, 0.1104, 0.0495, 0.0058, 0.9212, 0.1502, 0.1309, 0.1111, 0.0051, 0.1859, 0.9871, 0.0457, 0.0058, 0.4856, 0.0864, 0.2614, 0.0019, 0.1718, 0.0467, 0.0529, 0.0012, 0.0249, 0.1004], "alpha_ctx": [0.998, 0.9981, 0.9995, 0.6166, 0.9993, 0.9982, 0.9992, 0.4499, 0.9778, 0.9848, 0.9891, 0.9995, 0.9278, 0.2018, 0.9983, 0.9994, 0.6164, 0.9838, 0.9579, 0.9995, 0.9808, 0.9948, 0.9935, 0.9987, 0.9991, 0.998], "alpha_phon": [0.0014, 0.001, 0.0001, 0.0081, 0.0001, 0.0004, 0.0001, 0.074, 0.0111, 0.0045, 0.0029, 0.0001, 0.0631, 0.5269, 0.0007, 0.0001, 0.2301, 0.0026, 0.0181, 0.0002, 0.0064, 0.0005, 0.0019, 0.0001, 0.0002, 0.0005], "alpha_glyph": [0.0006, 0.0009, 0.0004, 0.3753, 0.0006, 0.0015, 0.0007, 0.4761, 0.0111, 0.0107, 0.008, 0.0004, 0.0091, 0.2713, 0.001, 0.0005, 0.1535, 0.0136, 0.024, 0.0003, 0.0128, 0.0046, 0.0047, 0.0012, 0.0007, 0.0016]}, {"label": 1, "attack_type": "PHON", "raw_text": "永丽贵宾VIP，圣但壕礼，回家拿18-888元！点： https://85036.cn/WYq", "proc_text": "永丽贵宾VIP,圣但壕礼,回家拿18-888元!点:https://85036.cn/WYq", "clean_text": "永丽贵宾VIP,圣但豪礼,回家拿18-888元!点:https:85036.cnWYq", "pred_prob": 0.9999974966049194, "chars": ["永", "丽", "贵", "宾", "V", "I", "P", ",", "圣", "但", "壕", "礼", ",", "回", "家", "拿", "1", "8", "-", "8", "8", "8", "元", "!", "点", ":", "h", "t", "t", "p", "s", ":", "/", "/", "8", "5", "0", "3", "6", ".", "c", "n", "/", "W", "Y", "q"], "obf_probs": [0.2793, 0.4675, 0.1151, 0.1188, 0.1147, 0.2821, 0.2413, 0.0061, 0.771, 0.5219, 0.4847, 0.1715, 0.0049, 0.0175, 0.102, 0.1287, 0.0916, 0.1369, 0.0438, 0.1172, 0.0792, 0.0748, 0.145, 0.094, 0.0082, 0.0293, 0.0823, 0.0369, 0.0477, 0.0462, 0.222, 0.0356, 0.0019, 0.0018, 0.3219, 0.2704, 0.3269, 0.1926, 0.3016, 0.0012, 0.0277, 0.1536, 0.0024, 0.1492, 0.2339, 0.1549], "alpha_ctx": [0.924, 0.9035, 0.9765, 0.9925, 0.995, 0.995, 0.9973, 0.9994, 0.8984, 0.9712, 0.8848, 0.9986, 0.9995, 0.9989, 0.9832, 0.9841, 0.9936, 0.9839, 0.9955, 0.9839, 0.9877, 0.9924, 0.9982, 0.9859, 0.997, 0.9951, 0.9952, 0.992, 0.9898, 0.9904, 0.9683, 0.9852, 0.995, 0.9954, 0.9697, 0.9913, 0.9946, 0.994, 0.9881, 0.9997, 0.9977, 0.9964, 0.999, 0.9741, 0.9321, 0.9958], "alpha_phon": [0.0732, 0.0619, 0.02, 0.0065, 0.0027, 0.0021, 0.001, 0.0001, 0.0792, 0.0115, 0.0676, 0.0005, 0.0001, 0.0003, 0.009, 0.0142, 0.0003, 0.0036, 0.0021, 0.0046, 0.004, 0.0018, 0.0015, 0.0003, 0.0022, 0.0008, 0.0022, 0.0009, 0.001, 0.0029, 0.0113, 0.0034, 0.0016, 0.0013, 0.0095, 0.005, 0.0034, 0.0028, 0.0042, 0.0, 0.0006, 0.0012, 0.0002, 0.0014, 0.0103, 0.002], "alpha_glyph": [0.0028, 0.0346, 0.0035, 0.001, 0.0022, 0.0029, 0.0017, 0.0005, 0.0224, 0.0173, 0.0476, 0.0009, 0.0004, 0.0008, 0.0078, 0.0017, 0.0061, 0.0125, 0.0024, 0.0114, 0.0083, 0.0058, 0.0002, 0.0138, 0.0008, 0.0041, 0.0026, 0.0071, 0.0092, 0.0067, 0.0204, 0.0114, 0.0034, 0.0033, 0.0209, 0.0037, 0.002, 0.0032, 0.0077, 0.0003, 0.0017, 0.0024, 0.0008, 0.0245, 0.0576, 0.0022]}, {"label": 1, "attack_type": "SPLIT", "raw_text": "全新线上推广，政府扶持项目，日化率10.88%，速戳 2558836.com:7080 退订T", "proc_text": "全新线上推广,政府扶持项目,日化率10.88%,速戳2558836.com:7080退订T", "clean_text": "全新线上推广,政府扶持项目,日化率10.88%,速戳2558836.com:7080退订T", "pred_prob": 0.9999980926513672, "chars": ["全", "新", "线", "上", "推", "广", ",", "政", "府", "扶", "持", "项", "目", ",", "日", "化", "率", "1", "0", ".", "8", "8", "%", ",", "速", "戳", "2", "5", "5", "8", "8", "3", "6", ".", "c", "o", "m", ":", "7", "0", "8", "0", "退", "订", "T"], "obf_probs": [0.1643, 0.0591, 0.207, 0.0833, 0.2035, 0.5521, 0.0059, 0.7102, 0.3606, 0.988, 0.5569, 0.1981, 0.3705, 0.0059, 0.0715, 0.5647, 0.2939, 0.0598, 0.2075, 0.0016, 0.1204, 0.1229, 0.0384, 0.0052, 0.2509, 0.0194, 0.0526, 0.258, 0.2061, 0.1346, 0.1352, 0.1887, 0.2552, 0.0013, 0.0144, 0.0244, 0.0031, 0.1286, 0.068, 0.3316, 0.3165, 0.3327, 0.0274, 0.0475, 0.38], "alpha_ctx": [0.994, 0.9992, 0.9985, 0.9981, 0.9764, 0.9912, 0.9994, 0.7133, 0.8315, 0.237, 0.991, 0.9896, 0.9927, 0.9994, 0.9946, 0.9103, 0.9836, 0.9965, 0.9984, 0.9989, 0.9833, 0.9842, 0.999, 0.9995, 0.9947, 0.9995, 0.9956, 0.9918, 0.9837, 0.9807, 0.9828, 0.9889, 0.9847, 0.9995, 0.9992, 0.9979, 0.999, 0.9915, 0.9947, 0.9939, 0.9824, 0.9937, 0.9943, 0.977, 0.9946], "alpha_phon": [0.0039, 0.0002, 0.0005, 0.001, 0.0015, 0.0061, 0.0001, 0.014, 0.1182, 0.0827, 0.0028, 0.0094, 0.0059, 0.0001, 0.0025, 0.0029, 0.0035, 0.0002, 0.0008, 0.0001, 0.0053, 0.0045, 0.0004, 0.0001, 0.0036, 0.0003, 0.0012, 0.0036, 0.0073, 0.0069, 0.006, 0.0058, 0.0052, 0.0001, 0.0002, 0.0006, 0.0002, 0.0015, 0.0007, 0.0042, 0.0043, 0.0044, 0.0007, 0.0109, 0.0012], "alpha_glyph": [0.002, 0.0006, 0.001, 0.001, 0.0221, 0.0027, 0.0005, 0.2726, 0.0503, 0.6803, 0.0063, 0.0011, 0.0014, 0.0005, 0.003, 0.0868, 0.0129, 0.0034, 0.0008, 0.0009, 0.0113, 0.0112, 0.0006, 0.0004, 0.0017, 0.0003, 0.0032, 0.0046, 0.009, 0.0125, 0.0111, 0.0054, 0.0101, 0.0004, 0.0006, 0.0015, 0.0009, 0.007, 0.0045, 0.0019, 0.0133, 0.0019, 0.005, 0.0122, 0.0042]}, {"label": 1, "attack_type": "GLYPH", "raw_text": "余额提醒：截止8日3时6分，您预存款金额小于7元。为不影响您的使用，请点击g://1f.q/1r进(...)", "proc_text": "余额提醒:截止8日3时6分,您预存款金额小于7元。为不影响您的使用,请点击g://1f.q/1r进(...", "clean_text": "余额提醒:截止8日3时6分,您预存款金额小于7元.为不影响您的使用,请点击g://1f.q/1r进(...)", "pred_prob": 0.9999970197677612, "chars": ["余", "额", "提", "醒", ":", "截", "止", "8", "日", "3", "时", "6", "分", ",", "您", "预", "存", "款", "金", "额", "小", "于", "7", "元", "。", "为", "不", "影", "响", "您", "的", "使", "用", ",", "请", "点", "击", "g", ":", "/", "/", "1", "f", ".", "q", "/", "1", "r", "进", "(", ".", ".", "."], "obf_probs": [0.55, 0.0799, 0.1402, 0.2755, 0.0573, 0.598, 0.3295, 0.2476, 0.2475, 0.2907, 0.0166, 0.451, 0.0897, 0.005, 0.0077, 0.0789, 0.0745, 0.1688, 0.0791, 0.056, 0.1401, 0.472, 0.169, 0.1702, 0.795, 0.0784, 0.1225, 0.1603, 0.3994, 0.0107, 0.0518, 0.2169, 0.0804, 0.0054, 0.0283, 0.0255, 0.1676, 0.4183, 0.0349, 0.0027, 0.002, 0.1083, 0.3273, 0.0013, 0.0963, 0.002, 0.1494, 0.1287, 0.2857, 0.5001, 0.0023, 0.0019, 0.0016], "alpha_ctx": [0.985, 0.9959, 0.9999, 0.9979, 0.9942, 0.989, 0.9309, 0.9794, 0.9789, 0.9928, 0.9994, 0.9793, 0.9965, 0.9996, 0.9985, 0.9973, 0.9977, 0.9965, 0.9987, 0.9993, 0.9961, 0.9504, 0.9935, 0.998, 0.6794, 0.9924, 0.9985, 0.9953, 0.9587, 0.998, 0.9987, 0.9963, 0.9999, 0.9996, 0.9979, 0.9999, 0.9945, 0.9958, 0.9877, 0.9972, 0.9984, 0.9968, 0.9952, 0.9995, 0.992, 0.9993, 0.9932, 0.9996, 0.9987, 0.959, 0.9996, 0.9996, 0.9996], "alpha_phon": [0.0076, 0.0033, 0.0, 0.0018, 0.0007, 0.0047, 0.0434, 0.0044, 0.0153, 0.0025, 0.0002, 0.0053, 0.0027, 0.0001, 0.0006, 0.0012, 0.0011, 0.0005, 0.0011, 0.0006, 0.0021, 0.0021, 0.0006, 0.0017, 0.052, 0.0063, 0.001, 0.0008, 0.0193, 0.0009, 0.0009, 0.0022, 0.0, 0.0001, 0.0013, 0.0001, 0.0037, 0.0015, 0.002, 0.0006, 0.0003, 0.0002, 0.0005, 0.0001, 0.0032, 0.0001, 0.0004, 0.0001, 0.001, 0.0036, 0.0, 0.0, 0.0001], "alpha_glyph": [0.0073, 0.0008, 0.0001, 0.0004, 0.0051, 0.0063, 0.0257, 0.0162, 0.0059, 0.0047, 0.0004, 0.0154, 0.0008, 0.0003, 0.0009, 0.0015, 0.0011, 0.003, 0.0002, 0.0001, 0.0017, 0.0475, 0.0059, 0.0003, 0.2686, 0.0014, 0.0005, 0.0039, 0.022, 0.0012, 0.0003, 0.0015, 0.0001, 0.0004, 0.0008, 0.0, 0.0017, 0.0027, 0.0103, 0.0022, 0.0014, 0.003, 0.0043, 0.0004, 0.0047, 0.0006, 0.0064, 0.0003, 0.0003, 0.0374, 0.0003, 0.0003, 0.0004]}, {"label": 0, "attack_type": "CLEAN", "raw_text": "妻子已向法院提出诉讼要求和他离婚", "proc_text": "妻子已向法院提出诉讼要求和他离婚", "clean_text": "妻子已向法院提出诉讼要求和他离婚", "pred_prob": 2.4475322788930498e-05, "chars": ["妻", "子", "已", "向", "法", "院", "提", "出", "诉", "讼", "要", "求", "和", "他", "离", "婚"], "obf_probs": [0.8847, 0.2458, 0.3101, 0.5022, 0.1189, 0.0936, 0.0944, 0.1378, 0.2141, 0.7368, 0.0693, 0.3408, 0.1144, 0.2283, 0.3728, 0.1742], "alpha_ctx": [0.3754, 0.9419, 0.8919, 0.7497, 0.99, 0.9884, 0.9756, 0.9878, 0.9651, 0.605, 0.991, 0.8675, 0.9886, 0.9917, 0.8923, 0.9572], "alpha_phon": [0.4828, 0.0535, 0.1051, 0.2056, 0.0094, 0.0113, 0.0092, 0.0118, 0.0323, 0.2563, 0.0083, 0.124, 0.011, 0.0075, 0.0893, 0.0225], "alpha_glyph": [0.1417, 0.0046, 0.003, 0.0447, 0.0006, 0.0003, 0.0152, 0.0005, 0.0026, 0.1386, 0.0007, 0.0085, 0.0003, 0.0008, 0.0184, 0.0203]}]}, "error_analysis": {"summary": {"total_errors": 20, "overall_error_rate": 0.00589, "false_positives": 8, "false_negatives": 12, "test_samples_in_uncertainty_band": 25, "errors_in_uncertainty_band": 7, "error_capture_rate_by_uncertainty_band": 0.35, "fp_mean_char_len": 36.4, "fn_mean_char_len": 44.0, "fp_categories": {"Financial / futures market report mimicking spam digits": 3, "Benign SMS with bank card / phone contact cues": 3, "Short structured spec or repeated-digit noise in benign text": 2}, "fn_categories": {"Upstream corpus label noise (public advisory / tender / food order)": 4, "Multi-symbol insertion (??) or vertical-column transposition": 4, "Conversational / domain-jargon spam without URL": 3, "Borderline gray-market promotion near 0.50 threshold": 1}}, "per_attack": {"CLEAN_HAM": {"total": 1121, "fp": 8, "fn": 0, "correct": 1113, "errors": 8, "error_rate": 0.00714, "accuracy": 0.99286}, "MIXED": {"total": 1171, "fp": 0, "fn": 2, "correct": 1169, "errors": 2, "error_rate": 0.00171, "accuracy": 0.99829}, "PHON": {"total": 453, "fp": 0, "fn": 2, "correct": 451, "errors": 2, "error_rate": 0.00442, "accuracy": 0.99558}, "GLYPH": {"total": 162, "fp": 0, "fn": 3, "correct": 159, "errors": 3, "error_rate": 0.01852, "accuracy": 0.98148}, "SPLIT": {"total": 46, "fp": 0, "fn": 0, "correct": 46, "errors": 0, "error_rate": 0.0, "accuracy": 1.0}, "SPACE": {"total": 166, "fp": 0, "fn": 4, "correct": 162, "errors": 4, "error_rate": 0.0241, "accuracy": 0.9759}, "CLEAN": {"total": 276, "fp": 0, "fn": 1, "correct": 275, "errors": 1, "error_rate": 0.00362, "accuracy": 0.99638}}, "errors": [{"type": "FP", "atk": "CLEAN_HAM", "prob": 0.99998, "cat": "Benign SMS with bank card / phone contact cues", "text": "梁旭森邮政6221885936001114942建行6216733161410008536", "in_band": false}, {"type": "FP", "atk": "CLEAN_HAM", "prob": 0.99996, "cat": "Benign SMS with bank card / phone contact cues", "text": "证据请联系：15952951174刘须忠将提供证据包括录音相关证人", "in_band": false}, {"type": "FP", "atk": "CLEAN_HAM", "prob": 0.99995, "cat": "Short structured spec or repeated-digit noise in benign text", "text": "奇葩：债主上门逼债奈何无力还债只好盗窃海带22222222222222222222222货", "in_band": false}, {"type": "FP", "atk": "CLEAN_HAM", "prob": 0.99945, "cat": "Short structured spec or repeated-digit noise in benign text", "text": "作品尺寸：170cmX110cm", "in_band": false}, {"type": "FP", "atk": "CLEAN_HAM", "prob": 0.99587, "cat": "Benign SMS with bank card / phone contact cues", "text": "安徽宿州皖北医院15楼烧伤科43室王思忆小朋友15656741218捐赠卡号：6228480038597132471王旭农行", "in_band": false}, {"type": "FP", "atk": "CLEAN_HAM", "prob": 0.95203, "cat": "Financial / futures market report mimicking spam digits", "text": "截止2015年7月31日上海期货交易所库存周报铜：103117吨增加1866吨", "in_band": false}, {"type": "FP", "atk": "CLEAN_HAM", "prob": 0.90541, "cat": "Financial / futures market report mimicking spam digits", "text": "无下折条款分级基金：申万菱信深成指B150023和银华H股B150176", "in_band": true}, {"type": "FP", "atk": "CLEAN_HAM", "prob": 0.6789, "cat": "Financial / futures market report mimicking spam digits", "text": "铁矿石期货1509开盘价408", "in_band": true}, {"type": "FN", "atk": "GLYPH", "prob": 3e-05, "cat": "Upstream corpus label noise (public advisory / tender / food order)", "text": "营口水务集团有限公司h管材、管件采购项目进行国内公开招标入围数量：三家。估算价约：0万元电话3王工", "in_band": false}, {"type": "FN", "atk": "SPACE", "prob": 9e-05, "cat": "Conversational / domain-jargon spam without URL", "text": "国股带票340（每十万2073）国股买断（每十万2300）全国城商350（每十万2134）农商农合电联'票送杭州13148310017、李小雪", "in_band": false}, {"type": "FN", "atk": "SPACE", "prob": 0.00011, "cat": "Conversational / domain-jargon spam without URL", "text": "王某某   在不在家   能谈加微谈  谈不了兄弟们规矩办  直接家里收", "in_band": false}, {"type": "FN", "atk": "MIXED", "prob": 0.00011, "cat": "Multi-symbol insertion (??) or vertical-column transposition", "text": "小姨袋祢 曰入 2??0??0??0???3??0??0??0??扣扣 3007929723", "in_band": false}, {"type": "FN", "atk": "MIXED", "prob": 0.00033, "cat": "Multi-symbol insertion (??) or vertical-column transposition", "text": "小姨袋祢 兲入 2??0??0??0???3??0??0??0?? 扣扣   3007943669", "in_band": false}, {"type": "FN", "atk": "PHON", "prob": 0.00591, "cat": "Multi-symbol insertion (??) or vertical-column transposition", "text": "不出门??天能到千十微： 即可工做", "in_band": false}, {"type": "FN", "atk": "CLEAN", "prob": 0.02073, "cat": "Conversational / domain-jargon spam without URL", "text": "启禀小仙女对我们的产品还满意的话请您给予我们5个小星星的鼓励哦", "in_band": false}, {"type": "FN", "atk": "SPACE", "prob": 0.06175, "cat": "Upstream corpus label noise (public advisory / tender / food order)", "text": "6份炒粉 1份炒面都加蛋 5瓶冰红茶 二瓶可乐 一包芙蓉王", "in_band": true}, {"type": "FN", "atk": "GLYPH", "prob": 0.08347, "cat": "Upstream corpus label noise (public advisory / tender / food order)", "text": "戴口罩、勤洗手、常消毒、多通风、用公筷；不聚集、少出行、注意饮食健康；倡议大家继续保持良好习惯，遵守疫情防控规定。", "in_band": true}, {"type": "FN", "atk": "GLYPH", "prob": 0.17654, "cat": "Upstream corpus label noise (public advisory / tender / food order)", "text": "根据天津市气象台发布的陆地大风蓝色预警信号，请相关单位采取相应措施，做好风险防范应对工作。建议有关企业采取防风、防火措施。发生生产安全事故应立即上报。", "in_band": true}, {"type": "FN", "atk": "PHON", "prob": 0.45595, "cat": "Borderline gray-market promotion near 0.50 threshold", "text": "免税香烟零售批发：软云玉溪130/条硬中240/条软中290/条大重就390/条质量保证贷到付款包退包换17358519265小杨", "in_band": true}, {"type": "FN", "atk": "SPACE", "prob": 0.49464, "cat": "Multi-symbol insertion (??) or vertical-column transposition", "text": "成／商／机／手 都／贸／打／写等联系 小张：13980706989【可 **验", "in_band": true}]}};
+    const DATA = {"meta":{"total_rows":16507,"num_clusters":12125,"split_counts":{"train":{"0":3842,"1":7864},"val":{"0":591,"1":994},"test":{"0":1067,"1":2149}},"test_attack_counts":{"CLEAN":1404,"PHON":554,"SPLIT":46,"MIXED":1047,"SPACE":157,"GLYPH":8},"transfer_pool_size":22028,"seeds":[42,1024,2025]},"zeroshot":{"track1":[{"name":"TFIDF-SVM","params":80000,"fair_f1":0.9925581395348836,"fair_std":1.1102230246251565e-16,"ham":0.9840674789128397,"auc":0.99833753673708,"raw_f1":0.9859287054409006,"raw_std":0.0,"pure_cjk":0.9866604259302599,"olivi9":0.7972065538544185,"olivi9_auc":0.9056817152223512,"olivi9_ham":0.9151253241140882,"cf16":0.6875,"cf40":0.8000000000000002,"plus_cp":0.9803186504217432,"minus_p":0.9841786877617497,"per_attack":{"CLEAN":0.9709302325581395,"PHON":0.9891696750902527,"MIXED":0.9971346704871061,"SPACE":0.9936305732484078,"SPLIT":0.9565217391304349,"GLYPH":1.0}},{"name":"LZASD (Fixed)","params":47105,"fair_f1":0.9765672137706337,"fair_std":0.001553088895745319,"ham":0.9468915963761324,"auc":0.993207247211747,"raw_f1":0.964914083347611,"raw_std":0.0015760145097414619,"pure_cjk":0.9589588137242524,"olivi9":0.722577020928738,"olivi9_auc":0.8388768237360765,"olivi9_ham":0.8579660040334197,"cf16":0.6458333333333334,"cf40":0.7666666666666666,"plus_cp":0.9387691346454233,"minus_p":0.9539320614239181,"per_attack":{"CLEAN":0.9020887241987644,"PHON":0.9777376654632972,"MIXED":0.9901305316778096,"SPACE":0.9745222929936306,"SPLIT":0.9130434782608696,"GLYPH":1.0}},{"name":"MV-CSN v2 (Clean)","params":1100272,"fair_f1":0.9925537838563777,"fair_std":0.0003750208953340481,"ham":0.985317088409872,"auc":0.9989107347648601,"raw_f1":0.920009640544997,"raw_std":0.04299868531777049,"pure_cjk":0.9829283059371955,"olivi9":0.7302506155979164,"olivi9_auc":0.8038226883424803,"olivi9_ham":0.757764333045232,"cf16":0.4791666666666667,"cf40":0.7166666666666667,"plus_cp":0.9815682599187753,"minus_p":0.9689778191406856,"per_attack":{"CLEAN":0.9723543928739083,"PHON":0.9909747292418772,"MIXED":0.9958611907035976,"SPACE":0.9808917197452228,"SPLIT":0.9855072463768115,"GLYPH":1.0}},{"name":"RBT3 (Clean)","params":38772481,"fair_f1":0.9944125347052921,"fair_std":0.0008766705960039048,"ham":0.9896907216494846,"auc":0.9994842962202511,"raw_f1":0.9912807911725229,"raw_std":0.0015567094017254642,"pure_cjk":0.9664125179044986,"olivi9":0.8050534214165245,"olivi9_auc":0.8760653944856113,"olivi9_ham":0.7665226159608182,"cf16":0.5,"cf40":0.7166666666666667,"plus_cp":0.9900031240237426,"minus_p":0.9385760818985575,"per_attack":{"CLEAN":0.9814629301413612,"PHON":0.9933814681107099,"MIXED":0.9933142311365808,"SPACE":0.9957537154989384,"SPLIT":1.0,"GLYPH":1.0}},{"name":"MacBERT-base (Clean)","params":102563329,"fair_f1":0.9935522109969804,"fair_std":0.0015531798647585705,"ham":0.9890659169009686,"auc":0.9993818096340007,"raw_f1":0.9926139713542962,"raw_std":0.001865925988254197,"pure_cjk":0.9837364403823744,"olivi9":0.8286832249051099,"olivi9_auc":0.9149778398835453,"olivi9_ham":0.8416018438490348,"cf16":0.6458333333333334,"cf40":0.7833333333333333,"plus_cp":0.9865666979069041,"minus_p":0.969908484566465,"per_attack":{"CLEAN":0.9780229289256092,"PHON":0.9933814681107099,"MIXED":0.9926774912448265,"SPACE":0.9915074309978769,"SPLIT":1.0,"GLYPH":1.0}},{"name":"RBT3 + MV-CSN v2 (Clean)","params":39741425,"fair_f1":0.9931595997554695,"fair_std":0.0013538473087637485,"ham":0.9906279287722587,"auc":0.9993601493483961,"raw_f1":0.9909663462851735,"raw_std":0.0008950147070773537,"pure_cjk":0.9792321776618717,"olivi9":0.7911713084537938,"olivi9_auc":0.8500027116515781,"olivi9_ham":0.7348890809564966,"cf16":0.5833333333333334,"cf40":0.7583333333333334,"plus_cp":0.9903155263980006,"minus_p":0.9661858228633472,"per_attack":{"CLEAN":0.9799212119318245,"PHON":0.9939831528279183,"MIXED":0.9898121617319324,"SPACE":0.9936305732484078,"SPLIT":0.9855072463768115,"GLYPH":1.0}},{"name":"MacBERT + MV-CSN v3 (Clean)","params":104915569,"fair_f1":0.9951172280227069,"fair_std":0.00019440544864890514,"ham":0.9887535145267105,"auc":0.9995731179283346,"raw_f1":0.994807621669195,"raw_std":0.000285976492394104,"pure_cjk":0.9885122634597563,"olivi9":0.831847264756306,"olivi9_auc":0.9117029977076826,"olivi9_ham":0.8023048112935753,"cf16":0.5833333333333334,"cf40":0.7583333333333333,"plus_cp":0.9903155263980006,"minus_p":0.9835582441445633,"per_attack":{"CLEAN":0.9795403396303621,"PHON":0.9963898916967509,"MIXED":0.9968163005412288,"SPACE":0.989384288747346,"SPLIT":1.0,"GLYPH":1.0}}],"track2":[{"name":"Plain CNN+Trans (Same KD)","params":2352240,"fair_f1":0.9912424176120073,"fair_std":0.0005789820520890881,"ham":0.9809434551702593,"auc":0.9987106315223445,"raw_f1":0.9907799679173591,"raw_std":0.0008992874397995693,"pure_cjk":0.9853589759818947,"olivi9":0.7682924891579191,"olivi9_auc":0.8464975364228948,"olivi9_ham":0.7795447997695187,"cf16":0.5,"cf40":0.725,"plus_cp":0.9790690409247111,"minus_p":0.9835582441445633,"per_attack":{"CLEAN":0.9632553802535533,"PHON":0.9897713598074609,"MIXED":0.996497930595352,"SPACE":0.989384288747346,"SPLIT":0.9782608695652174,"GLYPH":0.9583333333333334}},{"name":"MV-CSN v3 (Clean-KD Only)","params":2352240,"fair_f1":0.992082689094702,"fair_std":0.0005112240610359064,"ham":0.98562949078413,"auc":0.9988015611105707,"raw_f1":0.9892517040742845,"raw_std":0.0019028381962918753,"pure_cjk":0.9767378951944625,"olivi9":0.6959536713130662,"olivi9_auc":0.7919691245613348,"olivi9_ham":0.7712474791126476,"cf16":0.6458333333333334,"cf40":0.775,"plus_cp":0.985941893158388,"minus_p":0.9643244920117885,"per_attack":{"CLEAN":0.9712922133698939,"PHON":0.9885679903730447,"MIXED":0.9952244508118433,"SPACE":0.9872611464968153,"SPLIT":0.9782608695652174,"GLYPH":1.0}},{"name":"MV-CSN v3 (Full Dual-Teacher KD)","params":2352240,"fair_f1":0.9924103030384432,"fair_std":0.000608045661249203,"ham":0.9818806622930335,"auc":0.9988309987470471,"raw_f1":0.9916391293911216,"raw_std":0.0007493129306733063,"pure_cjk":0.9849266261333783,"olivi9":0.7600291101762512,"olivi9_auc":0.8397981837117104,"olivi9_ham":0.776433304523192,"cf16":0.625,"cf40":0.775,"plus_cp":0.9843798812870977,"minus_p":0.986195129517605,"per_attack":{"CLEAN":0.9656586873974211,"PHON":0.9909747292418772,"MIXED":0.9987265202164916,"SPACE":0.9915074309978769,"SPLIT":0.9710144927536232,"GLYPH":1.0}},{"name":"RBT3 (Same Data+Aug)","params":38772481,"fair_f1":0.9937214157376367,"fair_std":0.0003798641599992668,"ham":0.9862542955326461,"auc":0.9991336612613352,"raw_f1":0.9926294687477745,"raw_std":0.0002161431089514783,"pure_cjk":0.9765536744098015,"olivi9":0.8409587771476411,"olivi9_auc":0.9132040264231476,"olivi9_ham":0.7901469317199655,"cf16":0.8125,"cf40":0.8583333333333334,"plus_cp":0.9878163074039362,"minus_p":0.973165813556693,"per_attack":{"CLEAN":0.9722355421716703,"PHON":0.9939831528279183,"MIXED":0.997453040432983,"SPACE":0.9936305732484078,"SPLIT":0.9782608695652174,"GLYPH":1.0}},{"name":"RBT3 + MV-CSN v3 (Dual-Teacher)","params":41124721,"fair_f1":0.9931708227724387,"fair_std":0.001492551050993942,"ham":0.9865666979069041,"auc":0.9990409872205768,"raw_f1":0.9920777118905958,"raw_std":0.0020103699971316755,"pure_cjk":0.9706147216573301,"olivi9":0.8392308040266793,"olivi9_auc":0.9101729737553774,"olivi9_ham":0.8040910400460962,"cf16":0.8125,"cf40":0.85,"plus_cp":0.9865666979069041,"minus_p":0.956879168605553,"per_attack":{"CLEAN":0.9722111368009143,"PHON":0.9939831528279183,"MIXED":0.9949060808659662,"SPACE":0.9936305732484078,"SPLIT":0.9855072463768115,"GLYPH":1.0}}],"mcnemar":{"MV-CSN v3 (Full Dual-Teacher KD) vs MV-CSN v2 (Clean)":{"a_right_b_wrong":22,"a_wrong_b_right":22,"discordant":44,"p_value":1.0},"MV-CSN v3 (Full Dual-Teacher KD) vs Plain CNN+Trans (Same KD)":{"a_right_b_wrong":16,"a_wrong_b_right":9,"discordant":25,"p_value":0.2295229434967041},"MV-CSN v3 (Full Dual-Teacher KD) vs MV-CSN v3 (Clean-KD Only)":{"a_right_b_wrong":14,"a_wrong_b_right":16,"discordant":30,"p_value":0.8555355519056321},"MV-CSN v3 (Full Dual-Teacher KD) vs LZASD (Fixed)":{"a_right_b_wrong":70,"a_wrong_b_right":12,"discordant":82,"p_value":4.1079115101301e-11},"MV-CSN v3 (Full Dual-Teacher KD) vs TFIDF-SVM":{"a_right_b_wrong":17,"a_wrong_b_right":19,"discordant":36,"p_value":0.8679394004284404},"MV-CSN v3 (Full Dual-Teacher KD) vs RBT3 (Clean)":{"a_right_b_wrong":12,"a_wrong_b_right":23,"discordant":35,"p_value":0.08953107893466952},"MV-CSN v3 (Full Dual-Teacher KD) vs RBT3 (Same Data+Aug)":{"a_right_b_wrong":10,"a_wrong_b_right":15,"discordant":25,"p_value":0.42435622215270996},"RBT3 + MV-CSN v3 (Dual-Teacher) vs RBT3 (Same Data+Aug)":{"a_right_b_wrong":6,"a_wrong_b_right":15,"discordant":21,"p_value":0.0783538818359375},"RBT3 + MV-CSN v3 (Dual-Teacher) vs RBT3 (Clean)":{"a_right_b_wrong":8,"a_wrong_b_right":23,"discordant":31,"p_value":0.010673840530216694},"MacBERT + MV-CSN v3 (Clean) vs MacBERT-base (Clean)":{"a_right_b_wrong":7,"a_wrong_b_right":9,"discordant":16,"p_value":0.803619384765625}}},"llm":{"rows":[{"name":"MV-CSN v3 (Seed 42)","kind":"student","params":2352240,"bench_f1":0.9920966992096699,"bench_ham":0.9821930646672915,"sym40_f1":0.989322191272052,"sym40_ham":0.9737582005623243,"olivi9_f1":0.7658139343588056,"olivi9_ham":0.7794295592048401,"cf16":0.6875,"cf40":0.8,"esc_bench":0.0,"esc_sym":0.0,"esc_olv":0.0,"eff_batch_ms":0.09673614067651215,"eff_bs1_ms":5.143018501257757},{"name":"Cascade: v3 + 4B LoRA (τ=0.30)","kind":"cascade","params":4022468096,"bench_f1":0.9932605159191262,"bench_ham":0.9840674789128397,"sym40_f1":0.9900439916647372,"sym40_ham":0.9700093720712277,"olivi9_f1":0.7997704165300098,"olivi9_ham":0.8110630942091617,"cf16":0.6875,"cf40":0.8,"esc_bench":0.003420398009950249,"esc_sym":0.009950248756218905,"esc_olv":0.11297976854549996,"eff_batch_ms":0.12380322802858412,"eff_bs1_ms":5.478297657234419},{"name":"Cascade: v3 + 4B LoRA (τ=0.40)","kind":"cascade","params":4022468096,"bench_f1":0.9944263817928471,"bench_ham":0.9850046860356139,"sym40_f1":0.989819527996298,"sym40_ham":0.9681349578256795,"olivi9_f1":0.8196989528795812,"olivi9_ham":0.8292134831460675,"cf16":0.6875,"cf40":0.8,"esc_bench":0.00808457711442786,"esc_sym":0.018345771144278607,"esc_olv":0.18832736658063443,"eff_batch_ms":0.16071289259959137,"eff_bs1_ms":5.935496506293505},{"name":"Cascade: v3 + 4B LoRA (τ=0.45)","kind":"cascade","params":4022468096,"bench_f1":0.9951174145547547,"bench_ham":0.9887535145267105,"sym40_f1":0.9893813481071099,"sym40_ham":0.9625117150890347,"olivi9_f1":0.8352527975169485,"olivi9_ham":0.843733794295592,"cf16":0.75,"cf40":0.825,"esc_bench":0.013059701492537313,"esc_sym":0.02394278606965174,"esc_olv":0.2629256514861377,"eff_batch_ms":0.20008320147533243,"eff_bs1_ms":6.423175278623196},{"name":"Cascade: v3 + 4B ZS (τ=0.45)","kind":"cascade","params":4022468096,"bench_f1":0.9902732746641963,"bench_ham":0.9709465791940018,"sym40_f1":0.9884686346863468,"sym40_ham":0.9587628865979382,"olivi9_f1":0.8070658407891719,"olivi9_ham":0.7279170267934313,"cf16":0.8125,"cf40":0.85,"esc_bench":0.013059701492537313,"esc_sym":0.02394278606965174,"esc_olv":0.2629256514861377,"eff_batch_ms":0.18736105188671995,"eff_bs1_ms":5.849755695078838},{"name":"Qwen3-4B Clean-LoRA (3 ep)","kind":"lora","params":4022468096,"bench_f1":0.9960492679525912,"bench_ham":0.9896907216494846,"sym40_f1":0.9278305963699223,"sym40_ham":0.6888472352389878,"olivi9_f1":0.8977610771880382,"olivi9_ham":0.8592912705272255,"cf16":0.8125,"cf40":0.85,"esc_bench":1.0,"esc_sym":1.0,"esc_olv":1.0,"eff_batch_ms":7.9134320840239525,"eff_bs1_ms":98.0234332382679},{"name":"Qwen3-4B 4-Shot ICL","kind":"icl","params":4022468096,"bench_f1":0.9501016030706706,"bench_ham":0.8350515463917526,"sym40_f1":0.8009708737864077,"sym40_ham":0.004686035613870665,"olivi9_f1":0.8853404302506099,"olivi9_ham":0.7730337078651686,"cf16":1.0,"cf40":1.0,"esc_bench":1.0,"esc_sym":1.0,"esc_olv":1.0,"eff_batch_ms":17.12439116090536,"eff_bs1_ms":55.508166551589966},{"name":"Qwen3-4B Zero-Shot","kind":"zs","params":4022468096,"bench_f1":0.8847196164269335,"bench_ham":0.507029053420806,"sym40_f1":0.8012677106636839,"sym40_ham":0.0009372071227741331,"olivi9_f1":0.7676918297607953,"olivi9_ham":0.3619706136560069,"cf16":1.0,"cf40":1.0,"esc_bench":1.0,"esc_sym":1.0,"esc_olv":1.0,"eff_batch_ms":6.939278915524483,"eff_bs1_ms":54.11587655544281},{"name":"Qwen3-8B Zero-Shot","kind":"zs8","params":8190735360,"bench_f1":0.9377648895828686,"bench_ham":0.7825679475164011,"sym40_f1":0.8014171172851017,"sym40_ham":0.0018744142455482662,"olivi9_f1":0.8484472905047167,"olivi9_ham":0.6307692307692307,"cf16":1.0,"cf40":1.0,"esc_bench":1.0,"esc_sym":1.0,"esc_olv":1.0,"eff_batch_ms":13.313465734377417,"eff_bs1_ms":59.908144499999594}],"lora_meta":{"params":4022468096,"lora_trainable_params":11796480,"lora_train_seconds":905.2641661167145},"latency_hw":{"gpu":"NVIDIA A100-SXM4-80GB","cpu_threads":6,"solo_zero_contention":true},"latency_rows":[{"name":"MV-CSN v3 (2.35M)","params":2352240,"batch_label":"bs=64","gpu_batch_ms":0.09673614067651215,"gpu_bs1_eager_ms":5.143018501257757,"gpu_bs1_compile_ms":0.7883084999775747,"cpu_bs1_ms":5.831083999510156},{"name":"Plain CNN+Trans (2.35M)","params":2352240,"batch_label":"bs=64","gpu_batch_ms":0.05349343746274826,"gpu_bs1_eager_ms":3.449936499237083,"gpu_bs1_compile_ms":0.6409494999388698,"cpu_bs1_ms":3.2952864985418273},{"name":"RBT3 (38.5M)","params":38772481,"batch_label":"bs=64","gpu_batch_ms":0.09901904684284091,"gpu_bs1_eager_ms":2.809243498631986,"gpu_bs1_compile_ms":null,"cpu_bs1_ms":10.073328001453774},{"name":"RBT3 + MV-CSN v3 (40.8M)","params":41124721,"batch_label":"bs=64","gpu_batch_ms":0.18146518749517782,"gpu_bs1_eager_ms":8.874545499566011,"gpu_bs1_compile_ms":null,"cpu_bs1_ms":16.222988997469656},{"name":"MacBERT + MV-CSN v3 (104.6M)","params":104915569,"batch_label":"bs=64","gpu_batch_ms":0.37952757816128724,"gpu_bs1_eager_ms":14.829013500275323,"gpu_bs1_compile_ms":null,"cpu_bs1_ms":44.21652099699713},{"name":"Qwen3-8B (8.19B)","params":8190735360,"batch_label":"bs=32","gpu_batch_ms":13.313465734377417,"gpu_bs1_eager_ms":59.908144499999594,"gpu_bs1_compile_ms":null,"cpu_bs1_ms":null},{"name":"Qwen3-4B (4.0B)","params":4022468096,"batch_label":"bs=32","gpu_batch_ms":6.939278915524483,"gpu_bs1_eager_ms":54.11587655544281,"gpu_bs1_compile_ms":null,"cpu_bs1_ms":null}]},"ablations":[{"name":"Full MV-CSN v3 (Dual-Teacher KD)","fair_f1":0.9924103030384432,"fair_std":0.000608045661249203,"raw_f1":0.9916391293911216,"sym40_f1":0.9906369088001891,"olivi9_f1":0.7600291101762512,"delta_fair":0.0,"delta_raw":0.0,"delta_sym40":0.0,"delta_olivi9":0.0},{"name":"w/o Phonetic View","fair_f1":0.992407926822881,"fair_std":0.0017220084216406075,"raw_f1":0.9918640826290485,"sym40_f1":0.9891504648291548,"olivi9_f1":0.7518954548807768,"delta_fair":-0.0,"delta_raw":0.00022,"delta_sym40":-0.00149,"delta_olivi9":-0.00813},{"name":"w/o Glyph Visual View","fair_f1":0.9917679001798877,"fair_std":0.0009474209789874763,"raw_f1":0.9900589302610197,"sym40_f1":0.9891221948768311,"olivi9_f1":0.7544992832121581,"delta_fair":-0.00064,"delta_raw":-0.00158,"delta_sym40":-0.00151,"delta_olivi9":-0.00553},{"name":"w/o Context Gate (Uniform)","fair_f1":0.9924831848894339,"fair_std":0.0007931860713885025,"raw_f1":0.9918580591674614,"sym40_f1":0.9893124052896827,"olivi9_f1":0.7441891842455836,"delta_fair":7e-05,"delta_raw":0.00022,"delta_sym40":-0.00132,"delta_olivi9":-0.01584},{"name":"w/o RoCBert Consistency","fair_f1":0.9921772605873403,"fair_std":0.0003940135187716273,"raw_f1":0.9914810060571169,"sym40_f1":0.989777802712316,"olivi9_f1":0.7633809191704527,"delta_fair":-0.00023,"delta_raw":-0.00016,"delta_sym40":-0.00086,"delta_olivi9":0.00335},{"name":"w/o Multimodal Anchor","fair_f1":0.991090978353097,"fair_std":0.0004191170360706416,"raw_f1":0.988991922950729,"sym40_f1":0.9872266510883265,"olivi9_f1":0.7495012775095887,"delta_fair":-0.00132,"delta_raw":-0.00265,"delta_sym40":-0.00341,"delta_olivi9":-0.01053},{"name":"w/o Dynamic OOV Bridge","fair_f1":0.9921748482087499,"fair_std":0.0006092766178242661,"raw_f1":0.9910905701478802,"sym40_f1":0.9907149486236991,"olivi9_f1":0.7604616370393217,"delta_fair":-0.00024,"delta_raw":-0.00055,"delta_sym40":8e-05,"delta_olivi9":0.00043},{"name":"w/o Split/Noise Preprocessor","fair_f1":0.990814872414842,"fair_std":0.002608645265490065,"raw_f1":0.990814872414842,"sym40_f1":0.9931794408489535,"olivi9_f1":0.7912241422703129,"delta_fair":-0.0016,"delta_raw":-0.00082,"delta_sym40":0.00254,"delta_olivi9":0.0312},{"name":"w/o Pretrained Char Init","fair_f1":0.992334700377319,"fair_std":0.00037478462353209523,"raw_f1":0.9901504934456677,"sym40_f1":0.9903987458301954,"olivi9_f1":0.7611184345244232,"delta_fair":-8e-05,"delta_raw":-0.00149,"delta_sym40":-0.00024,"delta_olivi9":0.00109},{"name":"w/o Domain Teacher KD (Logit+Feat)","fair_f1":0.9914146751301297,"fair_std":0.001316793625329073,"raw_f1":0.990414800874051,"sym40_f1":0.9887933729800388,"olivi9_f1":0.7501650434042447,"delta_fair":-0.001,"delta_raw":-0.00122,"delta_sym40":-0.00184,"delta_olivi9":-0.00986},{"name":"w/o Unlabeled Transfer KD","fair_f1":0.992082689094702,"fair_std":0.0005112240610359064,"raw_f1":0.9892517040742845,"sym40_f1":0.9916172776130491,"olivi9_f1":0.6959536713130662,"delta_fair":-0.00033,"delta_raw":-0.00239,"delta_sym40":0.00098,"delta_olivi9":-0.06408},{"name":"w/o Cross-View & Space Aug","fair_f1":0.9909363720170173,"fair_std":0.0009359748464317087,"raw_f1":0.9792411259310693,"sym40_f1":0.9873629202402676,"olivi9_f1":0.7495907980381752,"delta_fair":-0.00147,"delta_raw":-0.0124,"delta_sym40":-0.00327,"delta_olivi9":-0.01044}],"intensity":{"rates":[0.0,0.1,0.2,0.3,0.4,0.5,0.6],"sub_only":{"TFIDF-SVM":[0.9932605159191262,0.9916356877323421,0.9925615992561599,0.9904673331783306,0.9895470383275261,0.9869888475836431,0.9809390980939098],"LZASD (Fixed)":[0.9774335751849675,0.975705236008079,0.975386097083557,0.9747616395531868,0.9727791191745151,0.9713097250735885,0.9672713662812277],"MV-CSN v2 (Clean)":[0.9933351921916881,0.9917852342680821,0.9914008848130945,0.9914009899010523,0.9899942673878307,0.987586980842297,0.9829701193946621],"RBT3 (Clean)":[0.9960491957914366,0.9948972415571689,0.992745433812719,0.9889320389349749,0.9834208024366754,0.9773001716212683,0.9659565282134714],"Plain CNN+Trans (Same KD)":[0.992179706956188,0.9889918545572822,0.9895651696149473,0.9866571478050742,0.9841969753315075,0.9757989901489116,0.9677585385600889],"MV-CSN v3 (Clean-KD Only)":[0.9935673857781001,0.9931044299514814,0.9924056878620048,0.9914614496812484,0.9916172776130491,0.9907641478300936,0.9870916225508064],"MV-CSN v3 (Full Dual-Teacher KD)":[0.992956301475623,0.9922529943224876,0.9922641079347662,0.9909393626464716,0.9906369088001891,0.9888372080946036,0.9847514494512358],"RBT3 (Same Data+Aug)":[0.9941890902174938,0.9938091007802315,0.9926611762180698,0.9902092411955485,0.9906784543536578,0.9871503104678375,0.9815446368456362],"RBT3 + MV-CSN v3 (Dual-Teacher)":[0.9941881138082899,0.994350916977042,0.993271851089293,0.9914219349193977,0.9903443879769979,0.9880223764520295,0.9826707845841528]},"mixed":{"TFIDF-SVM":[0.9932605159191262,0.9930297397769516,0.9920966992096699,0.9925615992561599,0.9890366223466294,0.9873890705277907,0.9859550561797753],"LZASD (Fixed)":[0.9774335751849675,0.9760138984402431,0.9759076795266273,0.9737678845666426,0.972462250610994,0.9710825751402677,0.9689982308549835],"MV-CSN v2 (Clean)":[0.9933351921916881,0.9927899945278957,0.9903045120589562,0.9894176969770365,0.9864184737022139,0.9837120680450795,0.9814751644935491],"RBT3 (Clean)":[0.9960491957914366,0.9956651787127989,0.9933542437693407,0.9914347031166431,0.9885487075889491,0.9840740553327447,0.9779627133200904],"Plain CNN+Trans (Same KD)":[0.992179706956188,0.9910200260513241,0.9907818029390016,0.9895424132613337,0.9852114230767747,0.9842918157010399,0.9805063185912539],"MV-CSN v3 (Clean-KD Only)":[0.9935673857781001,0.9936394760496216,0.9925432800598956,0.9910580841574053,0.9905829861119356,0.9890790149921637,0.9878106876400029],"MV-CSN v3 (Full Dual-Teacher KD)":[0.992956301475623,0.9931085688891743,0.992870412311288,0.991862350887922,0.9907730446728763,0.98906807938115,0.9876676573089921],"RBT3 (Same Data+Aug)":[0.9941890902174938,0.9938847338196739,0.9930425200516154,0.9924362575305826,0.9900658618100494,0.9886033288909676,0.9865623779643675],"RBT3 + MV-CSN v3 (Dual-Teacher)":[0.9941881138082899,0.9945034810231187,0.9936516713580015,0.9937378651982615,0.991192591953527,0.9878074081918928,0.9868037154193131]}},"in_dist":[{"name":"TFIDF-SVM","bench_a_f1":0.9973202322465387,"bench_a_std":0.0,"bench_a_auc":0.9998872269874348,"bench_b_f1":0.9932605159191262,"bench_b_std":0.0,"bench_b_auc":0.9984439483415272,"olivi_id_f1":0.9346991037131881,"olivi_id_std":1.1102230246251565e-16,"olivi_id_auc":0.9804850028284188},{"name":"LZASD (Fixed)","bench_a_f1":0.991882115695437,"bench_a_std":0.0007361323796985339,"bench_a_auc":0.9971674072726273,"bench_b_f1":0.9788876615674628,"bench_b_std":0.001118699098801426,"bench_b_auc":0.9932460612805821,"olivi_id_f1":0.8631264629533794,"olivi_id_std":0.00666276989765995,"olivi_id_auc":0.9274466307356777},{"name":"MV-CSN v2","bench_a_f1":0.9973155659866252,"bench_a_std":0.0008395877095342808,"bench_a_auc":0.9999012841276566,"bench_b_f1":0.9938812771808981,"bench_b_std":0.0004759439627569744,"bench_b_auc":0.999189701798923,"olivi_id_f1":0.9385248825538453,"olivi_id_std":0.0014167682599602654,"olivi_id_auc":0.9817067680868945},{"name":"MV-CSN v3","bench_a_f1":0.9969431597550636,"bench_a_std":0.0013249279609810365,"bench_a_auc":0.9999279768995383,"bench_b_f1":0.9932625312774159,"bench_b_std":0.00038069197385025814,"bench_b_auc":0.9994769549825127,"olivi_id_f1":0.9336208838926385,"olivi_id_std":0.005044091278419339,"olivi_id_auc":0.9794350539971951},{"name":"RBT3","bench_a_f1":0.9972397132434027,"bench_a_std":0.00046059780014819947,"bench_a_auc":0.9999522215177857,"bench_b_f1":0.9958946236855449,"bench_b_std":0.00043571409566124913,"bench_b_auc":0.9996144759904456,"olivi_id_f1":0.9434534412009117,"olivi_id_std":0.0025771553864631005,"olivi_id_auc":0.9857394792166433},{"name":"RBT3 + MV-CSN v3","bench_a_f1":0.9988085595612629,"bench_a_std":0.0006408466158806433,"bench_a_auc":0.9999637515316754,"bench_b_f1":0.996900878570487,"bench_b_std":0.0002162590880983233,"bench_b_auc":0.9995043574243682,"olivi_id_f1":0.9426627741190847,"olivi_id_std":0.0037838618141783262,"olivi_id_auc":0.9864158243900215}],"gate":{"total_tokens":159760,"buckets":{"clean_in_vocab":{"token_count":148020,"alpha_ctx_mean":0.8871117234230042,"alpha_phon_mean":0.04482175037264824,"alpha_glyph_mean":0.06806648522615433,"alpha_graph_total_mean":0.11288823559880257,"alpha_ctx_std":0.15931782126426697,"alpha_phon_std":0.09737923741340637,"alpha_glyph_std":0.10003684461116791},"obf_in_vocab_phon_or_glyph":{"token_count":7303,"alpha_ctx_mean":0.3384435176849365,"alpha_phon_mean":0.25743216276168823,"alpha_glyph_mean":0.40412431955337524,"alpha_graph_total_mean":0.6615564823150635,"alpha_ctx_std":0.3380242586135864,"alpha_phon_std":0.19465868175029755,"alpha_glyph_std":0.1989513784646988},"obf_oov_bridged":{"token_count":3976,"alpha_ctx_mean":0.11459580808877945,"alpha_phon_mean":0.33544692397117615,"alpha_glyph_mean":0.549957275390625,"alpha_graph_total_mean":0.8854041993618011,"alpha_ctx_std":0.14941665530204773,"alpha_phon_std":0.14710243046283722,"alpha_glyph_std":0.13463468849658966},"clean_oov_bridged":{"token_count":461,"alpha_ctx_mean":0.14663252234458923,"alpha_phon_mean":0.35276392102241516,"alpha_glyph_mean":0.5006035566329956,"alpha_graph_total_mean":0.8533674776554108,"alpha_ctx_std":0.18321974575519562,"alpha_phon_std":0.22723382711410522,"alpha_glyph_std":0.27476441860198975},"unbridged_unk":{"token_count":0}},"cases":[{"case_id":"glyph_oov_spam","true_label":1,"raw_text":"特惠充100送200え，髙额返利稳赚不赔加微十Ꝗ领福利","proc_text":"特惠充100送200え,髙额返利稳赚不赔加微加Q领福利","spam_prob":0.9999,"pred_label":"SPAM","oov_resolved":["え","髙"],"chars":["特","惠","充","1","0","0","送","2","0","0","え",",","髙","额","返","利","稳","赚","不","赔","加","微","加","Q","领","福","利"],"obf_probs":[0.0363,0.0125,0.0142,0.0354,0.0737,0.0897,0.0109,0.0792,0.0832,0.1009,0.9997,0.0018,0.9757,0.0508,0.0569,0.0531,0.0381,0.049,0.0429,0.0334,0.01,0.0122,0.0124,0.1554,0.0163,0.034,0.0455],"alpha_ctx":[0.9786,0.9839,0.9913,0.9847,0.941,0.9371,0.9915,0.9507,0.9339,0.9296,0.0001,0.9979,0.0394,0.98,0.9339,0.9422,0.9627,0.947,0.9387,0.9467,0.9778,0.9934,0.9871,0.892,0.9897,0.9567,0.9382],"alpha_phon":[0.0002,0.0001,0.0,0.0001,0.0014,0.0013,0.0001,0.0011,0.0015,0.0015,0.211,0.0,0.4115,0.0001,0.0022,0.0252,0.001,0.0014,0.0258,0.0007,0.0001,0.0,0.0001,0.0041,0.0001,0.0005,0.0254],"alpha_glyph":[0.0212,0.016,0.0087,0.0152,0.0577,0.0616,0.0085,0.0482,0.0646,0.069,0.7889,0.0021,0.5491,0.0199,0.0639,0.0325,0.0364,0.0517,0.0356,0.0526,0.0221,0.0066,0.0129,0.1039,0.0102,0.0428,0.0364]},{"case_id":"homophone_spam","true_label":1,"raw_text":"高薪招聘兼职日结三百元加徽信了解详情","proc_text":"高薪招聘兼职日结三百元加徽信了解详情","spam_prob":0.96555,"pred_label":"SPAM","oov_resolved":[],"chars":["高","薪","招","聘","兼","职","日","结","三","百","元","加","徽","信","了","解","详","情"],"obf_probs":[0.0219,0.5995,0.1851,0.1994,0.5996,0.1085,0.0608,0.3154,0.058,0.1124,0.046,0.0428,0.5041,0.088,0.1854,0.0863,0.1342,0.1376],"alpha_ctx":[0.9508,0.4957,0.8004,0.7915,0.4203,0.907,0.8956,0.6847,0.9315,0.8514,0.9649,0.8396,0.5319,0.9271,0.6644,0.8446,0.6874,0.8344],"alpha_phon":[0.0046,0.1626,0.0272,0.0313,0.3244,0.0057,0.0544,0.0453,0.0033,0.0079,0.0002,0.0038,0.2471,0.0048,0.262,0.0069,0.0444,0.01],"alpha_glyph":[0.0445,0.3418,0.1723,0.1772,0.2554,0.0872,0.05,0.27,0.0652,0.1407,0.0349,0.1566,0.221,0.0681,0.0736,0.1485,0.2682,0.1556]},{"case_id":"split_char_spam","true_label":1,"raw_text":"禾兑票代开正夫见保真联纟系电话13800138000","proc_text":"禾兑票代开正夫见保真联纟系电话13800138000","spam_prob":0.97733,"pred_label":"SPAM","oov_resolved":["纟"],"chars":["禾","兑","票","代","开","正","夫","见","保","真","联","纟","系","电","话","1","3","8","0","0","1","3","8","0","0","0"],"obf_probs":[0.9331,0.6696,0.1033,0.1876,0.0351,0.1635,0.9156,0.3916,0.0401,0.1415,0.0609,0.9738,0.0592,0.044,0.0708,0.0365,0.1346,0.1929,0.0633,0.0632,0.0398,0.132,0.1875,0.0599,0.0525,0.0582],"alpha_ctx":[0.1575,0.3889,0.8215,0.8196,0.9898,0.8466,0.1414,0.6325,0.9445,0.889,0.8964,0.0557,0.9691,0.8926,0.9404,0.9416,0.883,0.813,0.867,0.8824,0.9106,0.8613,0.8096,0.8736,0.896,0.9049],"alpha_phon":[0.5345,0.1831,0.0083,0.0584,0.0022,0.0357,0.3813,0.1605,0.0011,0.0523,0.0055,0.3406,0.0016,0.0119,0.0161,0.0028,0.0121,0.0254,0.0109,0.0081,0.0048,0.0152,0.0268,0.0112,0.0086,0.0079],"alpha_glyph":[0.308,0.4279,0.1702,0.122,0.008,0.1178,0.4773,0.207,0.0544,0.0587,0.0981,0.6037,0.0293,0.0955,0.0435,0.0556,0.1049,0.1617,0.1221,0.1094,0.0846,0.1235,0.1636,0.1152,0.0955,0.0872]},{"case_id":"space_noise_spam","true_label":1,"raw_text":"免 费 领 取 现 金 红 包 点 击 链 接 立 即 提 现","proc_text":"免费领取现金红包点击链接立即提现","spam_prob":0.99917,"pred_label":"SPAM","oov_resolved":[],"chars":["免","费","领","取","现","金","红","包","点","击","链","接","立","即","提","现"],"obf_probs":[0.0275,0.0287,0.0239,0.0283,0.0434,0.0527,0.0505,0.0359,0.0343,0.2356,0.2939,0.145,0.2065,0.0388,0.0305,0.0493],"alpha_ctx":[0.9766,0.9861,0.9857,0.9764,0.9802,0.9799,0.9747,0.9796,0.9653,0.889,0.761,0.9053,0.8086,0.9703,0.9879,0.9817],"alpha_phon":[0.0001,0.0,0.0002,0.0001,0.0001,0.0003,0.0003,0.0002,0.0004,0.0096,0.0267,0.0023,0.1023,0.0003,0.0,0.0001],"alpha_glyph":[0.0233,0.0139,0.0141,0.0235,0.0197,0.0198,0.025,0.0202,0.0342,0.1014,0.2123,0.0925,0.0892,0.0295,0.012,0.0182]},{"case_id":"polite_service_ham","true_label":0,"raw_text":"您好，您的快递已放至丰巢快递柜，请凭取件码及时领取。","proc_text":"您好,您的快递已放至丰巢快递柜,请凭取件码及时领取.","spam_prob":0.99736,"pred_label":"SPAM","oov_resolved":[],"chars":["您","好",",","您","的","快","递","已","放","至","丰","巢","快","递","柜",",","请","凭","取","件","码","及","时","领","取","."],"obf_probs":[0.0092,0.0096,0.0005,0.0109,0.0122,0.049,0.8087,0.2338,0.1157,0.1669,0.5706,0.9031,0.0393,0.8362,0.1552,0.0007,0.0385,0.7374,0.0452,0.3093,0.0423,0.1728,0.041,0.0373,0.0358,0.0013],"alpha_ctx":[0.9984,0.986,0.9994,0.998,0.9756,0.9888,0.3142,0.8302,0.944,0.8879,0.567,0.213,0.9894,0.3133,0.9021,0.9994,0.9612,0.411,0.9596,0.7336,0.964,0.8146,0.9708,0.9754,0.9703,0.9993],"alpha_phon":[0.0,0.0001,0.0,0.0,0.0066,0.0,0.1663,0.0115,0.0007,0.0437,0.0527,0.1611,0.0,0.1686,0.0058,0.0,0.0003,0.1161,0.0003,0.1328,0.0002,0.0082,0.0002,0.0002,0.0001,0.0],"alpha_glyph":[0.0016,0.0139,0.0006,0.002,0.0178,0.0112,0.5195,0.1583,0.0554,0.0684,0.3804,0.626,0.0106,0.5181,0.0921,0.0006,0.0386,0.4729,0.0402,0.1336,0.0358,0.1772,0.029,0.0244,0.0295,0.0007]},{"case_id":"narrative_ham","true_label":0,"raw_text":"我和飞机上一百五十多名旅客眼巴巴期待飞机划破长空腾空而起的时刻","proc_text":"我和飞机上一百五十多名旅客眼巴巴期待飞机划破长空腾空而起的时刻","spam_prob":0.00078,"pred_label":"HAM","oov_resolved":[],"chars":["我","和","飞","机","上","一","百","五","十","多","名","旅","客","眼","巴","巴","期","待","飞","机","划","破","长","空","腾","空","而","起","的","时","刻"],"obf_probs":[0.0034,0.0307,0.0602,0.0557,0.0767,0.0301,0.2771,0.278,0.5273,0.2027,0.0579,0.1803,0.2427,0.3986,0.2902,0.3247,0.0562,0.4067,0.0607,0.0483,0.3137,0.1576,0.058,0.2397,0.2657,0.2317,0.2392,0.0463,0.0102,0.0611,0.6242],"alpha_ctx":[0.9997,0.9635,0.9613,0.9653,0.948,0.9785,0.7902,0.7409,0.5939,0.8194,0.9596,0.8717,0.7572,0.5816,0.7156,0.6318,0.8973,0.6956,0.9337,0.9643,0.7076,0.8488,0.9552,0.7836,0.8187,0.793,0.7209,0.9875,0.9911,0.9331,0.5094],"alpha_phon":[0.0,0.0346,0.0032,0.0095,0.0363,0.01,0.1113,0.1156,0.1617,0.1274,0.0377,0.1172,0.163,0.2791,0.1734,0.1834,0.0263,0.1544,0.005,0.01,0.2533,0.1288,0.0124,0.1934,0.1521,0.1853,0.2511,0.0067,0.0054,0.0194,0.3909],"alpha_glyph":[0.0003,0.002,0.0355,0.0252,0.0157,0.0115,0.0985,0.1435,0.2444,0.0532,0.0027,0.0111,0.0798,0.1393,0.111,0.1849,0.0764,0.1501,0.0613,0.0257,0.0391,0.0224,0.0324,0.0231,0.0292,0.0218,0.028,0.0058,0.0035,0.0475,0.0997]}]},"error_analysis":{"n_test":3216,"n_fp":19,"n_fn":15,"fp_by_attack":{"CLEAN":19},"fn_by_attack":{"PHON":6,"MIXED":2,"CLEAN":4,"SPLIT":2,"SPACE":1},"top_fps":[{"idx":5304,"attack_type":"CLEAN","prob":0.99973,"len":52,"text":"恭喜你中南京bigbang门票一张回复名字电话明天中午12点前联系领取联系电话微信13464655130"},{"idx":1844,"attack_type":"CLEAN","prob":0.99849,"len":58,"text":"兹有计算机学报给你的汇款回音卡, 由于FIT物业无法联系并送达你本人, 所以请见此通知后到FIT 3-128室领取."},{"idx":1108,"attack_type":"CLEAN","prob":0.99801,"len":31,"text":"yz:咨询王老师13131130859扣扣1796806031"},{"idx":2067,"attack_type":"CLEAN","prob":0.99632,"len":31,"text":"01秒通过审核,额度最高达15万,最快当天可提车,一年免利息”"},{"idx":2326,"attack_type":"CLEAN","prob":0.99369,"len":33,"text":"加我微信免费发能拿红包的网址随便填就能拿到1到10元的红包十秒不用"},{"idx":831,"attack_type":"CLEAN","prob":0.99346,"len":62,"text":"tsinghua. edu. cn. 王晓浩1989年考入精仪系, 1994年读直博, 1999年毕业, 2001年副教授."},{"idx":4786,"attack_type":"CLEAN","prob":0.99059,"len":62,"text":"asp? cid=464, 或者 http: //www. lijiababy. com. cn/product. asp?"},{"idx":5064,"attack_type":"CLEAN","prob":0.98963,"len":31,"text":"上班太无聊有没有真爱陪我玩卧底??卫星:Cjy19950421"},{"idx":1942,"attack_type":"CLEAN","prob":0.9883,"len":29,"text":"msn. com/members/zhangxzhang/"},{"idx":168,"attack_type":"CLEAN","prob":0.98355,"len":70,"text":"不错不错 不过好像发错版了吧, joke版需要你! 【 在 lk409test 测试一下 测试一下 6 (int) 的大作中提到: 】 1."},{"idx":2178,"attack_type":"CLEAN","prob":0.96775,"len":34,"text":"专业注册外资公司代办融资租赁公司,私募基金公司15994704320"},{"idx":3152,"attack_type":"CLEAN","prob":0.95329,"len":51,"text":"6g规格:14mm天然绿龙晶圆珠手链绿龙晶手链招财进宝送长辈送朋友~现100元起拍每次出价不得低于10"},{"idx":1105,"attack_type":"CLEAN","prob":0.94509,"len":42,"text":"就免费了 另外, 你可以用信用卡给自己的帐号冲值, skype打欧洲比打中国便宜1."},{"idx":5299,"attack_type":"CLEAN","prob":0.93165,"len":30,"text":"亚马逊旗下名品特卖网站MYHABIT正在进行全场额外8折促销"},{"idx":216,"attack_type":"CLEAN","prob":0.92953,"len":30,"text":"双龙地铁口一手红本商铺租金低月供首付5万当业主值得拥有卖点一"},{"idx":2051,"attack_type":"CLEAN","prob":0.91234,"len":62,"text":"13311577896, 81937676, 可将简要介绍发短信至手机 信箱: ruicheng2004@sina. com"},{"idx":2585,"attack_type":"CLEAN","prob":0.8568,"len":36,"text":"待遇优厚高薪+佣金+旅游+150万购房补贴+奥迪A4顶配+15万现金奖励"},{"idx":3972,"attack_type":"CLEAN","prob":0.7009,"len":25,"text":". . 崩溃ing! ! ! 敢请大家给出出注意,"},{"idx":2990,"attack_type":"CLEAN","prob":0.63894,"len":68,"text":"浙江卫视今年夏天犯的最大最大的错误就是请周杰伦当评委,诚心砸场子不是,今年7月每周五晚9:10金罐凉茶领导者加多宝邀您共赏「我选周杰伦」"}],"top_fns":[{"idx":13691,"attack_type":"PHON","prob":0.00014,"len":41,"text":"@毛毛蜂73：11：19牛牛：十赌九死，最后痛的还是自己，千万不能爱上有家的女人，"},{"idx":15321,"attack_type":"CLEAN","prob":0.00018,"len":30,"text":"隐患险于明火，防范胜于救灾，生态和谐人人创，林草防火人人防。"},{"idx":13724,"attack_type":"PHON","prob":0.00069,"len":23,"text":"可以的，7号还没结束，我等下葳x跟你说怎么听课"},{"idx":10809,"attack_type":"CLEAN","prob":0.00542,"len":57,"text":"建议：多数设施作物夜间一膜保温，明天白天升温较快，适时早开棚，加强通风排气；明天夜里冷空气影响，午后及时闭棚保温。"},{"idx":13175,"attack_type":"SPLIT","prob":0.00773,"len":70,"text":"过去的人不留恋,过去的事不回头,离开的不遗憾,留下的会珍惜.潇洒才是人的最高级. 8051fy.c0m/t1r1 在FY真的很开心.4072"},{"idx":11144,"attack_type":"PHON","prob":0.01486,"len":44,"text":"杀跌至2850-2900区域可逐步低吸抄底，产品如有操作将在盘中提示。2/2【山东神光】"},{"idx":15214,"attack_type":"MIXED","prob":0.02856,"len":16,"text":"我姐垈得好，每天都有好几仟? ?"},{"idx":12461,"attack_type":"SPLIT","prob":0.09282,"len":59,"text":"6-2号超级会员日，年货商品低至8.5折，医保商品9.2折，鱼胶0元，地址：南山区西丽珠光路北珠光花半里欣苑3号楼0i"},{"idx":10621,"attack_type":"MIXED","prob":0.10934,"len":63,"text":"唐某某，我司 调 查部 门已经多次通 知你还 款，但你并未按 时还  款，请问你是想要骗  取 招  联 公 司 帒 款是吗？"},{"idx":13050,"attack_type":"CLEAN","prob":0.12523,"len":14,"text":"米主任13946333575"},{"idx":8683,"attack_type":"PHON","prob":0.1338,"len":56,"text":"哈https://longba257.com真岀桨吋3OO少下4OOO，眞魜@.G.D.G老稳了店M.G不朽清缘"},{"idx":13933,"attack_type":"SPACE","prob":0.17671,"len":85,"text":"yangcha*@chenkso*.com 已添加到 yangcha*@chenkso*.com。请访问 https://account.live.com/confirm"},{"idx":14571,"attack_type":"CLEAN","prob":0.2113,"len":156,"text":"新年好，欢迎来到阳澄湖半岛休闲度假。华谊兄弟电影世界“春节牛气活动”、比斯特购物村“赏柿灯选好礼”、纳斯卡丁车、商旅酒店网球中心、老北门柏漾酒店“迎春接福”活动、儿童迷宫乐园、环湖骑行、樱咖网红咖啡馆......邀您畅享春节七天乐！最新信息"},{"idx":5566,"attack_type":"PHON","prob":0.42601,"len":38,"text":"您还没有查看来自房客炎婷的信息。现在就去爱彼迎，点击「收件箱」查看最新消息。"},{"idx":9129,"attack_type":"PHON","prob":0.48598,"len":70,"text":"下午好哥，好久没见了，妹子这边换了个新场子，资源丰富，如果有空晚上可以过来坐坐！😊如打扰请见谅，祝您和家人平安快乐每一天😊（华娱会娱乐会所）"}],"cf16_detail":[{"text":"妈，我今晚加班，不用等我吃饭了。","mvcsn_v3_prob":0.00013,"mvcsn_v3_correct":true,"rbt3_mvcsn_v3_prob":0.00063,"rbt3_mvcsn_v3_correct":true},{"text":"明天上午十点开会，请大家准时到会议室！","mvcsn_v3_prob":0.00904,"mvcsn_v3_correct":true,"rbt3_mvcsn_v3_prob":0.00522,"rbt3_mvcsn_v3_correct":true},{"text":"你好，你的快递已放丰巢柜，请及时取件。","mvcsn_v3_prob":0.99481,"mvcsn_v3_correct":false,"rbt3_mvcsn_v3_prob":0.98594,"rbt3_mvcsn_v3_correct":false},{"text":"周末有空吗，一起去看电影吧！","mvcsn_v3_prob":0.27439,"mvcsn_v3_correct":true,"rbt3_mvcsn_v3_prob":0.03114,"rbt3_mvcsn_v3_correct":true},{"text":"收到，谢谢老师，我马上修改完发您邮箱。","mvcsn_v3_prob":0.96387,"mvcsn_v3_correct":false,"rbt3_mvcsn_v3_prob":0.64423,"rbt3_mvcsn_v3_correct":false},{"text":"今天天气真好，我们去操场跑步吧。","mvcsn_v3_prob":0.44324,"mvcsn_v3_correct":true,"rbt3_mvcsn_v3_prob":0.00094,"rbt3_mvcsn_v3_correct":true},{"text":"提醒：明天截止提交课程作业，请记得上传系统。","mvcsn_v3_prob":0.00307,"mvcsn_v3_correct":true,"rbt3_mvcsn_v3_prob":0.14128,"rbt3_mvcsn_v3_correct":true},{"text":"您好，您预约的明天下午2点门诊已确认，请携带身份证前往。","mvcsn_v3_prob":0.98115,"mvcsn_v3_correct":false,"rbt3_mvcsn_v3_prob":0.49736,"rbt3_mvcsn_v3_correct":true},{"text":"晚上一起去食堂吃晚饭吧？我六点半下课。","mvcsn_v3_prob":0.00045,"mvcsn_v3_correct":true,"rbt3_mvcsn_v3_prob":0.00043,"rbt3_mvcsn_v3_correct":true},{"text":"实验报告我已经写完了，等会儿发到群里大家核对一下。","mvcsn_v3_prob":0.00068,"mvcsn_v3_correct":true,"rbt3_mvcsn_v3_prob":0.00043,"rbt3_mvcsn_v3_correct":true},{"text":"今天下雨记得带伞，路上注意安全！","mvcsn_v3_prob":0.53399,"mvcsn_v3_correct":false,"rbt3_mvcsn_v3_prob":0.08632,"rbt3_mvcsn_v3_correct":true},{"text":"恭喜你通过初试，请下周三上午带简历来面试。","mvcsn_v3_prob":0.90565,"mvcsn_v3_correct":false,"rbt3_mvcsn_v3_prob":0.07056,"rbt3_mvcsn_v3_correct":true},{"text":"火车站人好多啊，我提前半小时到检票口等你。","mvcsn_v3_prob":0.00102,"mvcsn_v3_correct":true,"rbt3_mvcsn_v3_prob":0.00205,"rbt3_mvcsn_v3_correct":true},{"text":"老师好，请问这周的数据工程课是在东校园上吗？","mvcsn_v3_prob":0.00052,"mvcsn_v3_correct":true,"rbt3_mvcsn_v3_prob":0.00086,"rbt3_mvcsn_v3_correct":true},{"text":"昨天买的书已经发货了，预计后天上午送到宿舍楼下。","mvcsn_v3_prob":0.00042,"mvcsn_v3_correct":true,"rbt3_mvcsn_v3_prob":0.0008,"rbt3_mvcsn_v3_correct":true},{"text":"我手机快没电了，回去之后再给你回电话。","mvcsn_v3_prob":0.00342,"mvcsn_v3_correct":true,"rbt3_mvcsn_v3_prob":0.0008,"rbt3_mvcsn_v3_correct":true}]}};
 
     const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     const tooltip = document.getElementById("chart-tooltip");
     let curLang = "zh";
     let activeArchStage = "4";
+    let curAblMode = "cross";
+    let curCurveMode = "sub_only";
+    let curErrFilter = "CF16";
     let curCaseIdx = 0;
     let curHeatmapMode = "gate";
     let curTokIdx = 0;
-    let curErrFilter = "ALL";
 
     function bindTooltips(container) {
       container.querySelectorAll("[data-tip]").forEach(el => {
@@ -671,130 +711,161 @@
           tooltip.style.display = "block";
         });
         el.addEventListener("mousemove", e => {
-          tooltip.style.left = Math.min(window.innerWidth - 310, e.clientX + 12) + "px";
+          tooltip.style.left = Math.min(window.innerWidth - 320, e.clientX + 12) + "px";
           tooltip.style.top = Math.max(10, e.clientY - 38) + "px";
         });
         el.addEventListener("mouseleave", () => { tooltip.style.display = "none"; });
       });
     }
 
-    // Complete Bilingual I18N Dictionaries
     const I18N = {
       zh: {
         nav_prog: "实验进度", nav_arch: "模型架构", nav_exp: "实验结果", nav_xray: "门控透视 Demo", nav_handoff: "代码与数据交付",
         hero_eyebrow: "中山大学计算机学院 · 《数据科学与工程》课程大作业项目主页",
-        hero_title: "MV-CSN v2：面向中文对抗变体垃圾短信检测的<br/>多视图上下文门控字符相似性网络",
-        hero_sub: "仅 <strong>1.37M 参数</strong> 的字符级双视图图注意力防御网络，融合 32×32 渲染字形卷积嵌入、多音字读音先验、SpellGCN 动态未登录字图桥接与 RoCBert 一致性正则——在去偏 Benchmark B 零样本跨攻击评测中以 <strong>0.243&nbsp;ms/条</strong> 延迟比肩或超越 <strong>600M–4B Qwen3 大模型</strong>（快 <strong>36.5×–251×</strong>）。",
-        cta_repo: "GitHub 源码仓库", cta_rel: "开源权重与数据集 v2.0.0", cta_guide: "代码与实验说明手册",
-        cta_nb: "Colab 实跑 Notebook", cta_json: "原始数据 (8 JSON)", cta_xray: "交互式 Gate X-Ray",
-        t_step2: "预处理器重组 + 32×32 字形/拼音图", t_step3: "门控 6.7% → 77.3%", t_step4: "SPAM P = 1.0000 · 0.243 ms (Zero-Shot)",
-        a1_t:"1. 预处理器 Preproc", a1_1:"选择性 NFKC (⑧→8)", a1_2:"保留跨字形 (髙/え/Ꝗ)", a1_3:"Chaizi 2/3 字拆字重组",
-        a2_t:"2. 多模态锚点与编码", a2_1:"Char ID + 声母/韵母/声调", a2_2:"输出上下文表征 h_ctx",
-        a3_hdr:"3. 双视图 GAT 与 OOV 动态桥", a3_v1t:"View 1 · 语音相似图 GAT", a3_v1s:"Top-20 多音字加权读音先验",
-        a3_v2t:"View 2 · 渲染字形图 GAT", a3_v2s:"32×32 Font + SpellGCN OOV 桥",
-        a4_t:"4. 动态门控 Gate", a4_1:"逐字 Softmax 单形权", a4_2:"+ RoCBert 图一致性损失", a4_3:"正常字稳ctx · 变体切双图",
-        a5_t:"5. 双任务输出头", a5_1:"• Attention-Pooled 判别", a5_2:"• Token 级混淆定位", a5_3:"可选 RBT3 跨度融合 /", a5_4:"Qwen3-4B 不确定性级联",
-        kpi1_lbl: "零样本融合峰值 F1", kpi2_lbl: "独立 MV-CSN v2 F1 (1.37M)", kpi3_lbl: "单条短信推理延迟",
-        kpi4_lbl: "全测试集总错判率 (20/3,395)", kpi4_sub: "SPLIT 0/46 errors · 含 4 条上游语料标注噪声",
-        sec_prog_h: "实验进度与交付看板", sec_prog_note: "代码、全部 7 组实验、12 项测试与开源发布已完成 · 待队友接力配图与报告",
-        step1: "1. 数据去偏 · 12,992 簇划分", step2: "2. 7 组多随机种子实验", step3: "3. 重构 · 12 测试 · v2.0.0", step4: "4. 队友：配图 · 报告 · PPT",
-        sec_arch_h: "MV-CSN v2 五阶段模型架构（点击模块查看工程实现细节）", sec_arch_note: "融合 ChineseBERT · SpellGCN · RoCBert · kfcd/chaizi，总参数量仅 1,371,632",
-        sec_res_h: "全部实验结果总览（7 组多随机种子验证数据）", sec_res_note: "所有数值直接由 <code>results/*.json</code> 渲染生成（seeds: <code>42, 1024, 2025</code>）",
-        tab_zs: "Exp 2 · 零样本对抗与分类", tab_llm: "Exp 6 · Qwen3 大模型对比", tab_abl: "Exp 4 · 8 行消融实验", tab_curve: "Exp 1&3 · 强度曲线与基准", tab_err: "Exp 7 · 错判审计 (20)",
-        call_zs: "<strong>核心结论：</strong>仅在干净文本上训练、直接零样本测试 3,395 条真实变体短信时，<strong>RBT3</strong> F1 跌至 <code>0.9568</code>（漏报率超 8%），<strong>LZASD</strong> 的 <code>GLYPH/SPLIT</code> 跌至 <code>0.7657 / 0.5625</code>；而独立 <strong>MV-CSN v2 (1.37M)</strong> 跃升至 <code>F1 = 0.9951</code>（领先 RBT3 <code>+3.83%</code>，McNemar <code>p &lt; 1e-42</code>），<strong>RBT3 + MV-CSN v2</strong> 达到峰值 <code>0.9964</code>（<code>GLYPH = 0.9827</code>）。",
-        call_llm: "<strong>到底需不需要调大模型？不需要。</strong> 零样本 <code>Qwen3-4B-Instruct</code> 在正常短信上误杀率高达 59.5%（<code>HamAcc = 0.4050</code>, <code>F1 = 0.8671</code>, <code>30.74 ms</code>），4-Shot ICL 也仅 <code>0.9421</code>（<code>60.98 ms</code>）；即使做 3-seed LoRA 微调，<code>Qwen3-0.6B</code> 也仅仅与 1.37M 的 <code>MV-CSN v2</code> <strong>打平</strong>（<code>0.9951</code> vs. <code>0.9951</code>, McNemar <code>p = 0.3833</code>），却付出 <strong>438× 参数</strong> 和 <strong>36.5× 延迟</strong>。若确需大模型复核，仅送 <code>0.71%</code>（24/3,395）疑难样本进入 <strong>Cascade 级联</strong> 即可保持 <code>0.598 ms/条</code> 平均延迟。",
-        call_abl: "<strong>消融解读：</strong> 去掉 <strong>Split/Noise 预处理器</strong> 损失最大（<code>−0.0253 F1</code>，方差放大 12 倍）；去掉 <strong>RoCBert 图一致性正则</strong> 下降 <code>−0.0026</code>（关键的 Clean → Variant 泛化桥）；去掉 <strong>Context Gate</strong> 或 <strong>动态 OOV 桥</strong> 分别下降 <code>−0.0008 / −0.0007</code>。单去 Phonetic 或 Glyph 视图整体 F1 变动处于 3 种子方差内（<code>+0.0003~0.0004</code>），因 <code>MIXED</code> 攻击中双视图互为冗余；Exp 5 则证实模型在混淆字上真实同时依赖双视图提供归因与防御冗余。",
-        call_curve: "<strong>数据集长度捷径发现：</strong> 原始课程 Benchmark A 的 Ham 是长达 <code>191</code> 字的 BBS 论坛长帖，而 Spam 仅 <code>53</code> 字，导致 TFIDF-SVM 只需数长度就能拿到 <code>0.9991</code>；我们按 Spam 长度直方图重新配对采样出 <strong>Benchmark B（SMS-Matched 16.5K，p50 = 51 vs. 53，12,992 簇零泄漏划分）</strong>，彻底封死了长度捷径。",
-        ef_all: "全部错判 (20)", ef_fp: "误报 FP (8)", ef_fn: "漏报 FN (12)",
-        err_subnote: "Seed-42 Clean-Trained MV-CSN v2 · 3,395 测试样本总错误率 <strong>0.59%</strong>",
-        call_err: "<strong>错判审计核心发现：</strong> <code>8 条 FP</code> 全部集中于带银行卡/手机号/期货行情的特殊正常短信（零日常闲聊误杀）；<code>12 条 FN</code> 中有 <strong>4 条本身属于上游语料标错样本</strong>（气象台大风预警、防疫戴口罩倡议、炒粉点单、水务招标），扣除后<strong>真实垃圾短信召回率高达 99.65%</strong>。此外，全测试集仅 <code>0.74%</code>（25/3,395）样本落入 <code>(0.05, 0.95)</code> 不确定带，却直接捕获了 <strong>35.0%（7/20）</strong> 的错判（47× 富集度）。",
-        sec_xray_h: "交互式 Gate X-Ray · 逐字混淆定位与门控热力图", sec_xray_note: "切换真实测试集攻击样本，悬停或点击任意字符实时查看三路门控权重",
-        hm_btn_gate: "图门控激活 (1−α_ctx)",
-        hm_btn_obf: "自监督定位分 (obf_prob)",
+        hero_title: "MV-CSN v3：双师跨视图蒸馏的中文对抗变体<br/>垃圾短信检测多视图图注意力网络",
+        hero_sub: "仅 <strong>2.35M 参数</strong> 的字符级双视图图注意力防御学生网络，经由 <code>MacBERT + MV-CSN v3</code> 与 <code>Qwen3-8B</code> 双师共识跨越 <strong>22,028 条</strong> 无标注短信蒸馏对齐——在去泄露 Benchmark B v2 上取得 <code>Fair F1 = 0.9924</code> / <code>Raw F1 = 0.9916</code>（Raw 较 v2 跃升 <strong>+7.16%</strong>），在 60% 纯同音/形近替换压测下达 <code>0.9848</code>（领先 RBT3 Clean <strong>+1.88%</strong>），单卡批推理仅 <strong>0.097&nbsp;ms/条</strong>。",
+        cta_repo: "GitHub 源码仓库", cta_rel: "开源权重与归档 (Releases)", cta_guide: "代码与实验说明手册",
+        cta_scripts: "Stage 3 实验脚本", cta_json: "原始数据 (11 JSON)", cta_xray: "交互式 Gate X-Ray",
+        t_step2: "OOV 桥 [え,髙] + 22K 蒸馏", t_step3: "门控 11.3%→88.5% (0 未桥接)", t_step4: "SPAM P=0.9999 · 0.097 ms",
+        a1_t:"1. 预处理与跨视角增强", a1_1:"选择性 NFKC + 空格防插", a1_2:"保留跨文字形近 (髙/え/Ꝗ)", a1_3:"Chaizi 拆字重组 + Space Aug", a1_4:"支撑 Raw F1 +7.16%",
+        a2_t:"2. 预训练字嵌入与多模态编码", a2_1:"MacBERT SVD 字初值 + 拼音", a2_2:"hidden=192 · 上下文流 h_ctx",
+        a3_hdr:"3. 4-Head 双视图 GAT 与 OOV 桥", a3_v1t:"View 1 · 语音相似图 GAT", a3_v1s:"Top-20 多音字加权 + 残差门",
+        a3_v2t:"View 2 · 渲染字形图 GAT", a3_v2s:"32×32 Font + 动态 OOV 桥 (0 未桥接)",
+        a4_t:"4. 动态门控 Gate", a4_1:"逐字 Softmax 三路权重", a4_2:"+ RoCBert 图一致性正则", a4_3:"正常 11.3% 图 · OOV 88.5% 图",
+        a5_t:"5. 双师蒸馏与级联", a5_1:"• 域内 MacBERT+v3 KD", a5_2:"• 22K Qwen3-8B 共识 KD", a5_3:"• 分类 + 逐字定位双头", a5_4:"可选 1.31% Qwen3-4B 级联",
+        kpi1_lbl: "MV-CSN v3 Fair / Raw F1 (2.35M)", kpi1_sub: "Raw 较 v2 Clean +7.16% · 参数仅 RBT3 的 1/16.5",
+        kpi2_lbl: "60% 重度替换下抗扰 F1 (sub_only)", kpi2_sub: "较 RBT3 Clean +1.88% · 较同蒸馏 Plain +1.70%",
+        kpi3_lbl: "A100 批推理延迟 (编译 bs1: 0.788 ms)", kpi3_sub: "级联 Qwen3-4B LoRA 达 0.9951 F1 (仅上送 1.31%)",
+        kpi4_lbl: "159,760 Token 图门控动态路由", kpi4_sub: "Unbridged OOV = 0 · 无标注 KD 拉升 Olivi-9 +6.40%",
+        sec_prog_h: "Stage 3 实验进度与交付看板",
+        sec_prog_note: "全量双赛道 12 模型 × 3 种子、12 行消融、Olivi-9 外域、Qwen3-4B/8B 级联、11 个 JSON 与 11 项通过测试已同步完成",
+        step1: "1. 去泄露 12,125 簇 + 22K 双师共识池", step2: "2. 双赛道 12 模型 × 3 种子 + 压力曲线",
+        step3: "3. 12 行消融 + Olivi-9 + Qwen3-4B/8B 级联", step4: "4. 11 项测试全过 · Drive & GitHub 已同步",
+        sec_arch_h: "MV-CSN v3 五阶段协同与双师蒸馏架构（点击模块查看详情）",
+        sec_arch_note: "hidden=192 · 空洞卷积 + 3L Transformer · Top-20 音/形双图 GAT · 22K 跨视图共识蒸馏（2,352,240 参数）",
+        sec_res_h: "全部 Stage 3 实验结果总览（11 份结果 JSON 全量同步）",
+        sec_res_note: "主赛道与消融为 <code>seeds: 42, 1024, 2025</code> 均值±标准差；LLM 级联与错误分析为 Seed-42 单次对照",
+        tab_zs: "Track 1&2 · 12 模型主评测与分攻击", tab_llm: "Exp 6 · Qwen3-4B/8B 级联与延迟",
+        tab_abl: "Exp 4 · 12 行消融实验", tab_curve: "Exp 1/3/8b · 强度曲线与跨域", tab_err: "Exp 7 · 错判与反事实审计",
+        call_zs: "<strong>核心对比结论（含诚实基线对照）：</strong> ① 相比未加蒸馏的 <code>MV-CSN v2 (Clean)</code>（Raw F1 仅 <code>0.9200</code>），<strong>MV-CSN v3 (2.35M)</strong> 将未清洗 Raw F1 拉升至 <code>0.9916</code>（<strong>+7.16%</strong>），去标点 <code>-P</code> 达全场最高 <code>0.9862</code>，并显著优于固定图 <code>LZASD</code>（McNemar <code>p = 4.11e-11</code>）；② 22K 双师无标注 KD 使跨库零样本 <code>Olivi-9</code> 从 <code>0.6960</code>（Clean-KD Only）跃升至 <code>0.7600</code>（<strong>+6.40%</strong>）；③ 在同 22K 数据与增强赛道上，<code>RBT3 (Same Data+Aug)</code> 与 <code>RBT3 + MV-CSN v3</code> 总体均值在 1 个标准差内持平（<code>0.9937</code> vs. <code>0.9932</code>），但均显著超越 <code>RBT3 (Clean)</code>（<code>p = 0.0107</code>），验证了 22K 双师共识迁移池本身对中轻量编码器均有显著增益，而 <strong>MV-CSN v3</strong> 则以 <strong>1/16.5 的参数量（2.35M vs. 38.8M）</strong> 守住了极窄部署成本与抗重度替代韧性。",
+        call_llm: "<strong>Qwen3 大模型实测与不确定性级联前沿：</strong> 零样本 <code>Qwen3-4B</code> 与 <code>Qwen3-8B</code> 虽然因不依赖关键词捷径而在合成礼貌反事实 <code>CF16/CF40</code> 上拿 <code>1.000</code>，但在真实对抗扰动 <code>Sym40</code> 下将几乎所有混淆正常短信误判为垃圾（Ham Acc 崩至 <strong>0.09% / 0.19%</strong>）；即使经 15 分钟 Clean-LoRA 微调，<code>Qwen3-4B Clean-LoRA</code> 在 <code>Sym40</code> 上的 Ham Acc 仍跌至 <strong>68.88%</strong>（<code>F1 = 0.9278</code>），单条 GPU 延迟达 <code>98.0 ms</code>。相反，以 <strong>MV-CSN v3</strong> 作前置守门员的 <strong>Uncertainty Cascade（τ=0.45）</strong> 仅上送 <code>1.31%</code>（Bench B v2）/ <code>2.39%</code>（Sym40）样本，即以 <strong>0.200 ms</strong> 批有效延迟取得 <code>0.9951 F1</code>，并把 <code>Olivi-9</code> 从 <code>0.7658</code> 拉升至 <code>0.8353</code>。",
+        abl_btn_cross: "跨域 & 未清洗退化 (ΔOlivi-9 / ΔRaw)",
+        abl_btn_fair: "域内对抗退化 (ΔFair / ΔSym40)",
+        abl_subnote: "点击左侧标签切换可视化视图 · 下表完整展示全 12 行 × 4 维指标",
+        call_abl: "<strong>12 行消融关键发现（含诚实权衡）：</strong> ① 移除 <strong>Unlabeled Transfer KD</strong> 导致跨数据集 <code>Olivi-9</code> 暴跌 <code>−0.0641</code>，是跨库泛化的最大支柱；② 移除 <strong>Cross-View & Space Aug</strong> 导致未清洗 <code>Raw F1</code> 暴跌 <code>−0.0124</code>，直接证实其在对抗空格/插噪攻击上的决定性作用；③ 移除 <strong>Multimodal Anchor</strong>、<strong>Domain KD</strong> 与 <strong>Context Gate</strong> 均一致损伤多维鲁棒性；④ <strong>两项诚实观察：</strong>(a) 移除 <code>Split/Noise Preprocessor</code> 虽使 Fair F1 下降 <code>−0.0016</code>，却使零样本 <code>Olivi-9</code> 反升 <code>+0.0312</code>（规则清洗清除了域内拆字噪音，但也过滤了外域部分原始格式线索）；(b) <code>w/o Dynamic OOV Bridge</code> 在宏观 F1 均值仅差 <code>−0.0002</code>，只因测试集真实 OOV 仅占 2.78%，而 Exp 5 门控剖析证实模型在这些真 OOV 上以 <code>88.54%</code> 权重依赖图桥接。",
+        cm_sub: "sub_only · 纯同音/形近字替换 (0%→60%)",
+        cm_mix: "mixed · 混合拆字/插空/音形扰动 (0%→60%)",
+        curve_subnote: "Benchmark B v2 测试集 (N=3,216) · 3 随机种子均值",
+        call_curve: "<strong>高强度对抗与域外泛化对照：</strong> 在 60% 字符被篡改的最严苛 <code>sub_only=0.6</code> 压力下，<code>RBT3 (Clean)</code> 跌至 <code>0.9660</code>（-3.00%）、同蒸馏无图 <code>Plain CNN+Trans</code> 跌至 <code>0.9678</code>，而 <strong>MV-CSN v3</strong> 保持 <code>0.9848</code>（<code>Clean-KD Only</code> 达 <code>0.9871</code>），领先 <code>RBT3 (Clean)</code> <strong>+1.88%</strong> 与 <code>Plain</code> <strong>+1.70%</strong>。在外部 12,011 条 <code>Olivi-9</code> 语料上，零样本跨库由 Clean-KD 的 <code>0.6960</code> 通过 22K 双师蒸馏拉升至 <code>0.7600</code>，若放开同源 70/10/20 域内微调则直接达到 <code>0.9336</code>（AUC <code>0.9794</code>），证明架构表达力充足，剩余差距主源于源/目标域先验漂移。",
+        ef_cf16: "CF16 礼貌反事实对照 (16)", ef_all: "全量测试错判 (34)", ef_fp: "误报 FP (19)", ef_fn: "漏报 FN (15)",
+        err_subnote: "Seed-42 MV-CSN v3 · 3,216 条测试样本：19 FP (1.78% Ham) + 15 FN (0.70% Spam)",
+        call_err: "<strong>诚实局限与错判洞察：</strong> ① <code>19 条 FP</code> 全部发生在未经攻击的 <code>CLEAN</code> 正常短信（如中奖领票回复、高校/客服通知、房产与促销文案）；② <code>15 条 FN</code> 集中于 <code>PHON(6)</code>、纯无链接黑话 <code>CLEAN(4)</code>（含生态防火、大棚保温等疑似上游边界样本）及竖排/短域名；③ 在专门构造的 <code>CF16</code> 礼貌短通知反事实探针上，2.35M 单模型 <code>MV-CSN v3</code> 仍对 5/16 条快递柜/医院预约/邮箱回复/初试通知产生高置信误判（<code>CF16 = 68.75%</code> Seed-42，3-seed <code>0.6250</code>），而联合模型 <code>RBT3 + MV-CSN v3</code> 正确识别其中 3 条（3-seed <code>0.8125</code>），是明确可继续通过服务类负例难挖掘改进的方向。",
+        sec_xray_h: "交互式 Gate X-Ray · 159,760 Token 路由分布与逐字热力图",
+        sec_xray_note: "覆盖真实 OOV 动态图桥接、同音/拆字/插空混淆，以及 1 条诚实礼貌正常短信误报案例",
+        hm_btn_gate: "图门控激活 (1−α_ctx)", hm_btn_obf: "自监督定位分 (obf_prob)",
         hm_hint_gate: "<strong>图门控热力图</strong>（颜色越深代表模型越依赖语音/字形图替代上下文；悬停或点击字符查看三路权重）",
-        hm_hint_obf: "<strong>自监督定位头得分</strong>（由 20% 随机图扰动 + 4:1 加权训得，偏向高召回短语提示）",
+        hm_hint_obf: "<strong>自监督定位头得分</strong>（偏向高召回异常二元搭配与局部扰动片段提示）",
         hm_scale_gate: "上下文主导 (0%) ▢ ▢ ▤ ▥ 图通路主导 (100%)",
         hm_scale_obf: "低分 (0%) ▢ ▢ ▤ ▥ 高分 (100%)",
-        hm_note: "<strong>为何自监督定位分有时会标红正常字（如「圣但」的「圣」或正常短信里的「妻、讼」）？</strong> 零样本训练期间没有人工字符级标注，定位头仅靠 20% 随机图扰动 + 4:1 正类加权自监督学习，因此对<strong>低频字</strong>和<strong>异常二元搭配的邻字外溢</strong>较敏感（例如「圣+但」违和时，高频字「但」反而把异常分外溢给了低频字「圣」）。但该定位头仅起训练期正则与短语提示作用，不等于最终判别——切到默认的「图门控激活」可见「圣」仍有 <code>89.8%</code> 走上下文，且正常短信整体 <code>P(spam) = 0.0000</code> 完全不误杀。",
-        sec_hand_h: "队友接力 · 数据字典、开源资产与一键复现", sec_hand_note: "全部 8 份实验 JSON、权重包、代码手册与 Release v2.0.0 已准备就绪",
+        hm_note: "<strong>如何读懂这张门控透视图？</strong> 全量 <code>159,760</code> 测试字符统计显示：① 正常已知汉字的图通路平均仅 <code>11.3%</code>，避免同音/形近邻居污染日常语义；② 出现已知音形混用字时图门控立即升至 <code>66.2%</code>；③ 当遇到词表外的 <code>え / 髙 / 纟</code> 等真 OOV 伪装字时，<code>OOVGraphBridge</code> 100% 完成动态建边，图通路自动跃升至 <code>88.5%</code>（零未桥接 UNK）。同时可切至第 5 个案例公开查看一条礼貌快递柜通知的高置信误报行为。",
+        sec_hand_h: "资产交付 · 11 份结果 JSON、代码字典与一键复现",
+        sec_hand_note: "全部 11 份最终 Stage 3 JSON、fp16 推理包 demo_bundle.pt、文档与 Drive 云端归档已同步至 main",
         copy_btn: "复制命令",
-        footer_txt: "MV-CSN v2 Project Page · 直接构建自已验证的 <code>results/*.json</code> · 开源托管于 GitHub Pages (<code>1-pluto1/mv-csn</code>)"
+        footer_txt: "MV-CSN v3 Project Page · 全部指标由 Stage 3 <code>results/*.json</code> 程序化生成 · 托管于 GitHub Pages (<code>1-pluto1/mv-csn</code>)"
       },
       en: {
         nav_prog: "Progress", nav_arch: "Method", nav_exp: "Experiments", nav_xray: "Gate X-Ray", nav_handoff: "Data & Handoff",
         hero_eyebrow: "Sun Yat-sen University · Data Science & Engineering Capstone",
-        hero_title: "MV-CSN v2: Multi-View Context-Gated Character Similarity<br/>Network for Chinese Adversarial Spam Detection",
-        hero_sub: "A <strong>1.37M-parameter</strong> character-level graph defense combining 32×32 Rendered-Glyph CAE embeddings, phonetic priors, dynamic SpellGCN OOV bridging, and RoCBert consistency — matching or outperforming <strong>600M–4B Qwen3 LLMs</strong> at <strong>0.243&nbsp;ms/SMS</strong> (<strong>36.5×–251× faster</strong>).",
-        cta_repo: "GitHub Repository", cta_rel: "Release v2.0.0 (Weights & Data)", cta_guide: "Code & Experiments Guide",
-        cta_nb: "Colab Notebook", cta_json: "Raw JSONs (8 Files)", cta_xray: "Interactive Gate X-Ray",
-        t_step2: "Preprocessor + 32×32 Glyph/Phonetic Graphs", t_step3: "Gate 6.7% → 77.3%", t_step4: "SPAM P = 1.0000 · 0.243 ms (Zero-Shot)",
-        a1_t:"1. Preprocessor", a1_1:"Selective NFKC (⑧→8)", a1_2:"Preserve Script (髙/え/Ꝗ)", a1_3:"Chaizi 2/3-Char Recomp.",
-        a2_t:"2. Multimodal Encoder", a2_1:"Char ID + Pinyin (I/F/T)", a2_2:"Context States h_ctx",
-        a3_hdr:"3. Dual-View GAT + OOV Bridge", a3_v1t:"View 1 · Phonetic GAT", a3_v1s:"Top-20 Polyphone Priors",
-        a3_v2t:"View 2 · Glyph CAE GAT", a3_v2s:"32×32 Font + SpellGCN OOV",
-        a4_t:"4. Context Gate", a4_1:"Per-Token Softmax Alpha", a4_2:"+ RoCBert Consistency Loss", a4_3:"Clean->ctx · Variant->graph",
-        a5_t:"5. Dual Heads", a5_1:"• Attention-Pooled Spam", a5_2:"• Token Obfuscation Loc", a5_3:"Optional RBT3 Fusion /", a5_4:"Qwen3-4B Cascade",
-        kpi1_lbl: "Best Zero-Shot Evasion F1", kpi2_lbl: "Standalone MV-CSN v2 F1 (1.37M)", kpi3_lbl: "Inference Latency / SMS",
-        kpi4_lbl: "Overall Test Error Rate (20/3,395)", kpi4_sub: "SPLIT 0/46 errors · incl. 4 upstream label-noise rows",
-        sec_prog_h: "Experiment Progress & Delivery Dashboard", sec_prog_note: "Codebase, 7 Suites, 12 Tests & Release v2.0.0 Complete · Ready for Figures & Report",
-        step1: "1. Debiased Bench B (12,992 Clusters)", step2: "2. All 7 Multi-Seed Suites", step3: "3. Refactored · 12 Tests · v2.0.0", step4: "4. Teammates: Figures & Report",
-        sec_arch_h: "MV-CSN v2 5-Stage Pipeline (Click Any Module to Inspect)", sec_arch_note: "Synthesizing ChineseBERT · SpellGCN · RoCBert · kfcd/chaizi in 1,371,632 params",
-        sec_res_h: "Interactive Experimental Results (Verified Multi-Seed Data)", sec_res_note: "All metrics rendered directly from <code>results/*.json</code> (seeds: <code>42, 1024, 2025</code>)",
-        tab_zs: "Exp 2 · Zero-Shot Attacks", tab_llm: "Exp 6 · Qwen3 LLM Pareto", tab_abl: "Exp 4 · 8-Row Ablations", tab_curve: "Exp 1&3 · Curve & Bench A/B", tab_err: "Exp 7 · Error Audit (20)",
-        call_zs: "<strong>Takeaway:</strong> Trained strictly on clean SMS and tested zero-shot on 3,395 real variants, <strong>RBT3</strong> drops to <code>0.9568</code> F1 (&gt;8% miss rate) and <strong>LZASD</strong> collapses on <code>GLYPH/SPLIT</code> (<code>0.7657 / 0.5625</code>). Standalone <strong>MV-CSN v2 (1.37M)</strong> jumps to <code>0.9951</code> (+3.83% over RBT3, McNemar <code>p &lt; 1e-42</code>), while <strong>RBT3 + MV-CSN v2</strong> sets the peak at <code>0.9964</code>.",
-        call_llm: "<strong>Do we need a large LLM? No.</strong> Zero-shot <code>Qwen3-4B-Instruct</code> suffers 59.5% false positives (<code>HamAcc = 0.4050</code>, <code>F1 = 0.8671</code>, <code>30.74 ms</code>) and 4-Shot ICL only reaches <code>0.9421</code> at <code>60.98 ms</code>. Even Clean-LoRA <code>Qwen3-0.6B</code> merely ties <code>MV-CSN v2</code> (<code>0.9951</code> vs. <code>0.9951</code>, McNemar <code>p = 0.3833</code>) at <strong>438× params</strong> and <strong>36.5× latency</strong>. A Cascade escalating only <code>0.71%</code> uncertain cases maintains <code>0.598 ms/SMS</code>.",
-        call_abl: "<strong>Ablation Insight:</strong> Removing the <strong>Split/Noise Preprocessor</strong> causes the largest drop (<code>−0.0253 F1</code>, 12× higher std), followed by <strong>RoCBert Graph Consistency</strong> (<code>−0.0026</code>), <strong>Context Gate</strong> (<code>−0.0008</code>), and <strong>Dynamic OOV Bridge</strong> (<code>−0.0007</code>). Removing a single graph view varies within 3-seed noise due to cross-view redundancy on <code>MIXED</code> attacks, while Exp 5 confirms both views actively drive obfuscated tokens.",
-        call_curve: "<strong>Length-Shortcut Discovery:</strong> Course Benchmark A pairs long <code>191</code>-char BBS Ham with short <code>53</code>-char Spam SMS, inflating TFIDF-SVM (<code>0.9991</code>). Our debiased <strong>Benchmark B (SMS-Matched 16.5K, p50 = 51 vs. 53, 12,992 zero-overlap clusters)</strong> eliminates length shortcuts.",
-        ef_all: "All Errors (20)", ef_fp: "False Positives (8)", ef_fn: "False Negatives (12)",
-        err_subnote: "Seed-42 Clean-Trained MV-CSN v2 · <strong>0.59%</strong> overall error rate across 3,395 test SMS",
-        call_err: "<strong>Failure Audit:</strong> All <code>8 FP</code> come from benign SMS containing bank card / phone / futures figures (zero casual chat false alarms). Among <code>12 FN</code>, <strong>4 are upstream corpus label errors</strong> (weather alert, COVID health advisory, takeout order, water tender); excluding those yields <strong>99.65% true spam recall</strong>. Meanwhile, the <code>0.74%</code> uncertainty band captures <strong>35.0% (7/20)</strong> of all errors (47× enrichment).",
-        sec_xray_h: "Interactive Gate X-Ray & Real Test Case Studies", sec_xray_note: "Select any test case and hover/click characters to inspect token-level gate weights",
-        hm_btn_gate: "Graph Gate (1−α_ctx)",
-        hm_btn_obf: "Self-Sup Obf Head (obf_prob)",
-        hm_hint_gate: "<strong>Graph-Gate Activation Heatmap</strong> (darker = stronger shift from context to phonetic/glyph graphs; hover or click any character)",
-        hm_hint_obf: "<strong>Self-Supervised Obfuscation Head</strong> (trained via 20% random graph perturbations + 4:1 pos-weight; high-recall phrase signal)",
+        hero_title: "MV-CSN v3: Dual-Teacher Cross-View Distilled Graph Network<br/>for Chinese Adversarial Spam Detection",
+        hero_sub: "A <strong>2.35M-parameter</strong> character-level defense student distilled from a consensus of <code>MacBERT + MV-CSN v3</code> and <code>Qwen3-8B</code> across <strong>22,028 unlabeled SMS</strong> — achieving <code>Fair F1 = 0.9924</code> / <code>Raw F1 = 0.9916</code> (<strong>+7.16% Raw</strong> vs. v2), leading at <code>0.9848</code> under 60% pure character substitution (<strong>+1.88%</strong> over RBT3 Clean), and running at <strong>0.097&nbsp;ms/SMS</strong> (GPU batch).",
+        cta_repo: "GitHub Repository", cta_rel: "Releases & Checkpoints", cta_guide: "Code & Experiments Guide",
+        cta_scripts: "Stage 3 Scripts", cta_json: "Raw Data (11 JSONs)", cta_xray: "Interactive Gate X-Ray",
+        t_step2: "OOV [え,髙] + 22K Dual KD", t_step3: "Gate 11.3%→88.5% (0 UNK)", t_step4: "SPAM P=0.9999 · 0.097 ms",
+        a1_t:"1. Preproc &amp; Cross-View Aug", a1_1:"Selective NFKC + Space Guard", a1_2:"Preserve Script (髙/え/Ꝗ)", a1_3:"Chaizi Split + Space Aug", a1_4:"Drives +7.16% Raw F1",
+        a2_t:"2. Char Init &amp; Multimodal Enc", a2_1:"MacBERT SVD Init + Pinyin", a2_2:"hidden=192 · Context h_ctx",
+        a3_hdr:"3. 4-Head Dual-View GAT + OOV", a3_v1t:"View 1 · Phonetic GAT", a3_v1s:"Top-20 Polyphone + Res Gate",
+        a3_v2t:"View 2 · Glyph CAE GAT", a3_v2s:"32×32 Font + Dynamic OOV (0 UNK)",
+        a4_t:"4. Dynamic Context Gate", a4_1:"Per-Token Softmax Alpha", a4_2:"+ RoCBert Graph Consistency", a4_3:"Clean 11.3% · OOV 88.5% Graph",
+        a5_t:"5. Dual-Teacher KD &amp; Cascade", a5_1:"• MacBERT+v3 Domain KD", a5_2:"• 22K Qwen3-8B Consensus", a5_3:"• Spam + Token Obf Heads", a5_4:"Optional 1.31% Qwen3-4B Route",
+        kpi1_lbl: "MV-CSN v3 Fair / Raw F1 (2.35M)", kpi1_sub: "+7.16% Raw vs. v2 Clean · 16.5× smaller than RBT3",
+        kpi2_lbl: "60% Heavy Substitution F1 (sub_only)", kpi2_sub: "+1.88% vs. RBT3 Clean · +1.70% vs. Plain CNN+Trans KD",
+        kpi3_lbl: "A100 Batch Latency (Compiled bs1: 0.788 ms)", kpi3_sub: "Cascade (1.31% Qwen3-4B LoRA) reaches 0.9951 F1",
+        kpi4_lbl: "Gate Graph Shift (159,760 Tokens)", kpi4_sub: "Unbridged OOV = 0 · +6.40% Olivi-9 via 22K Unlabeled KD",
+        sec_prog_h: "Stage 3 Progress & Verified Delivery Dashboard",
+        sec_prog_note: "12-model Track 1&amp;2 (3 seeds), 12-row ablations, Olivi-9 external, Qwen3-4B/8B + Cascade, 11 JSONs &amp; tests synced",
+        step1: "1. 12,125-Cluster Splits + 22K Dual Pool", step2: "2. 12 Models Track 1&amp;2 + Stress Curves",
+        step3: "3. 12-Row Ablations + Olivi-9 + Qwen3 Cascade", step4: "4. 11 Tests Passed · Drive &amp; GitHub Synced",
+        sec_arch_h: "MV-CSN v3 Architecture & Dual-Teacher Cross-View Distillation",
+        sec_arch_note: "hidden=192 · Dilated CNN + 3L Transformer · Top-20 Dual GAT · 22K Consensus KD (2,352,240 params)",
+        sec_res_h: "Complete Stage 3 Experimental Results (Synced from 11 JSONs)",
+        sec_res_note: "Main tracks &amp; ablations: <code>seeds 42, 1024, 2025</code> mean±std; LLM Cascade &amp; error audit: Seed-42 comparison",
+        tab_zs: "Track 1&amp;2 · Main &amp; Attacks", tab_llm: "Exp 6 · Qwen3 &amp; Latency",
+        tab_abl: "Exp 4 · 12 Ablations", tab_curve: "Exp 1/3/8b · Curves &amp; Olivi-9", tab_err: "Exp 7 · Errors &amp; CF16",
+        call_zs: "<strong>Key Honest Takeaways:</strong> (1) Compared to un-distilled <code>MV-CSN v2 (Clean)</code> (<code>0.9200</code> Raw F1), <strong>MV-CSN v3 (2.35M)</strong> boosts Raw F1 to <code>0.9916</code> (<strong>+7.16%</strong>), leads all models on punctuation-stripped <code>-P</code> (<code>0.9862</code>), and beats fixed-graph <code>LZASD</code> (McNemar <code>p = 4.11e-11</code>). (2) 22K Dual-Teacher unlabeled KD raises zero-shot <code>Olivi-9</code> by <strong>+6.40%</strong> (<code>0.6960 → 0.7600</code>). (3) Honestly, when given the same 22K pool &amp; augmentations in Track 2, <code>RBT3 (Same Data+Aug)</code> matches <code>RBT3 + MV-CSN v3</code> within 1 std (<code>0.9937</code> vs. <code>0.9932</code>), while both beat <code>RBT3 Clean</code> (<code>p = 0.0107</code>)—showing the 22K pool benefits any compact encoder, while <strong>MV-CSN v3</strong> wins at <strong>1/16.5× parameter footprint</strong> and peak heavy-substitution resilience.",
+        call_llm: "<strong>LLM &amp; Uncertainty Cascade Pareto Frontier:</strong> While zero-shot <code>Qwen3-4B</code> and <code>Qwen3-8B</code> score <code>1.000</code> on synthetic <code>CF16/CF40</code> (zero keyword priors), under real obfuscation (<code>Sym40</code>) their clean-ham accuracy collapses to <strong>0.09% / 0.19%</strong> (flagging almost all perturbed SMS as spam). Even after 15-min Clean-LoRA fine-tuning, <code>Qwen3-4B</code> drops to <strong>68.88%</strong> Ham Acc under <code>Sym40</code> (<code>0.9278</code> F1) at <code>98.0 ms</code> bs=1. Routing just <code>1.31%</code> uncertain traffic from <strong>MV-CSN v3</strong> into Clean-LoRA (<strong>Cascade τ=0.45</strong>) hits <code>0.9951 F1</code> at <strong>0.200 ms</strong> effective batch latency while retaining <code>0.9894</code> on <code>Sym40</code> and lifting <code>Olivi-9</code> from <code>0.7658</code> to <code>0.8353</code>.",
+        abl_btn_cross: "Cross-Domain &amp; Raw Drops (ΔOlivi-9 / ΔRaw)",
+        abl_btn_fair: "In-Domain Robustness (ΔFair / ΔSym40)",
+        abl_subnote: "Toggle visualization metric above · All 12 rows × 4 dimensions shown in table below",
+        call_abl: "<strong>12-Row Ablation Insights &amp; Honest Trade-Offs:</strong> (1) Removing <strong>Unlabeled Transfer KD</strong> drops zero-shot <code>Olivi-9</code> by <code>−0.0641</code>, proving it drives cross-dataset generalization. (2) Removing <strong>Cross-View &amp; Space Aug</strong> drops unpreprocessed <code>Raw F1</code> by <code>−0.0124</code>. (3) Honest trade-offs: removing <code>Split/Noise Preprocessor</code> hurts Bench B Fair F1 (<code>−0.0016</code>) but boosts zero-shot <code>Olivi-9</code> (<code>+0.0312</code>) since regex cleanup strips domain-specific formatting cues; <code>w/o Dynamic OOV Bridge</code> shows near-zero macro F1 delta (<code>−0.0002</code>) because real OOV tokens are only 2.78% of Bench B v2 test tokens—whereas Exp 5 confirms <code>88.54%</code> graph routing when actual OOV tokens occur.",
+        cm_sub: "sub_only · Pure Homophone/Glyph Substitution (0%→60%)",
+        cm_mix: "mixed · Mixed Split/Space/Phon/Glyph (0%→60%)",
+        curve_subnote: "Benchmark B v2 Test Set (N=3,216) · 3-Seed Mean",
+        call_curve: "<strong>Heavy Attack Stress &amp; External Domain:</strong> At 60% character substitution (<code>sub_only=0.6</code>), <code>RBT3 (Clean)</code> falls to <code>0.9660</code> (−3.00%) and same-KD <code>Plain CNN+Trans</code> falls to <code>0.9678</code>, while <strong>MV-CSN v3</strong> holds <code>0.9848</code> (<strong>+1.88%</strong> vs. RBT3 Clean, <strong>+1.70%</strong> vs. Plain). On external <code>Olivi-9</code> (12,011 SMS), zero-shot cross-domain rises from <code>0.6960</code> to <code>0.7600</code> via 22K KD, while 70/10/20 in-domain training reaches <code>0.9336</code> (<code>0.9794</code> AUC), confirming capacity suffices and the remaining gap is domain prior shift.",
+        ef_cf16: "CF16 Polite Ham Probes (16)", ef_all: "All Test Errors (34)", ef_fp: "False Positives (19)", ef_fn: "False Negatives (15)",
+        err_subnote: "Seed-42 MV-CSN v3 · 3,216 test SMS: 19 FP (1.78% Ham) + 15 FN (0.70% Spam)",
+        call_err: "<strong>Failure Audit &amp; Honest Counterfactual Limit:</strong> All <code>19 FP</code> occur on unattacked <code>CLEAN</code> benign notices/ads; <code>15 FN</code> center on <code>PHON(6)</code> and unlinked colloquial <code>CLEAN(4)</code> spam. On the synthetic <code>CF16</code> polite notification probe, standalone 2.35M <code>MV-CSN v3</code> misclassifies 5/16 service/appointment notices (<code>68.75%</code> Seed-42, 3-seed <code>0.6250</code>), whereas <code>RBT3 + MV-CSN v3</code> fixes 3 of those 5 (3-seed <code>0.8125</code>), highlighting hard polite-ham negative mining as clear future work.",
+        sec_xray_h: "Interactive Gate X-Ray · 159,760-Token Routing & Character Heatmap",
+        sec_xray_note: "Inspect dynamic OOV bridging, obfuscation cases, and one honest polite-service FP",
+        hm_btn_gate: "Graph Gate (1−α_ctx)", hm_btn_obf: "Obfuscation Head (obf_prob)",
+        hm_hint_gate: "<strong>Graph-Gate Activation</strong> (darker = higher shift to phonetic/glyph graphs; hover/click any char)",
+        hm_hint_obf: "<strong>Self-Supervised Obfuscation Score</strong> (auxiliary regularizer sensitive to anomalous local bigrams)",
         hm_scale_gate: "Context-Led (0%) ▢ ▢ ▤ ▥ Graph-Led (100%)",
         hm_scale_obf: "Low (0%) ▢ ▢ ▤ ▥ High (100%)",
-        hm_note: "<strong>Why can the self-supervised obfuscation head flag clean characters (e.g., 「圣」 in 「圣但」 or 「妻/讼」 in normal SMS)?</strong> Under zero-shot training without manual character labels, the auxiliary head learns from 20% random graph perturbations with 4:1 positive weighting, making it sensitive to <strong>rare characters</strong> and <strong>neighbor spillover</strong> in anomalous bigrams (e.g., high-frequency 「但」 spills anomaly onto rarer 「圣」). It serves as a training regularizer rather than the final verdict: under the default Graph Gate view, 「圣」 still keeps <code>89.8%</code> context weight, and clean ham stays at <code>P(spam) = 0.0000</code> with zero false alarms.",
-        sec_hand_h: "Teammate Handoff: Data Dictionary & One-Click Reproduction", sec_hand_note: "All 8 JSON files, fp16 demo bundle, code guide & Release v2.0.0 ready",
+        hm_note: "<strong>Reading the Gate X-Ray:</strong> Across <code>159,760</code> test tokens, clean in-vocab tokens keep <code>88.7%</code> context weight (<code>11.3%</code> graph), in-vocab obfuscated tokens jump to <code>66.2%</code> graph, and OOV tokens (<code>え / 髙 / 纟</code>) reach <code>88.5%</code> graph via runtime <code>OOVGraphBridge</code> with <strong>0 unbridged unknowns</strong>. Case 5 transparently surfaces a polite parcel-locker false positive.",
+        sec_hand_h: "Deliverables · 11 Result JSONs, Dictionary & One-Click Reproduction",
+        sec_hand_note: "All 11 Stage 3 JSONs, fp16 demo_bundle.pt, guides &amp; Drive archives synced to main",
         copy_btn: "Copy Commands",
-        footer_txt: "MV-CSN v2 Project Page · Generated directly from verified <code>results/*.json</code> · Hosted on GitHub Pages (<code>1-pluto1/mv-csn</code>)"
+        footer_txt: "MV-CSN v3 Project Page · Built directly from verified Stage 3 <code>results/*.json</code> · GitHub Pages (<code>1-pluto1/mv-csn</code>)"
       }
     };
 
     const PROGRESS_ITEMS = [
-      { title_zh:"Exp 1 · 双基准分布内对比 (Bench A & B)", title_en:"Exp 1 · Dual In-Distribution Benchmarks",
-         desc_zh:"审计出课程数据长度捷径（191 vs 53 字），构建去偏 SMS-Matched 16.5K 主基准（3 seeds）。",
-         desc_en:"Exposed BBS/SMS length shortcut (191 vs 53) and built debiased SMS-Matched 16.5K (3 seeds).",
-         badge:"done", goto:"results:tab-curve", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
-      { title_zh:"Exp 2 · Zero-Shot Clean → RealVariant & McNemar", title_en:"Exp 2 · Zero-Shot Clean → RealVariant & McNemar",
-         desc_zh:"仅干净文本训练，直测 3,395 条真实变体；MV-CSN v2 领先 RBT3 +3.83% (McNemar p<1e-42)。",
-         desc_en:"Clean-trained on 3,395 real variants; MV-CSN v2 beats RBT3 by +3.83% (McNemar p<1e-42).",
-         badge:"done", goto:"results:tab-zs", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
-      { title_zh:"Exp 3 · 0%–60% 对抗扰动强度曲线", title_en:"Exp 3 · 0%–60% Adversarial Intensity Curve",
-         desc_zh:"7 档组合噪声压力测试，MV-CSN v2 在最恶劣 60% 扰动下 F1=0.9874 位列第一。",
-         desc_en:"7 noise levels up to 60%; standalone MV-CSN v2 ranks #1 under heaviest attack (0.9874).",
-         badge:"done", goto:"results:tab-curve", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
-      { title_zh:"Exp 4 · 8 行多随机种子消融实验", title_en:"Exp 4 · 8-Row Multi-Seed Ablation Study",
-         desc_zh:"24 次独立训练验证组件贡献：预处理器 (−0.0253) > RoCBert 一致性 (−0.0026) > 门控 (−0.0008)。",
-         desc_en:"24 runs: Preprocessor (−0.0253) > RoCBert Consistency (−0.0026) > Context Gate (−0.0008).",
-         badge:"done", goto:"results:tab-abl", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
-      { title_zh:"Exp 5 · Token 级动态门控可解释性", title_en:"Exp 5 · Token-Level Gate Interpretability",
-         desc_zh:"19,173 token 统计证实混淆字图权重从 6.7% 跃升至 77.3%，附带逐字透视案例。",
-         desc_en:"Across 19,173 tokens, graph weights shift from 6.7% (clean) to 77.3% (obfuscated).",
-         badge:"done", goto:"xray:", btn_zh:"交互体验 ↓", btn_en:"Inspect X-Ray ↓" },
-      { title_zh:"Exp 6 · Qwen3-0.6B/4B 大模型与级联评测", title_en:"Exp 6 · Qwen3 LLM & Cascade Benchmark",
-         desc_zh:"实证 4B 零样本误杀率 59.5%，0.6B LoRA 仅打平却慢 36.5×；Cascade 仅路由 0.71% 样本。",
-         desc_en:"Qwen3-4B Zero-Shot has 59.5% FP; 0.6B LoRA ties at 36.5× cost; Cascade routes only 0.71%.",
-         badge:"done", goto:"results:tab-llm", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
-      { title_zh:"Exp 7 · 全量 3,395 条错判案例审计 (CPU)", title_en:"Exp 7 · Full Error & Failure-Case Audit (CPU)",
-         desc_zh:"总共仅 20 条错判（8 FP + 12 FN），其中 4 条为上游语料标错样本，真实召回率 99.65%。",
-         desc_en:"Only 20/3,395 errors (8 FP + 12 FN); 4 FN are upstream label noise (99.65% true recall).",
-         badge:"done", goto:"results:tab-err", btn_zh:"查看图表 ↓", btn_en:"View Chart ↓" },
-      { title_zh:"工程交付 · 重构 · 一键脚本 · v2.0.0 开源", title_en:"Engineering · Release v2.0.0 · Teammate Handoff",
-         desc_zh:"统一推理门面、./reproduce.sh、12 项测试、Release v2.0.0 与 Drive 已就绪；待队友收尾报告/PPT。",
-         desc_en:"Unified inference facade, ./reproduce.sh, 12 tests, Release v2.0.0 & Drive ready for teammates.",
-         badge:"team", goto:"handoff:", btn_zh:"数据交接 ↓", btn_en:"Handoff Hub ↓" }
+      { title_zh:"Stage 1 · 去泄露 12,125 簇 &amp; 22K 双师池", title_en:"Stage 1 · 12,125 Clusters &amp; 22K Dual-Teacher Pool",
+         desc_zh:"MacBERT+v3 与 Qwen3-8B 双师共识过滤 22,028 条无标注短信，严格零聚类重叠划分。",
+         desc_en:"Consensus pseudo-labeling from MacBERT+v3 &amp; Qwen3-8B across 22,028 unlabeled SMS.",
+         badge:"done", goto:"results:tab-zs", btn_zh:"主表 ↓", btn_en:"Results ↓" },
+      { title_zh:"Track 1 &amp; 2 · 12 模型 × 3 种子 + 分攻击", title_en:"Track 1 &amp; 2 · 12 Models × 3 Seeds + Per-Attack",
+         desc_zh:"Fair/Raw/Pure-CJK/Olivi-9/CF16/CF40/+CP/-P 与 McNemar 显著性检验全部跑满。",
+         desc_en:"Full Track 1 (Clean-Only) &amp; Track 2 (22K KD/Aug) with McNemar tests.",
+         badge:"done", goto:"results:tab-zs", btn_zh:"查看 ↓", btn_en:"Inspect ↓" },
+      { title_zh:"Exp 3 · 0%–60% 对称扰动曲线 (sub_only &amp; mixed)", title_en:"Exp 3 · Symmetric Stress Curves (0%→60%)",
+         desc_zh:"MV-CSN v3 在 60% 替换下保持 0.9848（领先 RBT3 Clean +1.88%、Plain +1.70%）。",
+         desc_en:"MV-CSN v3 holds 0.9848 at sub_only=0.6 (+1.88% vs. RBT3 Clean, +1.70% vs. Plain).",
+         badge:"done", goto:"results:tab-curve", btn_zh:"看曲线 ↓", btn_en:"Curves ↓" },
+      { title_zh:"Exp 4 · 12 行 × 3 种子全方位消融", title_en:"Exp 4 · 12-Row × 3-Seed Ablation Suite",
+         desc_zh:"揭示 Unlabeled KD (-6.41% Olivi-9) 与 Cross-View Aug (-1.24% Raw) 主导机制及预处理器权衡。",
+         desc_en:"Pinpoints Unlabeled KD (-6.41% Olivi-9) &amp; Cross-View Aug (-1.24% Raw) plus preproc trade-offs.",
+         badge:"done", goto:"results:tab-abl", btn_zh:"看消融 ↓", btn_en:"Ablations ↓" },
+      { title_zh:"Exp 1 &amp; 8b · Bench A / B v2 / Olivi-9 域内对照", title_en:"Exp 1 &amp; 8b · Bench A/B v2 &amp; Olivi-9 In-Domain",
+         desc_zh:"验证模型容量足以在 Olivi-9 域内达 0.9336（零样本外域受领域先验影响）。",
+         desc_en:"In-domain Olivi-9 reaches 0.9336 (AUC 0.9794), isolating zero-shot gap to domain shift.",
+         badge:"done", goto:"results:tab-curve", btn_zh:"看基准 ↓", btn_en:"Benchmarks ↓" },
+      { title_zh:"Exp 5 · 159,760 Token Gate 分布与零未桥接", title_en:"Exp 5 · 159,760-Token Gate Audit &amp; 0 UNK",
+         desc_zh:"正常字仅 11.3% 走图，真 OOV 混淆字自动升至 88.5%，未桥接 OOV 严格为 0。",
+         desc_en:"Clean tokens use 11.3% graph; obfuscated OOV tokens shift to 88.5% with 0 unbridged UNKs.",
+         badge:"done", goto:"xray:", btn_zh:"看透视 ↓", btn_en:"Gate X-Ray ↓" },
+      { title_zh:"Exp 6 · Qwen3-4B/8B (ZS/ICL/LoRA) 与级联", title_en:"Exp 6 · Qwen3-4B/8B + Clean-LoRA &amp; Cascade",
+         desc_zh:"仅上送 1.31% 样本给 4B LoRA 即可达 0.9951 F1（0.200 ms 批延迟），避开 LLM 误杀塌陷。",
+         desc_en:"1.31% escalation reaches 0.9951 F1 at 0.200 ms while avoiding LLM Sym40 ham collapse.",
+         badge:"done", goto:"results:tab-llm", btn_zh:"看帕累托 ↓", btn_en:"Pareto ↓" },
+      { title_zh:"Solo A100 延迟 &amp; 诚实错判 / CF16 审计", title_en:"Solo A100 Latency &amp; Error / CF16 Audit",
+         desc_zh:"0.097 ms 批 / 0.788 ms 编译；公开 19 FP / 15 FN 全清单及 CF16 礼貌短信误判边界。",
+         desc_en:"0.097 ms batch / 0.788 ms compiled; full 34 errors + honest 5/16 CF16 failure breakdown.",
+         badge:"done", goto:"results:tab-err", btn_zh:"看审计 ↓", btn_en:"Error Audit ↓" },
+      { title_zh:"工程交付 · 11 测试 · 11 JSON · 云/仓库同步", title_en:"Engineering · 11 Tests · 11 JSONs · Synced",
+         desc_zh:"pytest 11 passed (1 skip), Google Drive 双包备份与 GitHub main 已完全一致。",
+         desc_en:"pytest 11 passed (1 skip), verified Drive archives, demo_bundle.pt &amp; GitHub main in sync.",
+         badge:"done", goto:"handoff:", btn_zh:"资产表 ↓", btn_en:"Assets ↓" }
     ];
 
     function renderProgressGrid() {
@@ -803,13 +874,11 @@
         const title = curLang === "zh" ? it.title_zh : it.title_en;
         const desc = curLang === "zh" ? it.desc_zh : it.desc_en;
         const btn = curLang === "zh" ? it.btn_zh : it.btn_en;
-        const badgeCls = it.badge === "done" ? "done" : "team";
-        const badgeTxt = it.badge === "done" ? "Done" : "Teammates";
         return `
           <div class="task-item">
             <div><div class="task-title">${esc(title)}</div><div class="task-desc">${esc(desc)}</div></div>
             <div class="task-right">
-              <span class="badge ${badgeCls}">${badgeTxt}</span>
+              <span class="badge done">Done</span>
               <button class="jump-link" data-goto="${it.goto}">${btn}</button>
             </div>
           </div>`;
@@ -824,42 +893,48 @@
     }
 
     const HANDOFF_ROWS = [
-      ["results/in_dist_results.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/in_dist_results.json", "24.6 KB",
-       "Bench A & B 长度审计、参数量、3-seed F1/AUC/HamAcc 与推理耗时。",
-       "Bench A & B length audits, parameter counts, 3-seed F1/AUC/HamAcc & inference latency."],
-      ["results/zeroshot_real_variants.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/zeroshot_real_variants.json", "10.1 KB",
-       "Clean → RealVariant 零样本 3-seed 指标与精确 McNemar 检验 p 值。",
-       "Clean -> RealVariant 3-seed metrics + exact McNemar test p-values."],
-      ["results/per_attack_breakdown.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/per_attack_breakdown.json", "5.0 KB",
-       "PHON / GLYPH / SPLIT / SPACE / MIXED / CLEAN 分攻击类型 F1 与召回率。",
-       "Per-attack F1 & recall across PHON, GLYPH, SPLIT, SPACE, MIXED, CLEAN."],
-      ["results/intensity_curve.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/intensity_curve.json", "7.4 KB",
-       "0%–60% 七档扰动强度曲线全部 5 模型 3-seed 数据。",
-       "0%–60% adversarial perturbation intensity curves across all 5 models (3 seeds)."],
-      ["results/ablations.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/ablations.json", "15.4 KB",
-       "8 行消融实验完整 3-seed 数据与精确 delta_f1。",
-       "8-row multi-seed ablation table with exact delta_f1 vs. full MV-CSN v2."],
-      ["results/llm_comparison.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/llm_comparison.json", "14.2 KB",
-       "Qwen3-0.6B/4B Zero-Shot、4-Shot ICL、Clean-LoRA、Cascade 与 McNemar 检验。",
-       "Qwen3-0.6B/4B Zero-Shot, 4-Shot ICL, Clean-LoRA & Cascade benchmarks + McNemar."],
-      ["results/gate_analysis.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/gate_analysis.json", "332.1 KB",
-       "19,173 token 门控分布与 6 条真实测试集逐字透视样本。",
-       "Token-level [ctx, phon, glyph] distributions across 19,173 tokens + 6 real case studies."],
-      ["results/error_analysis.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/error_analysis.json", "35.4 KB",
-       "3,395 测试样本全部 20 条错判（8 FP + 12 FN）清单、分类归纳与不确定带统计。",
-       "Full audit of all 20/3,395 test errors (8 FP + 12 FN), categories & uncertainty capture."],
-      ["docs/EXPERIMENTS_AND_CODE_GUIDE.md", "https://github.com/1-pluto1/mv-csn/blob/main/docs/EXPERIMENTS_AND_CODE_GUIDE.md", "28.2 KB",
-       "中文《代码架构与全部实验说明手册》（含架构讲解、JSON 字段字典、答辩 Q&A）。",
-       "Comprehensive Chinese engineering & experiments handoff guide + defense Q&A."],
-      ["Release v2.0.0 (artifacts/demo_bundle.pt)", "https://github.com/1-pluto1/mv-csn/releases/tag/v2.0.0", "20.5 MB",
-       "Seed-42 fp16 完整权重包 + 压缩 32×32 字形库 + 全部基准/划分/图缓存与 SHA-256。",
-       "Seed-42 fp16 MV-CSN v2 bundle + compressed 32x32 bitmaps + splits, graphs & SHA-256."],
+      ["results/zeroshot_real_variants.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/zeroshot_real_variants.json", "74 KB",
+       "Track 1 (7 模型) & Track 2 (5 模型) 3-seed Fair/Raw/Olivi-9/Probes 与 Seed-42 McNemar 检验。",
+       "Track 1 & Track 2 3-seed Fair/Raw/Olivi-9/Probes + exact McNemar p-values."],
+      ["results/per_attack_breakdown.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/per_attack_breakdown.json", "56 KB",
+       "全 12 模型在 CLEAN / PHON / MIXED / SPACE / SPLIT / GLYPH 六类细分切片上的 3-seed 指标。",
+       "All 12 models across CLEAN, PHON, MIXED, SPACE, SPLIT, GLYPH slices."],
+      ["results/pure_cjk_track.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/pure_cjk_track.json", "22 KB",
+       "剔除非汉字/符号干扰的 Pure-CJK 轨道评测（MacBERT+v3 0.9885, MV-CSN v3 0.9849）。",
+       "Pure-CJK track isolating CJK substitution performance across all 12 models."],
+      ["results/intensity_curve.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/intensity_curve.json", "259 KB",
+       "0%→60% 七档对称压力曲线（sub_only 与 mixed 双模式，9 模型 × 3 种子）。",
+       "0%→60% symmetric intensity stress curves (sub_only & mixed, 9 models × 3 seeds)."],
+      ["results/ablations.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/ablations.json", "98 KB",
+       "12 行完整消融（Fair / Raw / SymSub40 / Olivi-9 四维均值与 deltas_vs_full）。",
+       "12-row ablations across Fair, Raw, SymSub40, Olivi-9 + deltas_vs_full."],
+      ["results/in_dist_results.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/in_dist_results.json", "30 KB",
+       "Bench A Original 与 Bench B v2 SMS-Matched 分布内 3-seed 基准。",
+       "Bench A & Bench B v2 in-distribution 3-seed results."],
+      ["results/external_cross_domain.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/external_cross_domain.json", "37 KB",
+       "外部 Olivi-9 (12,011 条) 零样本跨库与 70/10/20 域内微调对照。",
+       "External Olivi-9 (12,011 SMS) zero-shot cross-domain vs. 70/10/20 in-domain."],
+      ["results/gate_analysis.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/gate_analysis.json", "15 KB",
+       "159,760 测试 Token 四桶门控权重均值统计 + 6 条真实透视案例（含 1 条礼貌误报）。",
+       "159,760-token gate routing stats across 4 buckets + 6 token-level case studies."],
+      ["results/error_analysis.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/error_analysis.json", "17 KB",
+       "Seed-42 全部 19 FP + 15 FN 错判明细，以及 16 条 CF16 礼貌短通知反事实对比。",
+       "All 19 FP + 15 FN records on Seed 42 plus full 16-item CF16 breakdown."],
+      ["results/latency_benchmark.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/latency_benchmark.json", "1.8 KB",
+       "A100 独立零争抢硬件测速（bs64/32, bs1 eager/torch.compile, 6 线程 CPU）。",
+       "Solo zero-contention A100 & 6-thread CPU latency across 7 architectures."],
+      ["results/llm_comparison.json", "https://github.com/1-pluto1/mv-csn/blob/main/results/llm_comparison.json", "26 KB",
+       "Qwen3-4B (ZS / 4-Shot ICL / Clean-LoRA), Qwen3-8B ZS 与 τ=0.30/0.40/0.45 级联扫描。",
+       "Qwen3-4B/8B evaluation, Clean-LoRA 3-epoch training & cascade sweep."],
+      ["artifacts/demo_bundle.pt", "https://github.com/1-pluto1/mv-csn/blob/main/artifacts/demo_bundle.pt", "20.0 MB",
+       "自包含 Seed-42 fp16 MV-CSN v3 推理包 + GlyphCAE + 双视图图 + 32×32 压缩字形库。",
+       "Self-contained Seed-42 fp16 MV-CSN v3 bundle with compressed 32x32 bitmaps & CAE."]
     ];
 
     function renderHandoffTable() {
       const h1 = curLang === "zh" ? "文件 / 资产路径" : "Artifact / Result File";
       const h2 = curLang === "zh" ? "大小" : "Size";
-      const h3 = curLang === "zh" ? "用途说明（画论文图 / 写报告 / 复现）" : "Contents for Figures, Report & Reproduction";
+      const h3 = curLang === "zh" ? "用途说明" : "Description";
       let tbl = `<table><thead><tr><th class="ta-left">${h1}</th><th>${h2}</th><th class="ta-left">${h3}</th></tr></thead><tbody>`;
       HANDOFF_ROWS.forEach(([label, url, sz, descZh, descEn]) => {
         const desc = curLang === "zh" ? descZh : descEn;
@@ -869,39 +944,37 @@
       document.getElementById("handoff-table-wrap").innerHTML = tbl;
     }
 
-    // Tab switcher
     function openTab(tabId) {
       document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tabId));
       document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === tabId));
     }
     document.querySelectorAll(".tab-btn").forEach(btn => btn.addEventListener("click", () => openTab(btn.dataset.tab)));
 
-    // Architecture Stage Details (1..5 consistent numbering)
     const ARCH_INFO = {
       "1": {
-        zh: "<strong>阶段 1 · 选择性预处理器</strong>：移除零宽字符与夹杂填充符号，仅对全角/圈号数字做 NFKC 折叠 (⑧→8)，刻意保留 <code>髙/穏/え/Ꝗ</code> 跨文字异体字符，并利用 <code>kfcd/chaizi</code> 执行 2/3 字拆字重组（如 <code>氵青→请</code>）。",
-        en: "<strong>Stage 1 · Selective Preprocessor</strong>: Strips zero-width/filler noise, selectively folds fullwidth &amp; circled alphanumerics while preserving cross-script lookalikes (<code>髙/え/Ꝗ</code>), and recomposes 2/3-char IDS radical splits.",
-        file: "mvcsn/data/preprocessing.py"
+        zh: "<strong>阶段 1 · 预处理与跨视角增强</strong>：保留 <code>髙/穏/え/Ꝗ</code> 等跨脚本形近异体字，重组 <code>chaizi</code> 拆字，并在双师蒸馏训练期引入 Cross-View（音/形邻域与可控 UNK 丢字）与 Space-Injection 增强，使未清洗 Raw F1 从 v2 的 <code>0.9200</code> 升至 <code>0.9916</code>（+7.16%）。",
+        en: "<strong>Stage 1 · Preprocessor & Cross-View Augmentation</strong>: Preserves cross-script lookalikes (<code>髙/え/Ꝗ</code>), recomposes Chaizi splits, and applies cross-view/UNK/space augmentations during distillation—raising Raw F1 from <code>0.9200</code> to <code>0.9916</code> (+7.16%).",
+        file: "mvcsn/data/preprocessing.py · augmentation.py"
       },
       "2": {
-        zh: "<strong>阶段 2 · 多模态锚点与编码</strong>：将字符 ID 嵌入与 <code>32×32 GlyphCAE (64d)</code> 字形向量、声母/韵母/声调嵌入经 LayerNorm 锚定相加，送入并行 CNN (k=3,5) + 2 层 Pre-LN Transformer 得到上下文状态 <code>h_ctx</code>。",
-        en: "<strong>Stage 2 · Multimodal Anchor &amp; ContextEncoder</strong>: Sums learned char IDs with projected 64-d rendered glyph CAE embeddings and Pinyin (I/F/T) features, then encodes context <code>h_ctx</code> via parallel k=3,5 CNN + 2L Transformer.",
-        file: "mvcsn/model/mvcsn.py · encoder.py"
+        zh: "<strong>阶段 2 · 预训练字嵌入与多模态编码器</strong>：用 <code>chinese-macbert-base</code> 字嵌入做 SVD 降维对齐 192 维词表初值，联合 <code>GlyphCAE (64d)</code> 与拼音声韵调嵌入，经多尺度空洞卷积 + 3 层 6-head Transformer 输出上下文序列表征 <code>h_ctx</code>。",
+        en: "<strong>Stage 2 · Pretrained SVD Char Init & Multimodal Encoder</strong>: Initializes 192-d char vectors via SVD of MacBERT embeddings, fuses <code>GlyphCAE (64d)</code> + pinyin priors, and runs multi-scale dilated CNN + 3-layer Transformer.",
+        file: "mvcsn/training/distill.py · model/encoder.py"
       },
       "3": {
-        zh: "<strong>阶段 3 · 双视图 GAT + OOV 动态桥</strong>：分别在 Top-20 语音相似图与跨脚本 32×32 视觉字形图上以 <code>h_ctx</code> 作 Query 聚合邻居；遇未登录新字 (<code>Ꝗ/え</code>) 时实时渲染位图并连入训练词表 Top-20 邻居。",
-        en: "<strong>Stage 3 · Dual-View GAT + Dynamic OOV Bridge</strong>: Attends over Top-20 phonetic and rendered-glyph neighbors using context queries; unseen test chars are rendered and linked to train neighbors at runtime.",
-        file: "mvcsn/model/gat.py · oov_bridge.py"
+        zh: "<strong>阶段 3 · 4-Head 双视图 GAT 与动态 OOV 桥</strong>：以 <code>h_ctx</code> 分别聚合 Top-20 语音图与 32×32 渲染字形图邻居；遇 <code>え/髙/纟</code> 等未登录测试字符时，<code>OOVGraphBridge</code> 实时渲染编码并连入训练图（159,760 token 测试中 0 未桥接）。",
+        en: "<strong>Stage 3 · 4-Head Dual-View GAT & Dynamic OOV Bridge</strong>: Queries Top-20 phonetic and rendered-glyph graphs; bridges unseen test glyphs at runtime with 0 unbridged unknowns across 159,760 tokens.",
+        file: "mvcsn/model/gat.py · graph/oov_bridge.py"
       },
       "4": {
-        zh: "<strong>阶段 4 · 动态门控与 RoCBert 一致性</strong>：逐字输出 <code>[α_ctx, α_phon, α_glyph]</code>；正常字 93.3% 保持上下文免受邻居污染，混淆字 77.3% 自动切换至音/形图完成纠偏；训练期以 20% GPU 图邻域扰动强制预测一致。",
-        en: "<strong>Stage 4 · Context Gate &amp; RoCBert Consistency</strong>: Outputs per-token weights <code>[α_ctx, α_phon, α_glyph]</code> (93.3% context on clean tokens; 77.3% graph on obfuscated tokens) regularized via 20% graph-neighbor consistency.",
-        file: "mvcsn/model/gate.py · losses.py"
+        zh: "<strong>阶段 4 · 动态门控与 RoCBert 图一致性</strong>：逐字输出 <code>[α_ctx, α_phon, α_glyph]</code>；正常已知字 <code>88.7%</code> 走上下文，已登录混淆字 <code>66.2%</code> 切至图视图，桥接 OOV 混淆字高达 <code>88.5%</code> 走图通路。",
+        en: "<strong>Stage 4 · Context Gate & RoCBert Consistency</strong>: Routes clean tokens context-first (<code>88.7%</code> ctx / <code>11.3%</code> graph), in-vocab obfuscations to <code>66.2%</code> graph, and bridged OOVs to <code>88.5%</code> graph.",
+        file: "mvcsn/model/gate.py · training/losses.py"
       },
       "5": {
-        zh: "<strong>阶段 5 · 双任务输出头与可选级联</strong>：AttentionPooling 汇聚句向量判定 Spam，同步输出逐字混淆概率热力图；可与 <code>hfl/rbt3</code> 跨度对齐融合刷新 <code>0.9964</code> F1，或仅路由 <code>0.71%</code> 不确定样本给 Qwen3-4B。",
-        en: "<strong>Stage 5 · Dual Heads &amp; Optional Cascade</strong>: Predicts message spam probability + token obfuscation scores; supports span-aligned RBT3 fusion (<code>0.9964</code> F1) or 0.71%-escalation Qwen3-4B cascade.",
-        file: "mvcsn/model/heads.py · finetune.py"
+        zh: "<strong>阶段 5 · 双师跨视图蒸馏与不确定性级联</strong>：域内由 104.9M <code>MacBERT+v3</code> 做 Logit+Feature KD，外域由 <code>MacBERT+v3</code> &amp; <code>Qwen3-8B</code> 双师共识对 22,028 条未标注短信做跨视角软标签蒸馏（Olivi-9 +6.40%）；部署时可仅上送 1.31% 给 Qwen3-4B LoRA 达 <code>0.9951 F1</code>。",
+        en: "<strong>Stage 5 · Dual-Teacher Cross-View KD & Cascade</strong>: Combines in-domain <code>MacBERT+v3</code> Logit/Feature KD with 22K consensus soft-labels from <code>MacBERT+v3</code> &amp; <code>Qwen3-8B</code> (+6.40% Olivi-9); optional 1.31% Qwen3-4B LoRA cascade reaches <code>0.9951 F1</code>.",
+        file: "mvcsn/training/distill.py · inference.py"
       }
     };
     function renderArchDetail(id) {
@@ -911,158 +984,226 @@
     }
     document.querySelectorAll(".arch-node").forEach(g => g.addEventListener("click", () => renderArchDetail(g.getAttribute("data-stage"))));
 
-    // Tab 1: Zero-Shot Grouped Bar Chart
+    // Tab 1: Track 1 & Track 2 Grouped SVG + Full 12-Model Table
     function renderZeroShot() {
-      const models = ["LZASD", "RBT3", "TFIDF-SVM", "MV-CSN v2", "RBT3 + MV-CSN v2"];
-      const colors = {"LZASD":"#94a3b8", "RBT3":"#60a5fa", "TFIDF-SVM":"#d97706", "MV-CSN v2":"#0f766e", "RBT3 + MV-CSN v2":"#0b5d3b"};
-      const metrics = [
-        {key:"OVERALL", label:"Overall F1"}, {key:"PHON", label:"PHON"}, {key:"GLYPH", label:"GLYPH"},
-        {key:"SPLIT", label:"SPLIT"}, {key:"SPACE", label:"SPACE"}, {key:"MIXED", label:"MIXED"},
+      const byName = {};
+      DATA.zeroshot.track1.concat(DATA.zeroshot.track2).forEach(r => { byName[r.name] = r; });
+      const chartModels = [
+        {name:"LZASD (Fixed)", short:"LZASD", color:"#94a3b8"},
+        {name:"MV-CSN v2 (Clean)", short:"v2 Clean", color:"#93c5fd"},
+        {name:"RBT3 (Clean)", short:"RBT3 Clean", color:"#60a5fa"},
+        {name:"MacBERT + MV-CSN v3 (Clean)", short:"MacBERT+v3", color:"#4338ca"},
+        {name:"Plain CNN+Trans (Same KD)", short:"Plain KD", color:"#d97706"},
+        {name:"MV-CSN v3 (Clean-KD Only)", short:"v3 CleanKD", color:"#2dd4bf"},
+        {name:"MV-CSN v3 (Full Dual-Teacher KD)", short:"v3 Dual-KD", color:"#0f766e"},
+        {name:"RBT3 + MV-CSN v3 (Dual-Teacher)", short:"RBT3+v3 Dual", color:"#0b5d3b"}
       ];
-      const W = 960, H = 280, padL = 52, padR = 16, padT = 40, padB = 42;
+      const metrics = [
+        {key:"fair_f1", label:"Fair F1"},
+        {key:"raw_f1", label:"Raw F1"},
+        {key:"pure_cjk", label:"Pure-CJK"},
+        {key:"olivi9", label:"Olivi-9 (ZS)"},
+        {key:"cf40", label:"CF40 Acc"}
+      ];
+      const W = 960, H = 300, padL = 52, padR = 16, padT = 56, padB = 42;
       const plotW = W - padL - padR, plotH = H - padT - padB;
-      const yMin = 0.50, yMax = 1.02;
+      const yMin = 0.60, yMax = 1.03;
       const yScale = v => padT + plotH * (1 - (Math.max(yMin, v) - yMin) / (yMax - yMin));
-      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:680px;">`;
-      models.forEach((m, i) => {
-        const lx = padL + i * 176;
-        svg += `<rect x="${lx}" y="10" width="11" height="11" rx="2.5" fill="${colors[m]}"/>`;
-        svg += `<text x="${lx+16}" y="19.5" font-size="11.5" font-weight="600" fill="#181a1f">${m}</text>`;
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:720px;">`;
+      chartModels.forEach((cm, i) => {
+        const row = Math.floor(i / 4), col = i % 4;
+        const lx = padL + col * 224, ly = 10 + row * 19;
+        svg += `<rect x="${lx}" y="${ly}" width="11" height="11" rx="2.5" fill="${cm.color}"/>`;
+        svg += `<text x="${lx+16}" y="${ly+9.5}" font-size="11" font-weight="650" fill="#181a1f">${esc(cm.short)}</text>`;
       });
-      [0.5, 0.6, 0.7, 0.8, 0.9, 1.0].forEach(yv => {
+      [0.6, 0.7, 0.8, 0.9, 1.0].forEach(yv => {
         const y = yScale(yv);
         svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e5e3dc" stroke-dasharray="3,3"/>`;
         svg += `<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#787e8a">${yv.toFixed(1)}</text>`;
       });
-      const groupW = plotW / metrics.length, barW = 21, gap = 3;
+      const groupW = plotW / metrics.length, barW = 14, gap = 3;
       metrics.forEach((mt, gi) => {
-        const totalGW = models.length * barW + (models.length - 1) * gap;
+        const totalGW = chartModels.length * barW + (chartModels.length - 1) * gap;
         const gx = padL + gi * groupW + (groupW - totalGW) / 2;
-        models.forEach((m, mi) => {
-          const val = mt.key === "OVERALL" ? DATA.zeroshot.summary[m].f1.mean : DATA.zeroshot.per_attack[m][mt.key];
-          const x = gx + mi * (barW + gap), y = yScale(val), h = yScale(yMin) - y;
-          const tip = `<strong>${m}</strong> · ${mt.label}<br/>F1 = <code>${val.toFixed(4)}</code>`;
-          svg += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${colors[m]}" data-tip="${esc(tip)}"/>`;
-          if (mi === 3) svg += `<text x="${x + barW/2 - 2}" y="${y - 13}" text-anchor="middle" font-size="9.3" font-weight="700" fill="#0f766e">${(val*100).toFixed(1)}</text>`;
-          else if (mi === 4) svg += `<text x="${x + barW/2 + 2}" y="${y - 4}" text-anchor="middle" font-size="9.3" font-weight="700" fill="#0b5d3b">${(val*100).toFixed(1)}</text>`;
+        chartModels.forEach((cm, mi) => {
+          const r = byName[cm.name];
+          const val = r[mt.key];
+          const x = gx + mi * (barW + gap), y = yScale(val), h = Math.max(2, yScale(yMin) - y);
+          const tip = `<strong>${esc(cm.name)}</strong> · ${mt.label}<br/>Score = <code>${val.toFixed(4)}</code> (Params: ${r.params.toLocaleString()})`;
+          svg += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="2.5" fill="${cm.color}" data-tip="${esc(tip)}"/>`;
+          if (mi === 6) svg += `<text x="${x + barW/2 - 4}" y="${y - 14}" text-anchor="middle" font-size="8.6" font-weight="700" fill="#0f766e">${(val*100).toFixed(1)}</text>`;
+          else if (mi === 7) svg += `<text x="${x + barW/2 + 6}" y="${y - 3}" text-anchor="middle" font-size="8.6" font-weight="700" fill="#0b5d3b">${(val*100).toFixed(1)}</text>`;
         });
         svg += `<text x="${padL + gi * groupW + groupW/2}" y="${H - 14}" text-anchor="middle" font-size="11.5" font-weight="700" fill="#181a1f">${mt.label}</text>`;
       });
       svg += `</svg>`;
       const cbox = document.getElementById("chart-zs"); cbox.innerHTML = svg; bindTooltips(cbox);
 
-      let tbl = `<table><thead><tr><th class="ta-left">Model (Clean → RealVariant, 3 Seeds)</th><th>Overall F1</th><th>AUC</th><th>Clean Ham Acc</th><th>PHON</th><th>GLYPH</th><th>SPLIT</th><th>SPACE</th><th>MIXED</th></tr></thead><tbody>`;
-      models.forEach(m => {
-        const s = DATA.zeroshot.summary[m], a = DATA.zeroshot.per_attack[m];
-        const hi = m.includes("MV-CSN") ? ' class="highlight"' : '';
-        tbl += `<tr${hi}><td class="ta-left">${m}</td><td><code>${s.f1.mean.toFixed(4)} ± ${s.f1.std.toFixed(4)}</code></td><td>${s.auc.toFixed(4)}</td><td>${s.ham.toFixed(4)}</td><td>${a.PHON.toFixed(4)}</td><td>${a.GLYPH.toFixed(4)}</td><td>${a.SPLIT.toFixed(4)}</td><td>${a.SPACE.toFixed(4)}</td><td>${a.MIXED.toFixed(4)}</td></tr>`;
-      });
+      const t1Hdr = curLang === "zh" ? "Track 1 · 严格纯标注 Clean-Only 基线（7 模型 · Bench B v2 Test N=3,216）" : "Track 1 · Strict Clean-Only Baselines (7 Models · Bench B v2 Test N=3,216)";
+      const t2Hdr = curLang === "zh" ? "Track 2 · 同 22K 双师无标注迁移池与跨视角增强（5 模型 · 3 种子公平对照）" : "Track 2 · Same 22K Dual-Teacher Unlabeled Pool &amp; Augmentation (5 Models · 3 Seeds)";
+      let tbl = `<table class="compact-tbl"><thead><tr><th class="ta-left">Model</th><th>Params</th><th>Fair F1</th><th>Ham</th><th>Raw F1</th><th>CJK</th><th>Olivi-9</th><th>CF16</th><th>CF40</th><th>+CP/-P</th><th>MIXED</th><th>PHON</th><th>SPLIT</th></tr></thead><tbody>`;
+      const addRows = (hdr, rows) => {
+        tbl += `<tr class="split-head"><td colspan="13">${hdr}</td></tr>`;
+        rows.forEach(r => {
+          const hi = r.name === "MV-CSN v3 (Full Dual-Teacher KD)" || r.name === "RBT3 + MV-CSN v3 (Dual-Teacher)" || r.name === "MacBERT + MV-CSN v3 (Clean)" ? ' class="highlight"' : '';
+          const pStr = r.params >= 1e6 ? (r.params/1e6).toFixed(1) + "M" : (r.params/1e3).toFixed(0) + "K";
+          tbl += `<tr${hi}><td class="ta-left">${esc(r.name)}</td><td>${pStr}</td><td><code>${r.fair_f1.toFixed(4)}</code><span style="color:var(--subtle);font-size:.88em;">±${r.fair_std.toFixed(4)}</span></td><td>${r.ham.toFixed(3)}</td><td><code>${r.raw_f1.toFixed(4)}</code></td><td>${r.pure_cjk.toFixed(3)}</td><td><code>${r.olivi9.toFixed(4)}</code></td><td>${r.cf16.toFixed(3)}</td><td>${r.cf40.toFixed(3)}</td><td>${r.plus_cp.toFixed(3)}/${r.minus_p.toFixed(3)}</td><td>${r.per_attack.MIXED.toFixed(3)}</td><td>${r.per_attack.PHON.toFixed(3)}</td><td>${r.per_attack.SPLIT.toFixed(3)}</td></tr>`;
+        });
+      };
+      addRows(t1Hdr, DATA.zeroshot.track1);
+      addRows(t2Hdr, DATA.zeroshot.track2);
       tbl += `</tbody></table>`;
       document.getElementById("table-zs").innerHTML = tbl;
     }
 
-    // Tab 2: LLM Latency vs F1 Pareto Scatter
+    // Tab 2: LLM & Cascade Pareto + Solo A100 Latency
     function renderLLM() {
+      const rowsByName = {};
+      DATA.llm.rows.forEach(r => { rowsByName[r.name] = r; });
       const pts = [
-        {name:"RBT3 + MV-CSN v2 (40M)", f1:DATA.llm.summary["RBT3 + MV-CSN v2"].f1, ms:DATA.llm.summary["RBT3 + MV-CSN v2"].ms, color:"#0b5d3b", lx:420, ly:42, anchor:"start", lead:true},
-        {name:"MV-CSN v2 (1.37M)", f1:DATA.llm.summary["MV-CSN v2"].f1, ms:DATA.llm.summary["MV-CSN v2"].ms, color:"#0f766e", lx:84, ly:124, anchor:"start", lead:true},
-        {name:"MV-CSN v2 + Qwen3-4B Cascade", f1:DATA.llm.summary["MV-CSN v2 + Qwen3-4B Cascade"].f1, ms:DATA.llm.summary["MV-CSN v2 + Qwen3-4B Cascade"].ms, color:"#2563eb", lx:355, ly:152, anchor:"start", lead:true},
-        {name:"Qwen3-0.6B Clean-LoRA (600M)", f1:DATA.llm.summary["Qwen3-0.6B (Clean-LoRA)"].f1, ms:DATA.llm.summary["Qwen3-0.6B (Clean-LoRA)"].ms, color:"#4338ca", lx:705, ly:102, anchor:"middle", lead:true},
-        {name:"Qwen3-0.6B Zero-Shot (cal.)", f1:DATA.llm.qwen06_cal.metrics.f1, ms:DATA.llm.summary["Qwen3-0.6B (Zero-Shot)"].ms, color:"#64748b", dx:-12, dy:4, anchor:"end", lead:false},
-        {name:"Qwen3-4B Zero-Shot (4B)", f1:DATA.llm.summary["Qwen3-4B-Instruct (Zero-Shot)"].f1, ms:DATA.llm.summary["Qwen3-4B-Instruct (Zero-Shot)"].ms, color:"#c83e37", dx:-12, dy:4, anchor:"end", lead:false},
-        {name:"Qwen3-4B 4-Shot ICL (4B)", f1:DATA.llm.summary["Qwen3-4B-Instruct (4-Shot ICL)"].f1, ms:DATA.llm.summary["Qwen3-4B-Instruct (4-Shot ICL)"].ms, color:"#d97706", dx:-12, dy:-4, anchor:"end", lead:false},
+        {name:"Cascade + 4B LoRA (τ=0.45, 1.31%)", key:"Cascade: v3 + 4B LoRA (τ=0.45)", color:"#0b5d3b", lx:285, ly:92, anchor:"start", lead:true},
+        {name:"Cascade + 4B LoRA (τ=0.30)", key:"Cascade: v3 + 4B LoRA (τ=0.30)", color:"#0891b2", lx:210, ly:130, anchor:"start", lead:true},
+        {name:"MV-CSN v3 (2.35M)", key:"MV-CSN v3 (Seed 42)", color:"#0f766e", lx:74, ly:166, anchor:"start", lead:true},
+        {name:"Cascade + 4B ZS (τ=0.45)", key:"Cascade: v3 + 4B ZS (τ=0.45)", color:"#2563eb", lx:270, ly:206, anchor:"start", lead:true},
+        {name:"Qwen3-4B Clean-LoRA (4.0B)", key:"Qwen3-4B Clean-LoRA (3 ep)", color:"#4338ca", lx:740, ly:62, anchor:"end", lead:false},
+        {name:"Qwen3-4B 4-Shot ICL", key:"Qwen3-4B 4-Shot ICL", color:"#d97706", lx:846, ly:128, anchor:"end", lead:true},
+        {name:"Qwen3-8B Zero-Shot (8.2B)", key:"Qwen3-8B Zero-Shot", color:"#7c3aed", lx:812, ly:166, anchor:"end", lead:false},
+        {name:"Qwen3-4B Zero-Shot (4.0B)", key:"Qwen3-4B Zero-Shot", color:"#c83e37", lx:720, ly:251, anchor:"end", lead:false},
       ];
-      const W = 960, H = 330, padL = 62, padR = 36, padT = 30, padB = 46;
+      const W = 960, H = 345, padL = 62, padR = 36, padT = 40, padB = 46;
       const plotW = W - padL - padR, plotH = H - padT - padB;
-      const xMin = Math.log10(0.14), xMax = Math.log10(95), yMin = 0.84, yMax = 1.012;
+      const xMin = Math.log10(0.06), xMax = Math.log10(26), yMin = 0.86, yMax = 1.008;
       const xScale = ms => padL + plotW * (Math.log10(ms) - xMin) / (xMax - xMin);
-      const yScale = f1 => padT + plotH * (1 - (f1 - yMin) / (yMax - yMin));
-      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:680px;">`;
-      const zW = xScale(1.0) - padL, zH = yScale(0.99) - yScale(1.005);
-      svg += `<rect x="${padL}" y="${yScale(1.005)}" width="${zW}" height="${zH}" fill="#e8f3ee" stroke="#86efac" stroke-dasharray="4,3" rx="6"/>`;
-      svg += `<text x="${padL+10}" y="${yScale(1.005)-8}" font-size="10.8" font-weight="700" fill="#0b5d3b">Pareto Ideal Zone (&lt; 1 ms/SMS, F1 &gt; 0.99)</text>`;
-      [0.2, 0.5, 1, 5, 10, 30, 60].forEach(tick => {
+      const yScale = f1 => padT + plotH * (1 - (Math.max(yMin, f1) - yMin) / (yMax - yMin));
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:700px;">`;
+      const zW = xScale(0.30) - padL, zH = yScale(0.990) - yScale(1.003);
+      svg += `<rect x="${padL}" y="${yScale(1.003)}" width="${zW}" height="${zH}" fill="#e8f3ee" stroke="#86efac" stroke-dasharray="4,3" rx="6"/>`;
+      svg += `<text x="${padL+6}" y="22" font-size="10.6" font-weight="700" fill="#0b5d3b">Pareto Ideal Zone (&lt; 0.3 ms Batch, Bench B F1 &gt; 0.99)</text>`;
+      [0.1, 0.2, 0.5, 1, 2, 5, 10, 20].forEach(tick => {
         const x = xScale(tick);
         svg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${H-padB}" stroke="#e5e3dc" stroke-dasharray="3,3"/>`;
         svg += `<text x="${x}" y="${H-padB+17}" text-anchor="middle" font-size="10.5" fill="#787e8a">${tick} ms</text>`;
       });
-      [0.85, 0.90, 0.95, 1.00].forEach(tick => {
+      [0.88, 0.92, 0.96, 1.00].forEach(tick => {
         const y = yScale(tick);
         svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e5e3dc" stroke-dasharray="3,3"/>`;
         svg += `<text x="${padL-9}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#787e8a">${tick.toFixed(2)}</text>`;
       });
-      const xAxisNote = curLang === "zh" ? "Inference Latency per SMS (ms, log10 scale) — 越靠左越快 · 越靠上越准" : "Inference Latency per SMS (ms, log10 scale) — Faster is Left · More Accurate is Up";
-      svg += `<text x="${padL + plotW/2}" y="${H-8}" text-anchor="middle" font-size="11.2" font-weight="600" fill="#575c66">${xAxisNote}</text>`;
-      svg += `<line x1="${xScale(pts[1].ms)}" y1="${yScale(pts[1].f1)}" x2="${xScale(pts[0].ms)}" y2="${yScale(pts[0].f1)}" stroke="#0b5d3b" stroke-width="1.6" stroke-dasharray="4,3"/>`;
+      const xAxisNote = curLang === "zh" ? "Effective GPU Batch Latency (ms/SMS, log10) · 越靠左越快 · 越靠上越准（含 Sym40 Ham Acc 提示）" : "Effective GPU Batch Latency (ms/SMS, log10) · Left = Faster · Up = Higher Bench B v2 F1";
+      svg += `<text x="${padL + plotW/2}" y="${H-8}" text-anchor="middle" font-size="11" font-weight="600" fill="#575c66">${xAxisNote}</text>`;
+      const r0 = rowsByName["MV-CSN v3 (Seed 42)"], rc = rowsByName["Cascade: v3 + 4B LoRA (τ=0.45)"];
+      svg += `<line x1="${xScale(r0.eff_batch_ms)}" y1="${yScale(r0.bench_f1)}" x2="${xScale(rc.eff_batch_ms)}" y2="${yScale(rc.bench_f1)}" stroke="#0b5d3b" stroke-width="1.6" stroke-dasharray="4,3"/>`;
       pts.forEach(p => {
-        const cx = xScale(p.ms), cy = yScale(p.f1);
-        const tx = p.lead ? p.lx : (cx + p.dx), ty = p.lead ? p.ly : (cy + p.dy);
-        if (p.lead) svg += `<line x1="${cx}" y1="${cy}" x2="${tx}" y2="${ty - 4}" stroke="${p.color}" stroke-width="1.1" opacity="0.65"/>`;
-        const tip = `<strong>${p.name}</strong><br/>F1 = <code>${p.f1.toFixed(4)}</code> · Latency = <code>${p.ms.toFixed(3)} ms/SMS</code>`;
+        const d = rowsByName[p.key];
+        const cx = xScale(d.eff_batch_ms), cy = yScale(d.bench_f1);
+        if (p.lead) svg += `<line x1="${cx}" y1="${cy}" x2="${p.lx}" y2="${p.ly - 4}" stroke="${p.color}" stroke-width="1.1" opacity="0.65"/>`;
+        const tip = `<strong>${esc(p.name)}</strong><br/>BenchB F1 = <code>${d.bench_f1.toFixed(4)}</code> · Sym40 HamAcc = <code>${(d.sym40_ham*100).toFixed(2)}%</code><br/>Olivi-9 F1 = <code>${d.olivi9_f1.toFixed(4)}</code> · Batch = <code>${d.eff_batch_ms.toFixed(3)} ms</code> (bs=1: ${d.eff_bs1_ms.toFixed(2)} ms)`;
         svg += `<circle cx="${cx}" cy="${cy}" r="6.5" fill="${p.color}" stroke="#fff" stroke-width="2" data-tip="${esc(tip)}"/>`;
-        svg += `<text x="${tx}" y="${ty}" text-anchor="${p.anchor}" font-size="11.2" font-weight="700" fill="${p.color}">${p.name} · ${p.f1.toFixed(4)}</text>`;
+        svg += `<text x="${p.lx}" y="${p.ly}" text-anchor="${p.anchor}" font-size="10.8" font-weight="700" fill="${p.color}">${esc(p.name)} · ${d.bench_f1.toFixed(4)}</text>`;
       });
       svg += `</svg>`;
       const cbox = document.getElementById("chart-llm"); cbox.innerHTML = svg; bindTooltips(cbox);
 
-      let tbl = `<table><thead><tr><th class="ta-left">Model / Strategy</th><th>Parameters</th><th>Latency (ms)</th><th>Overall F1</th><th>AUC</th><th>Clean Ham Acc</th><th>GLYPH F1</th><th>SPLIT F1</th></tr></thead><tbody>`;
-      DATA.llm.order.forEach(m => {
-        const s = DATA.llm.summary[m];
-        const hi = (m === "MV-CSN v2" || m === "RBT3 + MV-CSN v2") ? ' class="highlight"' : '';
-        const note = m === "Qwen3-0.6B (Zero-Shot)" ? ` <small style="color:var(--subtle);">(cal: ${DATA.llm.qwen06_cal.metrics.f1.toFixed(4)})</small>` : "";
-        tbl += `<tr${hi}><td class="ta-left">${m}</td><td>${s.params.toLocaleString()}</td><td><code>${s.ms.toFixed(3)}</code></td><td><code>${s.f1.toFixed(4)}</code>${note}</td><td>${s.auc.toFixed(4)}</td><td>${s.ham.toFixed(4)}</td><td>${s.glyph.toFixed(4)}</td><td>${s.split.toFixed(4)}</td></tr>`;
+      let tbl = `<table><thead><tr><th class="ta-left">Model / Cascade (Seed 42)</th><th>BenchB F1 (Ham)</th><th>Sym40 F1 (HamAcc!)</th><th>Olivi-9 F1</th><th>CF16 / CF40</th><th>Batch ms</th><th>bs=1 ms</th><th>Esc Rate</th></tr></thead><tbody>`;
+      DATA.llm.rows.forEach(r => {
+        const hi = r.name.includes("τ=0.45") && r.name.includes("LoRA") || r.kind === "student" ? ' class="highlight"' : '';
+        const symWarn = r.sym40_ham < 0.70 ? ' style="color:var(--vermilion);font-weight:700;"' : '';
+        tbl += `<tr${hi}><td class="ta-left">${esc(r.name)}</td><td><code>${r.bench_f1.toFixed(4)}</code> (${(r.bench_ham*100).toFixed(1)}%)</td><td${symWarn}><code>${r.sym40_f1.toFixed(4)}</code> (${(r.sym40_ham*100).toFixed(2)}%)</td><td><code>${r.olivi9_f1.toFixed(4)}</code></td><td>${r.cf16.toFixed(2)} / ${r.cf40.toFixed(2)}</td><td><code>${r.eff_batch_ms.toFixed(3)}</code></td><td>${r.eff_bs1_ms.toFixed(2)}</td><td>${(r.esc_bench*100).toFixed(2)}%</td></tr>`;
       });
       tbl += `</tbody></table>`;
       document.getElementById("table-llm").innerHTML = tbl;
+
+      const latTitle = curLang === "zh" ? `独立零争抢硬件延迟（A100-80GB · ${DATA.llm.latency_hw.cpu_threads}核 CPU）` : `Solo Latency (A100-80GB · ${DATA.llm.latency_hw.cpu_threads}T CPU)`;
+      let ltbl = `<table class="compact-tbl"><thead><tr><th class="ta-left">${latTitle}</th><th>Params</th><th>GPU Batch (ms/条)</th><th>GPU bs=1 Eager</th><th>GPU bs=1 Compile</th><th>CPU bs=1</th></tr></thead><tbody>`;
+      DATA.llm.latency_rows.forEach(r => {
+        const hi = r.name.startsWith("MV-CSN v3") ? ' class="highlight"' : '';
+        const pStr = r.params >= 1e9 ? (r.params/1e9).toFixed(2) + "B" : (r.params/1e6).toFixed(2) + "M";
+        const comp = r.gpu_bs1_compile_ms ? `<code>${r.gpu_bs1_compile_ms.toFixed(3)} ms</code>` : "—";
+        const cpu = r.cpu_bs1_ms ? `${r.cpu_bs1_ms.toFixed(3)} ms` : "—";
+        ltbl += `<tr${hi}><td class="ta-left">${esc(r.name)}</td><td>${pStr}</td><td><code>${r.gpu_batch_ms.toFixed(4)} ms</code> (${r.batch_label})</td><td>${r.gpu_bs1_eager_ms.toFixed(3)} ms</td><td>${comp}</td><td>${cpu}</td></tr>`;
+      });
+      ltbl += `</tbody></table>`;
+      document.getElementById("table-latency").innerHTML = ltbl;
     }
 
-    // Tab 3: Honest Diverging Delta-F1 Ablation Chart
-    function renderAblations() {
+    // Tab 3: 12-Row Ablation Diverging Chart + 4-Dim Table
+    function renderAblations(mode = curAblMode) {
+      curAblMode = mode;
       const rows = DATA.ablations;
-      const W = 960, rowH = 34, padL = 235, padR = 165, padT = 36, padB = 34;
+      const isCross = mode === "cross";
+      const W = 960, rowH = 34, padL = 248, padR = 230, padT = 38, padB = 34;
       const H = padT + rows.length * rowH + padB;
-      const plotW = W - padL - padR, xMin = -0.028, xMax = 0.002;
-      const xScale = v => padL + plotW * (v - xMin) / (xMax - xMin);
+      const plotW = W - padL - padR;
+      const xMin = isCross ? -0.068 : -0.0040, xMax = isCross ? 0.034 : 0.0030;
+      const xScale = v => padL + plotW * (Math.max(xMin, Math.min(xMax, v)) - xMin) / (xMax - xMin);
       const zeroX = xScale(0);
-      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:680px;">`;
-      svg += `<text x="16" y="20" font-size="11.5" font-weight="700" fill="#181a1f">ΔF1 Relative to Full MV-CSN v2 (0.9958 ± 0.0005, Zero-Shot Benchmark B, 3 Seeds)</text>`;
-      [-0.025, -0.020, -0.015, -0.010, -0.005, 0.0].forEach(tick => {
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:700px;">`;
+      const hdr = isCross
+        ? "12-Row Ablations · Cross-Domain ΔOlivi-9 (bar) &amp; Raw Δ (secondary) vs. Full MV-CSN v3"
+        : "12-Row Ablations · In-Domain Bench B Fair Δ (bar) &amp; SymSub40 Δ (3 Seeds)";
+      svg += `<text x="16" y="21" font-size="11.5" font-weight="700" fill="#181a1f">${hdr}</text>`;
+      const ticks = isCross ? [-0.06, -0.04, -0.02, 0.0, 0.02, 0.03] : [-0.004, -0.002, 0.0, 0.002];
+      ticks.forEach(tick => {
         const x = xScale(tick);
         svg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${H-padB}" stroke="${tick===0?'#181a1f':'#e5e3dc'}" stroke-width="${tick===0?1.5:1}" stroke-dasharray="${tick===0?'':'3,3'}"/>`;
         svg += `<text x="${x}" y="${H-12}" text-anchor="middle" font-size="10.2" fill="#787e8a">${tick===0?'0.000':tick.toFixed(3)}</text>`;
       });
       rows.forEach((r, i) => {
-        const y = padT + i * rowH, c = i === 0 ? "#0b5d3b" : (r.delta < -0.005 ? "#c83e37" : (r.delta < 0 ? "#d97706" : "#64748b"));
-        svg += `<text x="${padL-10}" y="${y+20}" text-anchor="end" font-size="11.5" font-weight="${i===0?700:500}" fill="#181a1f">${esc(r.name)}</text>`;
-        const bx = r.delta >= 0 ? zeroX : xScale(r.delta), bw = Math.max(4, Math.abs(xScale(r.delta) - zeroX));
-        const tip = `<strong>${esc(r.name)}</strong><br/>F1 = <code>${r.f1.toFixed(4)} ± ${r.std.toFixed(4)}</code> · ΔF1 = <code>${r.delta>=0?'+':''}${r.delta.toFixed(4)}</code>`;
+        const y = padT + i * rowH;
+        const primaryD = isCross ? r.delta_olivi9 : r.delta_fair;
+        const secD = isCross ? r.delta_raw : r.delta_sym40;
+        const secLbl = isCross ? "dRaw" : "dSym40";
+        const c = i === 0 ? "#0b5d3b" : (primaryD < (isCross ? -0.008 : -0.0008) || secD < -0.005 ? "#c83e37" : (primaryD > 0.001 ? "#0891b2" : "#d97706"));
+        svg += `<text x="${padL-10}" y="${y+20}" text-anchor="end" font-size="11.2" font-weight="${i===0?700:500}" fill="#181a1f">${esc(r.name)}</text>`;
+        const bx = primaryD >= 0 ? zeroX : xScale(primaryD), bw = Math.max(4, Math.abs(xScale(primaryD) - zeroX));
+        const tip = `<strong>${esc(r.name)}</strong><br/>Fair=${r.fair_f1.toFixed(4)} (${r.delta_fair>=0?'+':''}${r.delta_fair.toFixed(4)}) · Raw=${r.raw_f1.toFixed(4)} (${r.delta_raw>=0?'+':''}${r.delta_raw.toFixed(4)})<br/>Sym40=${r.sym40_f1.toFixed(4)} · Olivi-9=${r.olivi9_f1.toFixed(4)} (${r.delta_olivi9>=0?'+':''}${r.delta_olivi9.toFixed(4)})`;
         svg += `<rect x="${bx}" y="${y+7}" width="${bw}" height="18" rx="4" fill="${c}" data-tip="${esc(tip)}"/>`;
-        const lbl = i === 0 ? `${r.f1.toFixed(4)} (baseline)` : `${r.f1.toFixed(4)} (${r.delta>=0?'+':''}${r.delta.toFixed(4)})`;
-        svg += `<text x="${W-padR+10}" y="${y+20}" font-size="11.2" font-weight="700" fill="${c}">${lbl}</text>`;
+        const pVal = isCross ? r.olivi9_f1 : r.fair_f1;
+        const lbl = i === 0 ? `${pVal.toFixed(4)} (Full baseline)` : `${pVal.toFixed(4)} (${primaryD>=0?'+':''}${primaryD.toFixed(4)}) · ${secLbl}=${secD>=0?'+':''}${secD.toFixed(4)}`;
+        svg += `<text x="${W-padR+10}" y="${y+20}" font-size="10.8" font-weight="700" fill="${c}">${lbl}</text>`;
       });
       svg += `</svg>`;
       const cbox = document.getElementById("chart-abl"); cbox.innerHTML = svg; bindTooltips(cbox);
 
-      let tbl = `<table><thead><tr><th class="ta-left">Ablation Configuration (3 Seeds)</th><th>F1 (mean ± std)</th><th>ΔF1 vs. Full</th><th>AUC</th><th>Clean Ham Acc</th></tr></thead><tbody>`;
+      let tbl = `<table><thead><tr><th class="ta-left">12-Row Ablation (3 Seeds)</th><th>Fair F1 (Δ)</th><th>Raw F1 (Δ)</th><th>SymSub40 F1 (Δ)</th><th>Zero-Shot Olivi-9 (Δ)</th></tr></thead><tbody>`;
       rows.forEach((r, i) => {
-        tbl += `<tr${i===0?' class="highlight"':''}><td class="ta-left">${esc(r.name)}</td><td><code>${r.f1.toFixed(4)} ± ${r.std.toFixed(4)}</code></td><td><code>${r.delta>=0?'+':''}${r.delta.toFixed(4)}</code></td><td>${r.auc.toFixed(4)}</td><td>${r.ham.toFixed(4)}</td></tr>`;
+        const hi = i === 0 ? ' class="highlight"' : '';
+        tbl += `<tr${hi}><td class="ta-left">${esc(r.name)}</td><td><code>${r.fair_f1.toFixed(4)}±${r.fair_std.toFixed(4)}</code> (${r.delta_fair>=0?'+':''}${r.delta_fair.toFixed(4)})</td><td><code>${r.raw_f1.toFixed(4)}</code> (${r.delta_raw>=0?'+':''}${r.delta_raw.toFixed(4)})</td><td><code>${r.sym40_f1.toFixed(4)}</code> (${r.delta_sym40>=0?'+':''}${r.delta_sym40.toFixed(4)})</td><td><code>${r.olivi9_f1.toFixed(4)}</code> (${r.delta_olivi9>=0?'+':''}${r.delta_olivi9.toFixed(4)})</td></tr>`;
       });
       tbl += `</tbody></table>`;
       document.getElementById("table-abl").innerHTML = tbl;
     }
+    document.querySelectorAll("[data-ablmode]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-ablmode]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderAblations(btn.getAttribute("data-ablmode"));
+      });
+    });
 
-    // Tab 4: Intensity Curve — Fix Right-Edge Overlap With Explicit Evenly-Spaced Leader Slots!
-    function renderCurve() {
+    // Tab 4: Intensity Curves (sub_only / mixed) + In-Dist & Olivi-9 Table
+    function renderCurve(mode = curCurveMode) {
+      curCurveMode = mode;
       const rates = DATA.intensity.rates;
-      const models = ["LZASD", "TFIDF-SVM", "RBT3", "MV-CSN v2", "RBT3 + MV-CSN v2"];
-      const colors = {"LZASD":"#94a3b8", "TFIDF-SVM":"#d97706", "RBT3":"#60a5fa", "MV-CSN v2":"#0f766e", "RBT3 + MV-CSN v2":"#0b5d3b"};
-      const W = 960, H = 278, padL = 56, padR = 205, padT = 26, padB = 38;
+      const series = DATA.intensity[mode];
+      const curveSpecs = [
+        {key:"LZASD (Fixed)", short:"LZASD", color:"#94a3b8", sw:1.7},
+        {key:"TFIDF-SVM", short:"TFIDF-SVM", color:"#d97706", sw:1.7},
+        {key:"Plain CNN+Trans (Same KD)", short:"Plain CNN+Trans", color:"#f43f5e", sw:1.8},
+        {key:"RBT3 (Clean)", short:"RBT3 (Clean)", color:"#60a5fa", sw:1.9},
+        {key:"MV-CSN v2 (Clean)", short:"MV-CSN v2 (Clean)", color:"#38bdf8", sw:1.8},
+        {key:"RBT3 (Same Data+Aug)", short:"RBT3 (Same Data)", color:"#6366f1", sw:2.0},
+        {key:"RBT3 + MV-CSN v3 (Dual-Teacher)", short:"RBT3 + v3 Dual", color:"#8b5cf6", sw:2.0},
+        {key:"MV-CSN v3 (Full Dual-Teacher KD)", short:"MV-CSN v3 (Full)", color:"#0f766e", sw:3.0},
+        {key:"MV-CSN v3 (Clean-KD Only)", short:"v3 (Clean-KD)", color:"#0b5d3b", sw:2.5}
+      ];
+      const W = 960, H = 300, padL = 56, padR = 225, padT = 28, padB = 38;
       const plotW = W - padL - padR, plotH = H - padT - padB;
-      const yMin = 0.915, yMax = 1.003;
+      const yMin = 0.960, yMax = 1.000;
       const xScale = i => padL + plotW * (i / (rates.length - 1));
       const yScale = v => padT + plotH * (1 - (v - yMin) / (yMax - yMin));
-      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:680px;">`;
-      [0.92, 0.94, 0.96, 0.98, 1.00].forEach(yv => {
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:700px;">`;
+      [0.96, 0.97, 0.98, 0.99, 1.00].forEach(yv => {
         const y = yScale(yv);
         svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e5e3dc" stroke-dasharray="3,3"/>`;
         svg += `<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="10.5" fill="#787e8a">${yv.toFixed(2)}</text>`;
@@ -1070,92 +1211,97 @@
       rates.forEach((r, i) => {
         svg += `<text x="${xScale(i)}" y="${H-12}" text-anchor="middle" font-size="11" font-weight="600" fill="#575c66">${Math.round(r*100)}%</text>`;
       });
-      // Guaranteed 24px vertical spacing across top-4 tightly clustered endpoints at 60%
-      const labelY = {
-        "MV-CSN v2": 48,
-        "RBT3": 72,
-        "RBT3 + MV-CSN v2": 96,
-        "TFIDF-SVM": 120,
-        "LZASD": yScale(0.9207) + 4
-      };
+      const sorted = [...curveSpecs].sort((a, b) => series[b.key][rates.length-1] - series[a.key][rates.length-1]);
       const xEnd = xScale(rates.length - 1);
-      models.forEach(m => {
-        const vals = DATA.intensity.series[m];
+      curveSpecs.forEach(cs => {
+        const vals = series[cs.key];
         const path = vals.map((v, i) => `${i===0?'M':'L'} ${xScale(i)} ${yScale(v)}`).join(" ");
-        svg += `<path d="${path}" fill="none" stroke="${colors[m]}" stroke-width="${m.includes('MV-CSN')?2.8:1.8}"/>`;
+        svg += `<path d="${path}" fill="none" stroke="${cs.color}" stroke-width="${cs.sw}"/>`;
         vals.forEach((v, i) => {
-          const tip = `<strong>${m}</strong> @ ${Math.round(rates[i]*100)}%<br/>F1 = <code>${v.toFixed(4)}</code>`;
-          svg += `<circle cx="${xScale(i)}" cy="${yScale(v)}" r="4" fill="${colors[m]}" stroke="#fff" stroke-width="1.2" data-tip="${esc(tip)}"/>`;
+          const tip = `<strong>${esc(cs.key)}</strong> (${mode} @ ${Math.round(rates[i]*100)}%)<br/>F1 = <code>${v.toFixed(4)}</code>`;
+          svg += `<circle cx="${xScale(i)}" cy="${yScale(v)}" r="3.6" fill="${cs.color}" stroke="#fff" stroke-width="1.1" data-tip="${esc(tip)}"/>`;
         });
-        const lastV = vals[vals.length - 1];
-        const ly = labelY[m];
-        svg += `<line x1="${xEnd + 5}" y1="${yScale(lastV)}" x2="${W - padR + 24}" y2="${ly - 4}" stroke="${colors[m]}" stroke-width="1.15" opacity="0.6"/>`;
-        svg += `<text x="${W - padR + 28}" y="${ly}" font-size="11" font-weight="700" fill="${colors[m]}">${m} · ${lastV.toFixed(4)}</text>`;
+      });
+      sorted.forEach((cs, idx) => {
+        const lastV = series[cs.key][rates.length - 1];
+        const ly = padT + 12 + idx * 25.5;
+        svg += `<line x1="${xEnd + 5}" y1="${yScale(lastV)}" x2="${W - padR + 24}" y2="${ly - 4}" stroke="${cs.color}" stroke-width="1.1" opacity="0.65"/>`;
+        svg += `<text x="${W - padR + 28}" y="${ly}" font-size="10.8" font-weight="700" fill="${cs.color}">${esc(cs.short)} · ${lastV.toFixed(4)}</text>`;
       });
       svg += `</svg>`;
       const cbox = document.getElementById("chart-curve"); cbox.innerHTML = svg; bindTooltips(cbox);
 
-      const la = DATA.in_dist.bench_a.length_audit, lb = DATA.in_dist.bench_b.length_audit;
-      const tA = curLang === "zh" ? "Benchmark A (Course 16K) · 存在长度捷径偏差" : "Benchmark A (Course 16K) · Severe Length Shortcut";
-      const tB = curLang === "zh" ? "Benchmark B (SMS-Matched 16.5K) · 长度直方图严格对齐" : "Benchmark B (SMS-Matched 16.5K) · Matched Length Histogram";
-      document.getElementById("length-audit-bars").innerHTML = `
-        <div class="audit-card">
-          <div style="font-size:0.83rem;font-weight:700;color:var(--vermilion);">${tA}</div>
-          <div class="audit-row"><span style="width:92px;">Ham p50=${la.ham_p50}</span><div class="audit-track"><div class="audit-fill" style="width:${la.ham_p50/2.1}%;background:#0f766e;"></div></div></div>
-          <div class="audit-row"><span style="width:92px;">Spam p50=${la.spam_p50}</span><div class="audit-track"><div class="audit-fill" style="width:${la.spam_p50/2.1}%;background:#c83e37;"></div></div></div>
-        </div>
-        <div class="audit-card">
-          <div style="font-size:0.83rem;font-weight:700;color:var(--emerald);">${tB}</div>
-          <div class="audit-row"><span style="width:92px;">Ham p50=${lb.ham_p50}</span><div class="audit-track"><div class="audit-fill" style="width:${lb.ham_p50/2.1}%;background:#0f766e;"></div></div></div>
-          <div class="audit-row"><span style="width:92px;">Spam p50=${lb.spam_p50}</span><div class="audit-track"><div class="audit-fill" style="width:${lb.spam_p50/2.1}%;background:#0b5d3b;"></div></div></div>
-        </div>`;
-
-      let tbl = `<table><thead><tr><th class="ta-left">Model (In-Distribution, 3 Seeds)</th><th>Params</th><th>Bench A (16K) F1</th><th>Bench B (SMS 16.5K) F1</th><th>Bench B AUC</th><th>Bench B Latency (ms)</th></tr></thead><tbody>`;
-      ["TFIDF-SVM", "LZASD", "RBT3", "MV-CSN v2", "RBT3 + MV-CSN v2"].forEach(m => {
-        const sa = DATA.in_dist.bench_a.summary[m], sb = DATA.in_dist.bench_b.summary[m];
-        const p = DATA.in_dist.bench_b.params[m] === 0 ? "sparse" : DATA.in_dist.bench_b.params[m].toLocaleString();
-        const hi = m.includes("MV-CSN") ? ' class="highlight"' : '';
-        tbl += `<tr${hi}><td class="ta-left">${m}</td><td>${p}</td><td><code>${sa.f1.mean.toFixed(4)} ± ${sa.f1.std.toFixed(4)}</code></td><td><code>${sb.f1.mean.toFixed(4)} ± ${sb.f1.std.toFixed(4)}</code></td><td>${sb.auc.toFixed(4)}</td><td><code>${sb.ms.toFixed(3)}</code></td></tr>`;
+      let tbl = `<table><thead><tr><th class="ta-left">In-Distribution &amp; External Olivi-9 (3 Seeds)</th><th>Bench A F1 (AUC)</th><th>Bench B v2 In-Dist F1 (AUC)</th><th>Olivi-9 In-Domain 70/10/20 F1 (AUC)</th></tr></thead><tbody>`;
+      DATA.in_dist.forEach(r => {
+        const hi = r.name.includes("v3") ? ' class="highlight"' : '';
+        tbl += `<tr${hi}><td class="ta-left">${esc(r.name)}</td><td><code>${r.bench_a_f1.toFixed(4)}±${r.bench_a_std.toFixed(4)}</code> (${r.bench_a_auc.toFixed(4)})</td><td><code>${r.bench_b_f1.toFixed(4)}±${r.bench_b_std.toFixed(4)}</code> (${r.bench_b_auc.toFixed(4)})</td><td><code>${r.olivi_id_f1.toFixed(4)}±${r.olivi_id_std.toFixed(4)}</code> (${r.olivi_id_auc.toFixed(4)})</td></tr>`;
       });
       tbl += `</tbody></table>`;
       document.getElementById("table-indist").innerHTML = tbl;
     }
+    document.querySelectorAll("[data-curvemode]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-curvemode]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderCurve(btn.getAttribute("data-curvemode"));
+      });
+    });
 
-    // Tab 5: Error Analysis — Generous padL=445 Prevents ANY Left-Edge Clipping
-    function renderErrors(filterType = "ALL") {
+    // Tab 5: Error Analysis & CF16 Probe
+    function renderErrors(filterType = curErrFilter) {
       curErrFilter = filterType;
       const ea = DATA.error_analysis;
       const bars = [];
-      Object.entries(ea.summary.fp_categories).forEach(([k, v]) => bars.push({label: "FP · " + k, count: v, color: "#b45309"}));
-      Object.entries(ea.summary.fn_categories).forEach(([k, v]) => bars.push({label: "FN · " + k, count: v, color: "#c83e37"}));
-      const W = 960, rowH = 34, padL = 455, padR = 90, padT = 36;
-      const H = padT + bars.length * rowH + 14;
-      const plotW = W - padL - padR, maxC = Math.max(...bars.map(b => b.count), 4);
+      Object.entries(ea.fp_by_attack).forEach(([k, v]) => bars.push({label: "Test FP · " + k, count: v, color: "#b45309"}));
+      Object.entries(ea.fn_by_attack).forEach(([k, v]) => bars.push({label: "Test FN · " + k, count: v, color: "#c83e37"}));
+      const cfWrong = ea.cf16_detail.filter(c => !c.mvcsn_v3_correct).length;
+      const rbtWrong = ea.cf16_detail.filter(c => !c.rbt3_mvcsn_v3_correct).length;
+      bars.push({label: "CF16 Polite Ham FP (MV-CSN v3 Single)", count: cfWrong, color: "#9333ea"});
+      bars.push({label: "CF16 Polite Ham FP (RBT3 + MV-CSN v3)", count: rbtWrong, color: "#0f766e"});
+      const W = 960, rowH = 31, padL = 330, padR = 95, padT = 36;
+      const H = padT + bars.length * rowH + 12;
+      const plotW = W - padL - padR, maxC = Math.max(...bars.map(b => b.count), 10);
       let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:680px;">`;
       const chartTitle = curLang === "zh"
-        ? "Failure-Mode Taxonomy · 全部 20 条错判分布（共 3,395 测试样本，总体错误率 0.59%）"
-        : "Failure-Mode Taxonomy · All 20 Errors across 3,395 Benchmark B Test SMS (0.59% Error Rate)";
+        ? `Seed-42 错判拆解：3,216 测试样本 (19 FP + 15 FN) 与 CF16 反事实 (${cfWrong}/16 vs. 联合 ${rbtWrong}/16)`
+        : `Seed-42 Error Breakdown: 3,216 Test SMS (19 FP + 15 FN) &amp; CF16 (${cfWrong}/16 vs. RBT3+v3 ${rbtWrong}/16)`;
       svg += `<text x="16" y="20" font-size="11.5" font-weight="700" fill="#181a1f">${chartTitle}</text>`;
       bars.forEach((b, i) => {
-        const y = padT + i * rowH, bw = Math.max(12, plotW * (b.count / maxC));
-        const tip = `<strong>${esc(b.label)}</strong>: ${b.count} cases`;
-        svg += `<text x="${padL - 12}" y="${y + 20}" text-anchor="end" font-size="11" font-weight="600" fill="#181a1f">${esc(b.label)}</text>`;
-        svg += `<rect x="${padL}" y="${y + 6}" width="${plotW}" height="19" rx="4" fill="#f4f2eb"/>`;
-        svg += `<rect x="${padL}" y="${y + 6}" width="${bw}" height="19" rx="4" fill="${b.color}" data-tip="${esc(tip)}"/>`;
-        svg += `<text x="${padL + bw + 9}" y="${y + 20}" font-size="11.2" font-weight="700" fill="${b.color}">${b.count} ${b.count > 1 ? "cases" : "case"}</text>`;
+        const y = padT + i * rowH, bw = Math.max(8, plotW * (b.count / maxC));
+        const tip = `<strong>${esc(b.label)}</strong>: ${b.count}`;
+        svg += `<text x="${padL - 12}" y="${y + 18}" text-anchor="end" font-size="11" font-weight="600" fill="#181a1f">${esc(b.label)}</text>`;
+        svg += `<rect x="${padL}" y="${y + 5}" width="${plotW}" height="17" rx="4" fill="#f4f2eb"/>`;
+        svg += `<rect x="${padL}" y="${y + 5}" width="${bw}" height="17" rx="4" fill="${b.color}" data-tip="${esc(tip)}"/>`;
+        svg += `<text x="${padL + bw + 9}" y="${y + 18}" font-size="11" font-weight="700" fill="${b.color}">${b.count} ${b.count > 1 ? "cases" : "case"}</text>`;
       });
       svg += `</svg>`;
       const cbox = document.getElementById("chart-err"); cbox.innerHTML = svg; bindTooltips(cbox);
 
-      const rows = ea.errors.filter(e => filterType === "ALL" || e.type === filterType);
-      let tbl = `<table><thead><tr><th class="ta-left">Type</th><th class="ta-left">Attack</th><th>P(spam)</th><th class="ta-left">Failure Category</th><th class="ta-left">Real Test SMS (Complete Record)</th></tr></thead><tbody>`;
-      rows.forEach(ex => {
-        const badge = ex.type === "FP"
-          ? `<span class="badge team">FP</span>`
-          : `<span class="badge" style="background:var(--vermilion-soft);color:var(--vermilion);border:1px solid rgba(200,62,55,.25);">FN</span>`;
-        tbl += `<tr><td class="ta-left">${badge}</td><td class="ta-left"><code>${esc(ex.atk)}</code></td><td><code>${ex.prob.toFixed(4)}</code></td><td class="ta-left wrap-cell">${esc(ex.cat)}</td><td class="ta-left wrap-cell" style="max-width:410px;"><code>${esc(ex.text)}</code></td></tr>`;
-      });
-      tbl += `</tbody></table>`;
+      let tbl = "";
+      if (filterType === "CF16") {
+        tbl = `<table><thead><tr><th class="ta-left">CF16 Status</th><th>MV-CSN v3 P(spam)</th><th>RBT3+v3 P(spam)</th><th class="ta-left">Polite Daily Ham Probe Text (y=0)</th></tr></thead><tbody>`;
+        ea.cf16_detail.forEach(c => {
+          const ok3 = c.mvcsn_v3_correct, okR = c.rbt3_mvcsn_v3_correct;
+          const bdg = ok3
+            ? `<span class="badge done">OK</span>`
+            : `<span class="badge" style="background:var(--vermilion-soft);color:var(--vermilion);border:1px solid rgba(200,62,55,.25);">FP · Fixed=${okR?"Yes":"No"}</span>`;
+          tbl += `<tr><td class="ta-left">${bdg}</td><td><code>${c.mvcsn_v3_prob.toFixed(4)}</code></td><td><code>${c.rbt3_mvcsn_v3_prob.toFixed(4)}</code></td><td class="ta-left wrap-cell"><code>${esc(c.text)}</code></td></tr>`;
+        });
+        tbl += `</tbody></table>`;
+      } else {
+        const allErrs = [
+          ...ea.top_fps.map(x => ({...x, kind:"FP"})),
+          ...ea.top_fns.map(x => ({...x, kind:"FN"}))
+        ].filter(x => filterType === "ALL" || x.kind === filterType);
+        tbl = `<table><thead><tr><th class="ta-left">Type</th><th class="ta-left">Attack</th><th>P(spam)</th><th>Len</th><th class="ta-left">Real Test SMS (Complete Record)</th></tr></thead><tbody>`;
+        allErrs.forEach(ex => {
+          const badge = ex.kind === "FP"
+            ? `<span class="badge team">FP</span>`
+            : `<span class="badge" style="background:var(--vermilion-soft);color:var(--vermilion);border:1px solid rgba(200,62,55,.25);">FN</span>`;
+          tbl += `<tr><td class="ta-left">${badge}</td><td class="ta-left"><code>${esc(ex.attack_type)}</code></td><td><code>${ex.prob.toFixed(4)}</code></td><td>${ex.len}</td><td class="ta-left wrap-cell" style="max-width:480px;"><code>${esc(ex.text)}</code></td></tr>`;
+        });
+        tbl += `</tbody></table>`;
+      }
       document.getElementById("table-err").innerHTML = tbl;
     }
     document.querySelectorAll("[data-errfilter]").forEach(btn => {
@@ -1166,30 +1312,33 @@
       });
     });
 
-    // Section 4: Gate Distribution Stacked Bars + Case Study X-Ray
+    // Section 4: 159,760-Token Gate Distribution & 6 Real Cases
     function renderGateDist() {
+      const b = DATA.gate.buckets;
       const rows = curLang === "zh" ? [
-        {label: `正常干净字 Clean Tokens (n=${DATA.gate.counts.clean.toLocaleString()})`, vals: DATA.gate.means.clean},
-        {label: `谐音/混合混淆 Phonetic / Mixed (n=${DATA.gate.counts.phon_obf.toLocaleString()})`, vals: DATA.gate.means.phon_obf},
-        {label: `纯形近混淆 Glyph-Only Obf. (n=${DATA.gate.counts.glyph_obf.toLocaleString()})`, vals: DATA.gate.means.glyph_obf},
+        {label: `正常已知字 Clean In-Vocab (n=${b.clean_in_vocab.token_count.toLocaleString()})`, vals: [b.clean_in_vocab.alpha_ctx_mean, b.clean_in_vocab.alpha_phon_mean, b.clean_in_vocab.alpha_glyph_mean]},
+        {label: `混淆已知字 Obf In-Vocab (n=${b.obf_in_vocab_phon_or_glyph.token_count.toLocaleString()})`, vals: [b.obf_in_vocab_phon_or_glyph.alpha_ctx_mean, b.obf_in_vocab_phon_or_glyph.alpha_phon_mean, b.obf_in_vocab_phon_or_glyph.alpha_glyph_mean]},
+        {label: `干净桥接 OOV Clean Bridged (n=${b.clean_oov_bridged.token_count.toLocaleString()})`, vals: [b.clean_oov_bridged.alpha_ctx_mean, b.clean_oov_bridged.alpha_phon_mean, b.clean_oov_bridged.alpha_glyph_mean]},
+        {label: `混淆桥接 OOV Obf Bridged (n=${b.obf_oov_bridged.token_count.toLocaleString()})`, vals: [b.obf_oov_bridged.alpha_ctx_mean, b.obf_oov_bridged.alpha_phon_mean, b.obf_oov_bridged.alpha_glyph_mean]},
       ] : [
-        {label: `Clean Tokens (n=${DATA.gate.counts.clean.toLocaleString()})`, vals: DATA.gate.means.clean},
-        {label: `Phonetic / Mixed Obf. (n=${DATA.gate.counts.phon_obf.toLocaleString()})`, vals: DATA.gate.means.phon_obf},
-        {label: `Glyph-Only Obf. (n=${DATA.gate.counts.glyph_obf.toLocaleString()})`, vals: DATA.gate.means.glyph_obf},
+        {label: `Clean In-Vocab (n=${b.clean_in_vocab.token_count.toLocaleString()})`, vals: [b.clean_in_vocab.alpha_ctx_mean, b.clean_in_vocab.alpha_phon_mean, b.clean_in_vocab.alpha_glyph_mean]},
+        {label: `Obf In-Vocab (n=${b.obf_in_vocab_phon_or_glyph.token_count.toLocaleString()})`, vals: [b.obf_in_vocab_phon_or_glyph.alpha_ctx_mean, b.obf_in_vocab_phon_or_glyph.alpha_phon_mean, b.obf_in_vocab_phon_or_glyph.alpha_glyph_mean]},
+        {label: `Clean OOV Bridged (n=${b.clean_oov_bridged.token_count.toLocaleString()})`, vals: [b.clean_oov_bridged.alpha_ctx_mean, b.clean_oov_bridged.alpha_phon_mean, b.clean_oov_bridged.alpha_glyph_mean]},
+        {label: `Obf OOV Bridged (n=${b.obf_oov_bridged.token_count.toLocaleString()})`, vals: [b.obf_oov_bridged.alpha_ctx_mean, b.obf_oov_bridged.alpha_phon_mean, b.obf_oov_bridged.alpha_glyph_mean]},
       ];
-      const W = 960, H = 162, padL = 290, padR = 24, padT = 36;
+      const W = 960, H = 198, padL = 310, padR = 24, padT = 36;
       const plotW = W - padL - padR;
       const segColors = ["#2b303a", "#0b5d3b", "#c83e37"];
       const segLabels = ["Context Gate (α_ctx)", "Phonetic GAT (α_phon)", "Rendered-Glyph GAT (α_glyph)"];
-      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:660px;">`;
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:680px;">`;
       segLabels.forEach((lbl, i) => {
-        const lx = padL + i * 215;
+        const lx = padL + i * 212;
         svg += `<rect x="${lx}" y="10" width="11" height="11" rx="2.5" fill="${segColors[i]}"/>`;
         svg += `<text x="${lx+16}" y="19.5" font-size="11.2" font-weight="600" fill="#181a1f">${lbl}</text>`;
       });
       rows.forEach((r, idx) => {
         const y = padT + idx * 38;
-        svg += `<text x="${padL-12}" y="${y+20}" text-anchor="end" font-size="11.3" font-weight="600" fill="#181a1f">${r.label}</text>`;
+        svg += `<text x="${padL-12}" y="${y+20}" text-anchor="end" font-size="11" font-weight="600" fill="#181a1f">${r.label}</text>`;
         let curX = padL;
         r.vals.forEach((v, si) => {
           const w = plotW * v;
@@ -1203,8 +1352,14 @@
       const cbox = document.getElementById("chart-gate-dist"); cbox.innerHTML = svg; bindTooltips(cbox);
     }
 
-    const CASE_LABELS_ZH = ["MIXED 复合攻击 (Spam)", "PHON 谐音攻击 (Spam)", "SPLIT 拆字/域名规避 (Spam)", "GLYPH 形近攻击 (Spam)", "CLEAN 正常短信 (Ham)"];
-    const CASE_LABELS_EN = ["MIXED Attack (Spam)", "PHON Homophone (Spam)", "SPLIT Domain/Radical (Spam)", "GLYPH Lookalike (Spam)", "CLEAN Normal SMS (Ham)"];
+    const CASE_LABELS_ZH = [
+      "1. GLYPH+OOV 跨文字 (Spam)", "2. PHON 谐音混淆 (Spam)", "3. SPLIT+OOV 拆字 (Spam)",
+      "4. SPACE 插空噪音 (Spam)", "5. Polite Service (诚实 FP)", "6. Narrative Ham (正常)"
+    ];
+    const CASE_LABELS_EN = [
+      "1. GLYPH+OOV (Spam)", "2. PHON Homophone (Spam)", "3. SPLIT+OOV (Spam)",
+      "4. SPACE Noise (Spam)", "5. Polite Service (Honest FP)", "6. Narrative Ham (Clean)"
+    ];
 
     function renderCaseButtons() {
       const wrap = document.getElementById("case-pills");
@@ -1228,12 +1383,15 @@
       document.getElementById("hm-scale-text").innerHTML = I18N[curLang][curHeatmapMode === "gate" ? "hm_scale_gate" : "hm_scale_obf"];
       document.getElementById("hm-limitation-note").innerHTML = I18N[curLang].hm_note;
 
-      const vTxtSpam = curLang === "zh" ? "判定：SPAM 垃圾短信" : "Verdict: SPAM";
-      const vTxtHam = curLang === "zh" ? "判定：CLEAN HAM 正常短信" : "Verdict: CLEAN HAM";
-      const verdict = cs.pred_prob >= 0.5
-        ? `<span class="badge" style="background:var(--vermilion-soft);color:var(--vermilion);border:1px solid rgba(200,62,55,.25);">${vTxtSpam}</span>`
-        : `<span class="badge done">${vTxtHam}</span>`;
-      document.getElementById("case-verdict").innerHTML = `${verdict} &nbsp; <code>P(spam) = ${cs.pred_prob.toFixed(4)}</code> · Attack Tag: <code>${esc(cs.attack_type)}</code>`;
+      const predSpam = cs.spam_prob >= 0.5;
+      const vTxt = predSpam ? (curLang === "zh" ? "判定：SPAM 垃圾短信" : "Pred: SPAM") : (curLang === "zh" ? "判定：CLEAN HAM 正常短信" : "Pred: HAM");
+      const truthTxt = cs.true_label === 1 ? "True: SPAM" : "True: HAM";
+      const verdict = predSpam
+        ? `<span class="badge" style="background:var(--vermilion-soft);color:var(--vermilion);border:1px solid rgba(200,62,55,.25);">${vTxt}</span>`
+        : `<span class="badge done">${vTxt}</span>`;
+      const oovHtml = cs.oov_resolved.length ? ` &nbsp; <span class="oov-pill">OOV Bridged: [${cs.oov_resolved.map(esc).join(", ")}]</span>` : "";
+      document.getElementById("case-verdict").innerHTML = `${verdict} &nbsp; <code>P(spam) = ${cs.spam_prob.toFixed(4)}</code> · <code>${truthTxt}</code> · Case: <code>${esc(cs.case_id)}</code>${oovHtml}`;
+
       const rawH = curLang === "zh" ? "原始输入短信 (Raw SMS)" : "Raw Input SMS";
       const procH = curLang === "zh" ? "预处理器清洗/重组输出 (Preprocessed)" : "Preprocessed / Recomposed Text";
       document.getElementById("case-compare").innerHTML = `
@@ -1282,7 +1440,6 @@
         <div><div style="font-size:0.76rem;color:var(--muted);">${lbls[4]}：<strong>${(ag*100).toFixed(1)}%</strong></div><div class="meter-track"><div class="meter-fill" style="width:${ag*100}%;background:#c83e37;"></div></div></div>`;
     }
 
-    // Language switch handler re-renders ALL localized sections cleanly
     document.getElementById("lang-toggle").addEventListener("click", () => {
       curLang = curLang === "zh" ? "en" : "zh";
       document.documentElement.lang = curLang === "zh" ? "zh-CN" : "en";
@@ -1292,8 +1449,10 @@
       });
       renderProgressGrid();
       renderArchDetail(activeArchStage);
+      renderZeroShot();
       renderLLM();
-      renderCurve();
+      renderAblations(curAblMode);
+      renderCurve(curCurveMode);
       renderErrors(curErrFilter);
       renderGateDist();
       renderCaseButtons();
@@ -1321,9 +1480,9 @@
     renderArchDetail("4");
     renderZeroShot();
     renderLLM();
-    renderAblations();
-    renderCurve();
-    renderErrors("ALL");
+    renderAblations("cross");
+    renderCurve("sub_only");
+    renderErrors("CF16");
     renderGateDist();
     renderCaseButtons();
     renderCaseStudy(0);

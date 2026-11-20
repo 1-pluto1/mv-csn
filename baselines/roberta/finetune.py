@@ -1,4 +1,4 @@
-"""Pretrained Chinese RoBERTa (hfl/rbt3) baseline and RBT3 + MV-CSN v2 fusion model."""
+"""Pretrained Chinese RoBERTa/MacBERT baselines and Backbone + MV-CSN fusion models."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ from mvcsn.training.metrics import compute_classification_metrics
 
 
 class RBT3HybridDataset(Dataset):
-    """Pre-tokenizes RBT3 inputs & character spans once for fast GPU training."""
+    """Pre-tokenizes Transformer inputs & character spans once for fast GPU training."""
 
     def __init__(
         self,
@@ -36,6 +36,7 @@ class RBT3HybridDataset(Dataset):
         oov_map: Optional[Dict[str, int]] = None,
         max_len: int = 192,
         use_preprocessor: bool = True,
+        soft_probs: Optional[List[float]] = None,
     ) -> None:
         self.records = records
         raw_texts = [r.raw_text for r in records]
@@ -64,6 +65,7 @@ class RBT3HybridDataset(Dataset):
                     "char_ids": ids,
                     "obf_mask": obf,
                     "label": float(rec.label),
+                    "soft_prob": float(soft_probs[i]) if soft_probs is not None else float(rec.label),
                 }
             )
 
@@ -91,6 +93,7 @@ def make_rbt3_collator(pad_token_id: int = 0):
         char_mask = torch.zeros((bsz, max_c), dtype=torch.bool)
         obf_labels = torch.zeros((bsz, max_c), dtype=torch.float32)
         labels = torch.zeros((bsz,), dtype=torch.float32)
+        soft_probs = torch.zeros((bsz,), dtype=torch.float32)
 
         for i, b in enumerate(batch):
             Lr = len(b["raw_ids"])
@@ -104,6 +107,7 @@ def make_rbt3_collator(pad_token_id: int = 0):
             char_mask[i, :Lc] = True
             obf_labels[i, :Lc] = torch.tensor(b["obf_mask"], dtype=torch.float32)
             labels[i] = float(b["label"])
+            soft_probs[i] = float(b["soft_prob"])
 
             for t_idx, (s_c, e_c) in enumerate(b["proc_offsets"]):
                 if e_c > s_c and s_c < Lc:
@@ -120,15 +124,17 @@ def make_rbt3_collator(pad_token_id: int = 0):
             "char_mask": char_mask,
             "obf_labels": obf_labels,
             "labels": labels,
+            "soft_probs": soft_probs,
         }
 
     return collate
 
 
 class RBT3Classifier(nn.Module):
-    def __init__(self, model_name: str = "hfl/rbt3", dropout: float = 0.15) -> None:
+    def __init__(self, model_name: str = "hfl/rbt3", dropout: float = 0.15, use_proc: bool = True) -> None:
         super().__init__()
         self.backbone = AutoModel.from_pretrained(model_name)
+        self.use_proc = use_proc
         hdim = self.backbone.config.hidden_size
         self.head = nn.Sequential(
             nn.Dropout(dropout),
@@ -138,26 +144,32 @@ class RBT3Classifier(nn.Module):
         )
 
     def forward(self, batch: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
-        out = self.backbone(input_ids=batch["raw_input_ids"], attention_mask=batch["raw_attention_mask"])
+        in_key = "proc_input_ids" if self.use_proc else "raw_input_ids"
+        m_key = "proc_attention_mask" if self.use_proc else "raw_attention_mask"
+        out = self.backbone(input_ids=batch[in_key], attention_mask=batch[m_key])
         cls = out.last_hidden_state[:, 0, :]
-        return {"spam_logit": self.head(cls).squeeze(-1)}
+        return {"spam_logit": self.head(cls).squeeze(-1), "backbone_feat": cls}
 
 
 class RBT3MVCSNFusion(nn.Module):
-    """Fuses projected RBT3 contextual states (768->128) with aligned MV-CSN v2 char-graph states."""
+    """Fuses projected Backbone contextual states with aligned MV-CSN char-graph states."""
 
-    def __init__(self, mvcsn_model: MVCSNModel, model_name: str = "hfl/rbt3", dropout: float = 0.15) -> None:
+    def __init__(
+        self,
+        mvcsn_model: MVCSNModel,
+        model_name: str = "hfl/rbt3",
+        dropout: float = 0.15,
+        use_proc: bool = True,
+    ) -> None:
         super().__init__()
         self.backbone = AutoModel.from_pretrained(model_name)
         self.mvcsn = mvcsn_model
+        self.use_proc = use_proc
         r_dim = self.backbone.config.hidden_size
         m_dim = mvcsn_model.char_emb.embedding_dim
 
         self.rbt_proj = nn.Linear(r_dim, m_dim)
-        self.fuse_gate = nn.Sequential(
-            nn.Linear(m_dim * 2, m_dim),
-            nn.Sigmoid(),
-        )
+        self.fuse_gate = nn.Sequential(nn.Linear(m_dim * 2, m_dim), nn.Sigmoid())
         self.classifier = nn.Sequential(
             nn.Linear(m_dim * 2, m_dim),
             nn.GELU(),
@@ -170,31 +182,35 @@ class RBT3MVCSNFusion(nn.Module):
         batch: Dict[str, torch.Tensor],
         override_char_ids: Optional[torch.Tensor] = None,
     ) -> Dict[str, torch.Tensor]:
-        rbt_out = self.backbone(
-            input_ids=batch["proc_input_ids"],
-            attention_mask=batch["proc_attention_mask"],
-        ).last_hidden_state
+        in_key = "proc_input_ids" if self.use_proc else "raw_input_ids"
+        m_key = "proc_attention_mask" if self.use_proc else "raw_attention_mask"
+        rbt_out = self.backbone(input_ids=batch[in_key], attention_mask=batch[m_key]).last_hidden_state
         r_proj = self.rbt_proj(rbt_out)
 
         cids = override_char_ids if override_char_ids is not None else batch["char_ids"]
         mv_out = self.mvcsn(cids, batch["char_mask"])
         h_char = mv_out["h_fused"]
-        h_aligned = torch.bmm(batch["span_align"], h_char)
 
-        g = self.fuse_gate(torch.cat([r_proj, h_aligned], dim=-1))
-        tok_fused = g * r_proj + (1.0 - g) * h_aligned
+        if self.use_proc:
+            h_aligned = torch.bmm(batch["span_align"], h_char)
+            g = self.fuse_gate(torch.cat([r_proj, h_aligned], dim=-1))
+            tok_fused = g * r_proj + (1.0 - g) * h_aligned
+        else:
+            tok_fused = r_proj
 
-        mask_t = batch["proc_attention_mask"].float()
+        mask_t = batch[m_key].float()
         tok_pooled = (tok_fused * mask_t.unsqueeze(-1)).sum(dim=1) / torch.clamp(mask_t.sum(dim=1, keepdim=True), min=1.0)
         mv_pooled, _ = self.mvcsn.pool(h_char, batch["char_mask"])
         pooled = torch.cat([tok_pooled, mv_pooled], dim=-1)
         spam_logit = self.classifier(pooled).squeeze(-1)
 
+        bb_mean = (rbt_out * mask_t.unsqueeze(-1)).sum(dim=1) / torch.clamp(mask_t.sum(dim=1, keepdim=True), min=1.0)
         return {
             "spam_logit": spam_logit,
             "obf_logits": mv_out["obf_logits"],
             "alpha": mv_out["alpha"],
             "pooled": pooled,
+            "backbone_feat": bb_mean,
         }
 
 
@@ -210,13 +226,38 @@ def evaluate_rbt3_family(
 ) -> Tuple[Dict[str, float], List[float], List[int]]:
     model.eval()
     probs, targets = [], []
+    use_amp = device.type == "cuda"
+    amp_dtype = torch.bfloat16 if (use_amp and torch.cuda.is_bf16_supported()) else torch.float16
     for batch in loader:
         b = _to_device(batch, device)
-        with torch.amp.autocast("cuda", enabled=(device.type == "cuda")):
+        with torch.amp.autocast("cuda", enabled=use_amp, dtype=amp_dtype):
             out = model(b)
         probs.extend(torch.sigmoid(out["spam_logit"].float()).cpu().tolist())
         targets.extend(batch["labels"].long().tolist())
     return compute_classification_metrics(targets, probs), probs, targets
+
+
+@torch.no_grad()
+def extract_backbone_features(
+    model: nn.Module,
+    loader: DataLoader,
+    device: torch.device,
+) -> Dict[str, torch.Tensor]:
+    model.eval()
+    logits_all: List[torch.Tensor] = []
+    feats_all: List[torch.Tensor] = []
+    use_amp = device.type == "cuda"
+    amp_dtype = torch.bfloat16 if (use_amp and torch.cuda.is_bf16_supported()) else torch.float16
+    for batch in loader:
+        b = _to_device(batch, device)
+        with torch.amp.autocast("cuda", enabled=use_amp, dtype=amp_dtype):
+            out = model(b)
+        logits_all.append(out["spam_logit"].float().cpu())
+        feats_all.append(F.normalize(out["backbone_feat"].float(), p=2, dim=-1).cpu())
+    return {
+        "logits": torch.cat(logits_all, dim=0),
+        "feats": torch.cat(feats_all, dim=0),
+    }
 
 
 def train_rbt3_family(
@@ -229,6 +270,10 @@ def train_rbt3_family(
     is_fusion: bool = False,
     loc_loss_weight: float = 0.25,
     use_consistency: bool = True,
+    unlabeled_loader: Optional[DataLoader] = None,
+    unlabeled_weight: float = 0.35,
+    aug_train_loader: Optional[DataLoader] = None,
+    aug_cons_weight: float = 0.35,
 ) -> Dict[str, object]:
     model = model.to(device)
     if is_fusion:
@@ -241,17 +286,24 @@ def train_rbt3_family(
         opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
 
     use_amp = device.type == "cuda"
-    scaler = torch.amp.GradScaler("cuda", enabled=use_amp)
+    use_bf16 = use_amp and torch.cuda.is_bf16_supported()
+    amp_dtype = torch.bfloat16 if use_bf16 else torch.float16
+    use_scaler = use_amp and not use_bf16
+    scaler = torch.amp.GradScaler("cuda", enabled=use_scaler)
+
     best_f1 = -1.0
     best_state = copy.deepcopy(model.state_dict())
     t0 = time.time()
 
     for _ in range(epochs):
         model.train()
+        u_iter = iter(unlabeled_loader) if unlabeled_loader is not None else None
+        a_iter = iter(aug_train_loader) if aug_train_loader is not None else None
+
         for batch in train_loader:
             b = _to_device(batch, device)
             opt.zero_grad(set_to_none=True)
-            with torch.amp.autocast("cuda", enabled=use_amp):
+            with torch.amp.autocast("cuda", enabled=use_amp, dtype=amp_dtype):
                 out = model(b)
                 if not is_fusion:
                     loss = F.binary_cross_entropy_with_logits(out["spam_logit"], b["labels"])
@@ -262,7 +314,7 @@ def train_rbt3_family(
                         obf_labels=b["obf_labels"],
                         attn_mask=b["char_mask"],
                         loc_loss_weight=loc_loss_weight if b["obf_labels"].sum() > 0 else 0.0,
-                        gate_prior_weight=0.05,
+                        gate_prior_weight=0.05 if b["obf_labels"].sum() > 0 else 0.0,
                     )
                     loss = aux["total"]
                     if use_consistency:
@@ -286,11 +338,41 @@ def train_rbt3_family(
                         )
                         l_cons = compute_consistency_loss(out, out_pert)
                         loss = 0.5 * loss + 0.5 * aux_p["total"] + 0.35 * l_cons
-            scaler.scale(loss).backward()
-            scaler.unscale_(opt)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-            scaler.step(opt)
-            scaler.update()
+
+                if a_iter is not None:
+                    try:
+                        ab = next(a_iter)
+                    except StopIteration:
+                        a_iter = iter(aug_train_loader)
+                        ab = next(a_iter)
+                    ab_dev = _to_device(ab, device)
+                    out_aug = model(ab_dev)
+                    l_aug = F.binary_cross_entropy_with_logits(out_aug["spam_logit"], ab_dev["labels"])
+                    loss = 0.5 * loss + 0.5 * l_aug
+
+                if u_iter is not None:
+                    try:
+                        ub = next(u_iter)
+                    except StopIteration:
+                        u_iter = iter(unlabeled_loader)
+                        ub = next(u_iter)
+                    ub_dev = _to_device(ub, device)
+                    out_u = model(ub_dev)
+                    l_u = F.binary_cross_entropy_with_logits(
+                        out_u["spam_logit"], ub_dev["soft_probs"].clamp(1e-4, 1.0 - 1e-4)
+                    )
+                    loss = loss + unlabeled_weight * l_u
+
+            if use_scaler:
+                scaler.scale(loss).backward()
+                scaler.unscale_(opt)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                scaler.step(opt)
+                scaler.update()
+            else:
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                opt.step()
 
         val_m, _, _ = evaluate_rbt3_family(model, val_loader, device)
         if val_m["f1"] > best_f1:

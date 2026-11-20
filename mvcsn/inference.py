@@ -1,9 +1,4 @@
-"""Unified MV-CSN v2 artifact serialization and inference engine.
-
-Consolidates fp16/zlib demo-bundle saving/loading and dynamic-OOV inference
-into a single cohesive module shared by the Streamlit app, LLM cascade runner,
-ablation runner, and CPU error-analysis pipeline.
-"""
+"""Unified MV-CSN v2/v3 artifact serialization and inference engine."""
 
 from __future__ import annotations
 
@@ -22,23 +17,21 @@ from mvcsn.data.splits import SpamRecord
 from mvcsn.data.vocab import CharVocab
 from mvcsn.graph.oov_bridge import OOVGraphBridge
 from mvcsn.model.mvcsn import MVCSNModel
+from mvcsn.utils.config import MVCSNConfig
 
 
 @dataclass
 class DemoBundle:
-    """Deserialized components extracted from a self-contained ``demo_bundle.pt``."""
-
     vocab: CharVocab
     graphs: Dict[str, torch.Tensor]
     gmeta: Dict[str, Any]
     bitmaps: torch.Tensor
     model_state: Dict[str, torch.Tensor]
+    model_cfg: Optional[MVCSNConfig] = None
 
 
 @dataclass
 class PredictionResult:
-    """Structured per-message output from :class:`MVCSNInferenceEngine`."""
-
     raw_text: str
     proc_text: str
     spam_prob: float
@@ -52,7 +45,6 @@ class PredictionResult:
     pool_weights: List[float]
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return a plain dictionary representation compatible with JSON / UI layers."""
         return asdict(self)
 
 
@@ -62,21 +54,19 @@ def save_demo_bundle(
     graphs: Dict[str, torch.Tensor],
     glyph_meta: Dict[str, Any],
     out_path: str | Path = "artifacts/demo_bundle.pt",
+    model_cfg: Optional[MVCSNConfig] = None,
 ) -> Path:
-    """Pack MV-CSN v2 weights, multi-view graphs, and zlib-compressed glyphs into fp16.
-
-    Args:
-        model: Trained :class:`MVCSNModel` (base vocabulary buffers active).
-        vocab: Character vocabulary aligned with ``model`` and ``graphs``.
-        graphs: Multi-view Top-K graph tensor dictionary.
-        glyph_meta: Metadata returned by :func:`build_multiview_graphs`.
-        out_path: Destination ``.pt`` bundle path.
-
-    Returns:
-        Path to the saved self-contained bundle (~20.5 MB).
-    """
     model.reset_inference_graph()
+    cfg = model_cfg if model_cfg is not None else model.get_config(teacher_feat_dim=0)
+    cfg_dict = asdict(cfg)
+    cfg_dict["teacher_feat_dim"] = 0
+
     bitmaps_u8 = (glyph_meta["bitmaps"] * 255.0).clamp(0, 255).to(torch.uint8).cpu().numpy()
+    clean_state = {
+        k: (v.half().cpu() if v.is_floating_point() else v.cpu())
+        for k, v in model.state_dict().items()
+        if not k.startswith("kd_proj.")
+    }
     payload = {
         "stoi": vocab.stoi,
         "graphs": {k: v.half().cpu() if v.is_floating_point() else v.cpu() for k, v in graphs.items()},
@@ -95,10 +85,8 @@ def save_demo_bundle(
             "cnn_weight": glyph_meta["cnn_weight"],
             "pixel_weight": glyph_meta["pixel_weight"],
         },
-        "model_state": {
-            k: v.half().cpu() if v.is_floating_point() else v.cpu()
-            for k, v in model.state_dict().items()
-        },
+        "model_cfg": cfg_dict,
+        "model_state": clean_state,
     }
     dest = Path(out_path)
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -107,15 +95,6 @@ def save_demo_bundle(
 
 
 def load_demo_bundle(bundle_path: str | Path = "artifacts/demo_bundle.pt") -> DemoBundle:
-    """Deserialize a compressed fp16 ``demo_bundle.pt`` into float32 CPU tensors.
-
-    Args:
-        bundle_path: Path to the saved bundle file.
-
-    Returns:
-        Typed :class:`DemoBundle` containing vocabulary, graphs, glyph metadata,
-        32x32 bitmaps, and float32 model state dictionary.
-    """
     raw = torch.load(Path(bundle_path), map_location="cpu", weights_only=False)
     vocab = CharVocab(raw["stoi"])
     graphs = {k: v.float() if v.is_floating_point() else v for k, v in raw["graphs"].items()}
@@ -140,25 +119,27 @@ def load_demo_bundle(bundle_path: str | Path = "artifacts/demo_bundle.pt") -> De
         **raw["glyph_cfg"],
     }
     model_state = {
-        k: v.float() if v.is_floating_point() else v for k, v in raw["model_state"].items()
+        k: (v.float() if v.is_floating_point() else v)
+        for k, v in raw["model_state"].items()
+        if not k.startswith("kd_proj.")
     }
+    model_cfg = None
+    if "model_cfg" in raw and isinstance(raw["model_cfg"], dict):
+        cd = dict(raw["model_cfg"])
+        cd["teacher_feat_dim"] = 0
+        model_cfg = MVCSNConfig(**cd)
+
     return DemoBundle(
         vocab=vocab,
         graphs=graphs,
         gmeta=gmeta,
         bitmaps=bitmaps,
         model_state=model_state,
+        model_cfg=model_cfg,
     )
 
 
 class MVCSNInferenceEngine:
-    """High-level inference facade coupling preprocessing, OOV bridging, and MV-CSN v2.
-
-    Encapsulates all stateful resource wiring so callers (Streamlit UI, CLI error
-    analysis, LLM cascade) never manipulate raw graph buffers or decompression
-    details directly.
-    """
-
     def __init__(
         self,
         model: MVCSNModel,
@@ -187,17 +168,6 @@ class MVCSNInferenceEngine:
         font_dir: str | Path = "/content/fonts",
         device: Optional[torch.device] = None,
     ) -> "MVCSNInferenceEngine":
-        """Instantiate an inference engine directly from a ``demo_bundle.pt`` file.
-
-        Args:
-            bundle_path: Path to ``artifacts/demo_bundle.pt``.
-            chaizi_path: Path to ``data/resources/chaizi_map.json.gz``.
-            font_dir: Directory containing ``NotoSansCJKsc-Regular.otf`` and ``unifont.otf``.
-            device: Target inference device (defaults to CPU).
-
-        Returns:
-            Ready-to-serve :class:`MVCSNInferenceEngine`.
-        """
         bundle = load_demo_bundle(bundle_path)
         preproc = TextPreprocessor(chaizi_path)
         bridge = OOVGraphBridge(
@@ -207,7 +177,7 @@ class MVCSNInferenceEngine:
             chaizi_path=chaizi_path,
             font_dir=font_dir,
         )
-        model = MVCSNModel.from_config(len(bundle.vocab), bundle.graphs)
+        model = MVCSNModel.from_config(len(bundle.vocab), bundle.graphs, config=bundle.model_cfg)
         model.load_state_dict(bundle.model_state, strict=True)
         model.eval()
         return cls(
@@ -222,7 +192,6 @@ class MVCSNInferenceEngine:
         )
 
     def as_legacy_dict(self) -> Dict[str, Any]:
-        """Expose engine components as a dictionary for legacy UI/test compatibility."""
         return {
             "engine": self,
             "model": self.model,
@@ -236,16 +205,6 @@ class MVCSNInferenceEngine:
 
     @torch.no_grad()
     def predict(self, text: str, max_len: int = 192, threshold: float = 0.5) -> PredictionResult:
-        """Predict spam probability and token-level gate diagnostics for one SMS.
-
-        Args:
-            text: Raw input message string.
-            max_len: Maximum character length encoded by the model.
-            threshold: Binary classification decision threshold.
-
-        Returns:
-            Structured :class:`PredictionResult` with gate weights and OOV list.
-        """
         proc_text = self.preproc.process(text, enabled=True) or text
         oov_map, ext_bundle = self.bridge.build_extended_bundle([proc_text])
         ids = self.vocab.encode(proc_text, max_len=max_len, oov_map=oov_map)
@@ -285,17 +244,6 @@ class MVCSNInferenceEngine:
         batch_size: int = 128,
         max_len: int = 192,
     ) -> Dict[str, Any]:
-        """Run batched inference with a single shared OOV graph extension over ``records``.
-
-        Args:
-            records: Sequence of preprocessed :class:`SpamRecord` instances.
-            batch_size: Evaluation mini-batch size.
-            max_len: Maximum token length per sample.
-
-        Returns:
-            Dictionary containing ``probs``, ``mean_alphas``, ``max_obf_probs``,
-            ``top_tokens``, and ``oov_map``.
-        """
         rec_list = list(records)
         oov_map, ext_bundle = self.bridge.build_extended_bundle([r.proc_text for r in rec_list])
         ds = SpamDataset(rec_list, self.vocab, max_len=max_len, use_preprocessor=True, oov_map=oov_map)

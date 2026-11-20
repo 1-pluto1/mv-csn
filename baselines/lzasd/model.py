@@ -51,7 +51,7 @@ def build_lzasd_smoothed_embeddings(
     denom = weights.sum(dim=-1, keepdim=True)
     smoothed = torch.where(denom > 0, (weights @ raw_vecs) / torch.clamp(denom, min=1.0), raw_vecs)
 
-    final_emb = torch.where(valid_cjk.unsqueeze(-1), smoothed, raw_vecs * 0.0)
+    final_emb = torch.where(valid_cjk.unsqueeze(-1), smoothed, raw_vecs)
     final_emb[:2] = 0.0
     return final_emb
 

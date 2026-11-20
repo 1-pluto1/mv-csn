@@ -17,6 +17,7 @@ from mvcsn import (
     load_demo_bundle,
 )
 from mvcsn.data.splits import SpamRecord
+from mvcsn.utils.config import DistillConfig, MVCSN_V3_CONFIG
 from mvcsn.utils.experiment import ABLATION_SPECS, DEFAULT_SEEDS, aggregate_metric_runs, to_clean_record
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -65,8 +66,9 @@ def test_preprocessor_mask_parity() -> None:
 def test_experiment_utilities_and_ablation_matrix() -> None:
     """Verify shared DRY experiment helpers and canonical 8-row ablation spec."""
     assert DEFAULT_SEEDS == (42, 1024, 2025)
-    assert len(ABLATION_SPECS) == 8
-    assert ABLATION_SPECS[0].name == "Full MV-CSN v2"
+    assert len(ABLATION_SPECS) == 12
+    assert ABLATION_SPECS[0].name == "Full MV-CSN v3 (Dual-Teacher KD)"
+    assert MVCSN_V3_CONFIG.hidden_dim == 192
 
     stats = aggregate_metric_runs([{"f1": 0.99, "auc": 1.0}, {"f1": 0.97, "auc": 0.98}])
     assert abs(stats["f1"]["mean"] - 0.98) < 1e-9
@@ -79,6 +81,7 @@ def test_experiment_utilities_and_ablation_matrix() -> None:
     assert clean.raw_text == "注册送礼"
     assert sum(clean.obf_mask) == 0
     assert TrainConfig().cons_weight == 0.50
+    assert DistillConfig().lambda_unlabeled == 0.85
 
 
 def test_inference_engine_bundle_strict_load_and_prediction() -> None:

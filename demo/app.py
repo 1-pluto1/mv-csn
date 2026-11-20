@@ -1,4 +1,4 @@
-"""MV-CSN v2 Interactive Streamlit Inspector (Inference, Benchmarks, Graph Explorer)."""
+"""MV-CSN v3 Interactive Streamlit Inspector (Inference, Benchmarks, Graph Explorer)."""
 
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ def build_demo_engine(
     chaizi_path: str | Path = "data/resources/chaizi_map.json.gz",
     font_dir: str | Path = "/content/fonts",
 ) -> Dict[str, object]:
-    """Load MV-CSN v2 inference facade on CPU, auto-bootstrapping from Drive if missing."""
+    """Load MV-CSN v3 inference facade on CPU, auto-bootstrapping from Drive if missing."""
     bp = Path(bundle_path)
     cp = Path(chaizi_path)
     if not bp.exists() or not cp.exists():
@@ -46,7 +46,7 @@ def build_demo_engine(
 def predict_single_text(
     text: str, engine: Dict[str, object] | MVCSNInferenceEngine, max_len: int = 192
 ) -> Dict[str, object]:
-    """Run MV-CSN v2 inference on one message via :class:`MVCSNInferenceEngine`."""
+    """Run MV-CSN v3 inference on one message via :class:`MVCSNInferenceEngine`."""
     facade = engine if isinstance(engine, MVCSNInferenceEngine) else engine["engine"]
     return facade.predict(text, max_len=max_len).to_dict()
 
@@ -63,7 +63,7 @@ def _render_char_heatmap_html(res: Dict[str, object]) -> str:
     for ch, p_obf, ac, ap, ag in zip(
         res["chars"], res["obf_probs"], res["alpha_ctx"], res["alpha_phon"], res["alpha_glyph"]
     ):
-        red = int(min(255, 255))
+        red = 255
         gb = int(max(70, 245 - p_obf * 175))
         bg = f"rgb({red},{gb},{gb})" if p_obf >= 0.35 else "rgb(240,244,248)"
         border = "2px solid #d9534f" if p_obf >= 0.5 else "1px solid #d0d7de"
@@ -79,11 +79,11 @@ def _render_char_heatmap_html(res: Dict[str, object]) -> str:
 def main() -> None:
     import streamlit as st
 
-    st.set_page_config(page_title="MV-CSN v2: Adversarial Variant Spam Inspector", layout="wide")
-    st.title("MV-CSN v2: Chinese Adversarial Variant Spam Detection & Gate X-Ray")
+    st.set_page_config(page_title="MV-CSN v3: Adversarial Variant Spam Inspector", layout="wide")
+    st.title("MV-CSN v3: Dual-Teacher Distilled Chinese Adversarial Spam Detection & Gate X-Ray")
     st.caption(
-        "Multi-View Context-Gated Character Similarity Network | 32x32 Rendered-Glyph CAE + "
-        "Phonetic Reading Priors + Dynamic SpellGCN OOV Bridge + RoCBert Consistency"
+        "Multi-View Context-Gated Character Similarity Network (2.35M) | 32x32 Rendered-Glyph CAE + "
+        "Phonetic Priors + Dynamic SpellGCN OOV Bridge + Dual-Teacher Cross-View KD"
     )
 
     @st.cache_resource
@@ -94,7 +94,7 @@ def main() -> None:
 
     tab1, tab2, tab3 = st.tabs([
         "1. Live Variant Detector & Gate X-Ray",
-        "2. Benchmarks, Ablations & Qwen3 LLM",
+        "2. Benchmarks, Ablations, Latency & Qwen3 LLM",
         "3. Dual-View Graph & 32x32 Glyph Inspector",
     ])
 
@@ -133,76 +133,140 @@ def main() -> None:
             st.dataframe(rows, use_container_width=True, height=280)
 
     with tab2:
-        st.subheader("Quantitative Benchmark & LLM Comparison Explorer")
+        st.subheader("Quantitative Benchmark, Cross-Domain, Latency & LLM Comparison Explorer")
         zs = _load_json_safe("results/zeroshot_real_variants.json")
         atk = _load_json_safe("results/per_attack_breakdown.json")
         ic = _load_json_safe("results/intensity_curve.json")
         abl = _load_json_safe("results/ablations.json")
+        ext = _load_json_safe("results/external_cross_domain.json")
+        lat = _load_json_safe("results/latency_benchmark.json")
         llm = _load_json_safe("results/llm_comparison.json")
 
         if zs:
-            st.markdown("#### Zero-Shot Evasion (Trained Strictly on Clean SMS -> Tested on Real Adversarial Variants)")
+            st.markdown("#### Track 1 (Clean-Only) & Track 2 (22K Dual-Teacher KD) — Benchmark B v2 (3 Seeds)")
+            raw_sum = zs.get("raw_summary", {})
+            ol_sum = zs.get("olivi9_summary", {})
+            pr_sum = zs.get("probes_summary", {})
             zs_rows = [
                 {
                     "Model": m,
-                    "F1 (mean+-std)": f"{s['f1']['mean']:.4f} +- {s['f1']['std']:.4f}",
-                    "AUC": round(s["auc"]["mean"], 4),
-                    "Clean Ham Acc": round(s["clean_ham_acc"]["mean"], 4),
-                    "Spam Recall": round(s["spam_recall"]["mean"], 4),
+                    "Params": zs.get("params", {}).get(m, 0),
+                    "Fair F1": f"{s['f1']['mean']:.4f} ± {s['f1']['std']:.4f}",
+                    "Ham Acc": round(s["clean_ham_acc"]["mean"], 4),
+                    "Raw F1": round(raw_sum.get(m, {}).get("f1", {}).get("mean", 0.0), 4),
+                    "Olivi-9 F1": round(ol_sum.get(m, {}).get("f1", {}).get("mean", 0.0), 4),
+                    "CF16": round(pr_sum.get(m, {}).get("orig_16_ham_acc", {}).get("mean", 0.0), 4),
+                    "CF40": round(pr_sum.get(m, {}).get("balanced_40_acc", {}).get("mean", 0.0), 4),
                 }
                 for m, s in zs["summary"].items()
             ]
             st.dataframe(zs_rows, use_container_width=True)
 
-        if atk:
-            st.markdown("#### Per-Attack Type F1 Breakdown (Benchmark B Zero-Shot)")
-            atk_rows = [
-                {
-                    "Model": m,
-                    "PHON": round(s["PHON"]["mean"], 4),
-                    "GLYPH": round(s["GLYPH"]["mean"], 4),
-                    "SPLIT": round(s["SPLIT"]["mean"], 4),
-                    "SPACE": round(s["SPACE"]["mean"], 4),
-                    "MIXED": round(s["MIXED"]["mean"], 4),
-                    "CLEAN": round(s["CLEAN"]["mean"], 4),
-                }
-                for m, s in atk.items()
-            ]
+        if atk and "summary" in atk:
+            st.markdown("#### Per-Attack Breakdown (Benchmark B v2 Fair Test)")
+            atk_rows = []
+            for m, s in atk["summary"].items():
+                row = {"Model": m}
+                for key in ("CLEAN", "PHON", "MIXED", "SPACE", "SPLIT", "GLYPH"):
+                    cell = s.get(key, {})
+                    metric = cell.get("f1") or cell.get("accuracy") or cell.get("spam_recall") or {}
+                    row[key] = round(metric.get("mean", 0.0), 4)
+                atk_rows.append(row)
             st.dataframe(atk_rows, use_container_width=True)
 
         if abl:
-            st.markdown("#### 8-Row Multi-Seed Ablation Study")
+            st.markdown("#### 12-Row Multi-Seed Ablation Study")
+            deltas = abl.get("deltas_vs_full", {})
+            raw_abl = abl.get("raw_summary", {})
+            sym_abl = abl.get("symsub40_summary", {})
+            olv_abl = abl.get("olivi9_summary", {})
             abl_rows = [
                 {
                     "Variant": name,
-                    "F1 (mean+-std)": f"{s['f1']['mean']:.4f} +- {s['f1']['std']:.4f}",
-                    "Delta F1": round(s["delta_f1"], 4),
-                    "Clean Ham Acc": round(s["clean_ham_acc"]["mean"], 4),
+                    "Fair F1": f"{s['f1']['mean']:.4f} ± {s['f1']['std']:.4f}",
+                    "ΔFair": round(deltas.get(name, {}).get("delta_fair_f1", 0.0), 4),
+                    "Raw F1": round(raw_abl.get(name, {}).get("f1", {}).get("mean", 0.0), 4),
+                    "SymSub40 F1": round(sym_abl.get(name, {}).get("f1", {}).get("mean", 0.0), 4),
+                    "Olivi-9 F1": round(olv_abl.get(name, {}).get("f1", {}).get("mean", 0.0), 4),
+                    "ΔOlivi-9": round(deltas.get(name, {}).get("delta_olivi9_f1", 0.0), 4),
                 }
                 for name, s in abl["summary"].items()
             ]
             st.dataframe(abl_rows, use_container_width=True)
 
-        if llm:
-            st.markdown("#### Qwen3 Open-Weight LLM vs. MV-CSN v2 & Uncertainty Cascade")
-            llm_rows = [
-                {
-                    "Model": m,
-                    "F1": round(s["f1"]["mean"], 4),
-                    "AUC": round(s["auc"]["mean"], 4),
-                    "Clean Ham Acc": round(s["clean_ham_acc"]["mean"], 4),
-                    "Latency (ms/sample)": round(s.get("infer_ms_per_sample", {}).get("mean", 0.0), 3),
-                    "Parameters": llm.get("params", {}).get(m, 0),
-                }
-                for m, s in llm["summary"].items()
-            ]
+        if llm and "mvcsn_v3_seed42" in llm:
+            st.markdown("#### Qwen3-4B/8B LLM vs. MV-CSN v3 & Uncertainty Cascade (Seed 42 Comparison)")
+            llm_rows = []
+            for lbl, entry, esc in [
+                ("MV-CSN v3 (Seed 42)", llm["mvcsn_v3_seed42"], 0.0),
+                ("Qwen3-4B Zero-Shot", llm["qwen3_4b_zeroshot"], 1.0),
+                ("Qwen3-4B 4-Shot ICL", llm["qwen3_4b_4shot_icl"], 1.0),
+                ("Qwen3-4B Clean-LoRA (3 ep)", llm["qwen3_4b_clean_lora"], 1.0),
+                ("Qwen3-8B Zero-Shot", llm["qwen3_8b_zeroshot"], 1.0),
+            ]:
+                llm_rows.append(
+                    {
+                        "Strategy": lbl,
+                        "Bench B F1": round(entry["bench_b_v2"]["f1"], 4),
+                        "Sym40 F1": round(entry["sym_sub_40"]["f1"], 4),
+                        "Sym40 HamAcc": round(entry["sym_sub_40"]["clean_ham_acc"], 4),
+                        "Olivi-9 F1": round(entry["olivi_9"]["f1"], 4),
+                        "CF16": round(entry["cf16_ham_acc"], 4),
+                        "Esc Rate": f"{esc * 100:.1f}%",
+                    }
+                )
+            for cname, ctag in [("qwen4b_clean_lora", "4B LoRA"), ("qwen4b_zeroshot", "4B ZS")]:
+                for tau, sw in llm.get("cascade_sweep", {}).get(cname, {}).items():
+                    llm_rows.append(
+                        {
+                            "Strategy": f"Cascade v3 + {ctag} (τ={tau})",
+                            "Bench B F1": round(sw["bench_b_v2"]["metrics"]["f1"], 4),
+                            "Sym40 F1": round(sw["sym_sub_40"]["metrics"]["f1"], 4),
+                            "Sym40 HamAcc": round(sw["sym_sub_40"]["metrics"]["clean_ham_acc"], 4),
+                            "Olivi-9 F1": round(sw["olivi_9"]["metrics"]["f1"], 4),
+                            "CF16": round(sw["cf16"]["acc"], 4),
+                            "Esc Rate": f"{sw['bench_b_v2']['escalation_rate'] * 100:.2f}%",
+                        }
+                    )
             st.dataframe(llm_rows, use_container_width=True)
 
-        if ic:
-            st.markdown("#### Adversarial Perturbation Intensity Curve (0% -> 60% Attack Rate)")
+        if ext and "indomain_olivi9" in ext:
+            st.markdown("#### Olivi-9 External Cross-Domain Zero-Shot vs. In-Domain (70/10/20)")
+            ol_rows = []
+            zs_olv = ext.get("zeroshot_olivi9", {}).get("summary", {})
+            id_olv = ext.get("indomain_olivi9", {}).get("summary", {})
+            for m, s in id_olv.items():
+                ol_rows.append(
+                    {
+                        "Model": m,
+                        "In-Domain Olivi-9 F1": round(s["f1"]["mean"], 4),
+                        "In-Domain AUC": round(s["auc"]["mean"], 4),
+                        "Zero-Shot F1 (if matched)": round(zs_olv.get(m, {}).get("f1", {}).get("mean", 0.0), 4),
+                    }
+                )
+            st.dataframe(ol_rows, use_container_width=True)
+
+        if lat and "models" in lat:
+            st.markdown(f"#### Solo Zero-Contention Latency ({lat['hardware']['gpu']})")
+            lat_rows = [
+                {
+                    "Model": m,
+                    "Params": v["params"],
+                    "GPU Batch (ms/msg)": round(v.get("gpu_bs64_ms_per_msg") or v.get("gpu_bs32_ms_per_msg") or 0.0, 4),
+                    "GPU bs=1 Eager (ms)": round(v["gpu_bs1_eager_ms_per_msg"], 3),
+                    "GPU bs=1 Compile (ms)": round(v["gpu_bs1_compile_ms_per_msg"], 3) if v.get("gpu_bs1_compile_ms_per_msg") else None,
+                    "CPU bs=1 (ms)": round(v["cpu_bs1_ms_per_msg"], 3) if v.get("cpu_bs1_ms_per_msg") else None,
+                }
+                for m, v in lat["models"].items()
+            ]
+            st.dataframe(lat_rows, use_container_width=True)
+
+        if ic and "summary" in ic:
+            st.markdown("#### Symmetric Perturbation Intensity Curve (0% -> 60% Attack Rate)")
+            mode = st.selectbox("Perturbation Mode", [k for k in ("sub_only", "mixed") if k in ic["summary"]])
             chart_dict = {
-                m: {f"{float(r)*100:.0f}%": ic["summary"][m][str(r)]["mean"] for r in ic["rates"]}
-                for m in ic["summary"]
+                m: {f"{float(r)*100:.0f}%": ic["summary"][mode][m][str(r)]["f1"]["mean"] for r in ic["rates"]}
+                for m in ic["summary"][mode]
             }
             st.line_chart(chart_dict)
 
@@ -210,10 +274,10 @@ def main() -> None:
         st.subheader("Dual-View Neighbor & 32x32 Rendered-Glyph Inspector")
         query_ch = st.text_input("Inspect any CJK / Homoglyph / Lookalike character (e.g., 髙, え, Ꝗ, 元, 稳, 茺)", value="え", max_chars=2)
         ch = query_ch.strip()[:1] if query_ch.strip() else "え"
-        vocab: CharVocab = engine["vocab"]
-        graphs: Dict[str, torch.Tensor] = engine["graphs"]
-        bridge: OOVGraphBridge = engine["bridge"]
-        bitmaps: torch.Tensor = engine["bitmaps"]
+        vocab = engine["vocab"]
+        graphs = engine["graphs"]
+        bridge = engine["bridge"]
+        bitmaps = engine["bitmaps"]
 
         in_vocab = ch in vocab.stoi
         if in_vocab:

@@ -1,0 +1,56 @@
+{
+  "hardware": {
+    "gpu": "NVIDIA A100-SXM4-80GB",
+    "cpu_threads": 6,
+    "solo_zero_contention": true
+  },
+  "models": {
+    "MV-CSN v3 (2.35M)": {
+      "params": 2352240,
+      "gpu_bs64_ms_per_msg": 0.09673614067651215,
+      "gpu_bs1_eager_ms_per_msg": 5.143018501257757,
+      "gpu_bs1_compile_ms_per_msg": 0.7883084999775747,
+      "cpu_bs1_ms_per_msg": 5.831083999510156
+    },
+    "Plain CNN+Trans (2.35M)": {
+      "params": 2352240,
+      "gpu_bs64_ms_per_msg": 0.05349343746274826,
+      "gpu_bs1_eager_ms_per_msg": 3.449936499237083,
+      "gpu_bs1_compile_ms_per_msg": 0.6409494999388698,
+      "cpu_bs1_ms_per_msg": 3.2952864985418273
+    },
+    "RBT3 (38.5M)": {
+      "params": 38772481,
+      "gpu_bs64_ms_per_msg": 0.09901904684284091,
+      "gpu_bs1_eager_ms_per_msg": 2.809243498631986,
+      "gpu_bs1_compile_ms_per_msg": null,
+      "cpu_bs1_ms_per_msg": 10.073328001453774
+    },
+    "RBT3 + MV-CSN v3 (40.8M)": {
+      "params": 41124721,
+      "gpu_bs64_ms_per_msg": 0.18146518749517782,
+      "gpu_bs1_eager_ms_per_msg": 8.874545499566011,
+      "gpu_bs1_compile_ms_per_msg": null,
+      "cpu_bs1_ms_per_msg": 16.222988997469656
+    },
+    "MacBERT + MV-CSN v3 (104.6M)": {
+      "params": 104915569,
+      "gpu_bs64_ms_per_msg": 0.37952757816128724,
+      "gpu_bs1_eager_ms_per_msg": 14.829013500275323,
+      "gpu_bs1_compile_ms_per_msg": null,
+      "cpu_bs1_ms_per_msg": 44.21652099699713
+    },
+    "Qwen3-8B (8.19B)": {
+      "params": 8190735360,
+      "gpu_bs32_ms_per_msg": 13.313465734377417,
+      "gpu_bs1_eager_ms_per_msg": 59.908144499999594,
+      "cpu_bs1_ms_per_msg": null
+    },
+    "Qwen3-4B (4.0B)": {
+      "params": 4022468096,
+      "gpu_bs32_ms_per_msg": 6.939278915524483,
+      "gpu_bs1_eager_ms_per_msg": 54.11587655544281,
+      "cpu_bs1_ms_per_msg": null
+    }
+  }
+}
