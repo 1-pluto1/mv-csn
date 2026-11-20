@@ -73,7 +73,7 @@ mv-csn/
    - **骨架扩容至 `2.35M`（`MVCSN_V3_CONFIG`）**：`hidden_dim=192`，6-head 3-layer Transformer，多尺度空洞卷积，4-head Residual 音/形双图 GAT。
    - **MacBERT SVD 字嵌入初值（`build_pretrained_char_init`）**：将 `hfl/chinese-macbert-base` 输入字向量矩阵按词表字符对齐并用 SVD 降维初始化 192 维词表。
    - **双师共识跨视图蒸馏（`Dual-Teacher Cross-View KD`）**：
-     - *域内教师*：`MacBERT + MV-CSN v3 (104.9M)` 在 Benchmark B v2 上提供 Logit KL + 768→192 特征对齐；
+     - *域内教师*：`MacBERT + MV-CSN v3 (104.9M)` 在 Benchmark B v2 上提供软标签蒸馏（BCE，在固定二分类教师目标下学生梯度与 KL 等价）+ 学生 `192→768` 线性投影余弦特征对齐；
      - *无标注跨库共视教师*：使用 `MacBERT + MV-CSN v3` 与 `Qwen3-8B` 对 `22,028` 条去泄露无标注中文短信打共识软标签，使学生直接学到多领域正常短信用语与自然标点分布；
      - *Cross-View & Space Aug*：蒸馏同时随机注入 `<UNK>`（`0.30`）、图邻域扰动（`0.20`）与随机空格（`0.25`），将 `Raw F1` 拉升至 **`0.9916`（+7.16%）**。
    - **与强基线同赛道公平对齐（Track 2 `Same Data+Aug`）**：专门设置 Track 2，把同样的 22K 双师迁移池与跨视角增强给到 38.8M 的 `RBT3 (Same Data+Aug)` 与 2.35M 无图 `Plain CNN+Trans`，彻底区分“数据增益”与“图结构增益”。
@@ -101,7 +101,7 @@ mv-csn/
 | Track 2 | `RBT3 (Same Data+Aug)` | 38.8M | **0.9937** (0.9863) | **0.9926** | 0.9766 | **0.8410** | **0.8125** | **0.8583** |
 | Track 2 | `RBT3 + MV-CSN v3 (Dual-Teacher)` | 41.1M | 0.9932 (0.9866) | 0.9921 | 0.9706 | 0.8392 | **0.8125** | 0.8500 |
 
-- **McNemar 显著性（Seed 42 Fair）**：`MV-CSN v3 vs LZASD (Fixed)`：$b=70, c=12, p = 4.11 \times 10^{-11}$；`RBT3 + MV-CSN v3 (Dual-Teacher) vs RBT3 (Clean)`：$b=8, c=23, p = 0.0107$；`MV-CSN v3 vs Plain CNN+Trans`：$b=16, c=9, p = 0.2295$；`RBT3+v3 Dual vs RBT3 (Same Data+Aug)`：$b=6, c=15, p = 0.0784$。
+- **McNemar 显著性（Seed 42 Fair，$b=$前者独对，$c=$后者独对）**：`MV-CSN v3 vs LZASD (Fixed)`：$b=70, c=12, p = 4.11 \times 10^{-11}$（v3 显著更优）；`RBT3 + MV-CSN v3 (Dual-Teacher) vs RBT3 (Clean)`：$b=8, c=23, p = 0.0107$（域内 Fair F1 上 Clean 错得更少，Track 2 增益主要体现在外域 `Olivi-9` / `CF16` / `sub_only=0.6`）；`MV-CSN v3 vs Plain CNN+Trans`：$b=16, c=9, p = 0.2295$；`RBT3+v3 Dual vs RBT3 (Same Data+Aug)`：$b=6, c=15, p = 0.0784$。
 
 ### 2. 对称扰动曲线 (`sub_only` & `mixed`, 0% → 60%) 与 12 行消融
 
@@ -141,7 +141,7 @@ mv-csn/
 ## 五、写报告 & 答辩高频 Q&A（Stage 3 实事求是口径）
 
 1. **Q：为什么 Track 2 中 `RBT3 (Same Data+Aug)` 与 `RBT3 + MV-CSN v3` 分数几乎打平（`0.9937` vs `0.9932`）？那图神经网络到底贡献了什么？**
-   - **A**：我们诚实保留了这两组同 22K 池对称对照实验。结果显示 **22K 双师共识迁移池本身具有极强迁移价值**（把 RBT3 `Olivi-9` 从 `0.8051` 拉到 `0.8410`、`CF16` 从 `0.50` 拉到 `0.8125`）。而与 `RBT3`（38.8M）相比，**`MV-CSN v3`（2.35M）参数小 16.5 倍**；与**同参数同蒸馏的无图模型 `Plain CNN+Trans (Same KD)`** 相比，`MV-CSN v3` 在 `GLYPH`（1.0000 vs 0.9583）、`CF16`（0.6250 vs 0.5000）、`CF40`（0.7750 vs 0.7250）和最严苛 `sub_only=0.6`（0.9848 vs 0.9678，**+1.70%**）上全面领先，直接分离出音/形双图结构的独立贡献。
+   - **A**：我们诚实保留了这两组同 22K 池对称对照实验。结果显示 **22K 双师共识迁移池本身具有极强迁移价值**（把 RBT3 `Olivi-9` 从 `0.8051` 拉到 `0.8410`、`CF16` 从 `0.50` 拉到 `0.8125`，仅在域内 Fair F1 略降 `-0.0007` 至 `-0.0012`）。而与 `RBT3`（38.8M）相比，**`MV-CSN v3`（2.35M）参数小 16.5 倍**；与关闭图/门控分支的 `Plain CNN+Trans (Same KD)` 对照相比，`MV-CSN v3` 在 `GLYPH`（8 条正例召回 1.0000 vs 0.9583）、`CF16`（0.6250 vs 0.5000）、`CF40`（0.7750 vs 0.7250）和 `sub_only=0.6`（0.9848 vs 0.9678，**+1.70%**）上表现更优（诚实注：`Plain` 训练时 `unk_prob=1.0` 且关闭模块仍在构造函数内注册，故上述差距反映整体图机制与扰动配置的联合效果，而非严格等有效容量的纯单变量净增益）。
 2. **Q：既然 `MV-CSN v3` 有双图机制，为什么 `w/o Dynamic OOV Bridge` 在消融里宏观 F1 只降 `0.0002`？**
    - **A**：因为标准 `Bench B v2` 测试集中实际落在训练词表之外的字符仅占 `2.78%`（`4,437 / 159,760`），平均到全局测试集上被 97.2% 已登录字稀释。但在 Exp 5 按 Token 类型分桶测量时，系统在 `3,976` 个真实 `obf_oov_bridged` 字符上把图门控从 `11.29%` 自动拉高到 **`88.54%`** 且 `unbridged_unk = 0`，精准兑现了零未桥接设计目标。
 3. **Q：2.35M 小模型还存在什么诚实短板？如何低成本弥补？**

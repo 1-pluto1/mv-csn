@@ -116,7 +116,7 @@ cmd_full() {
   if [[ ! -f "data/resources/variant_spam_sms_matched.tsv.gz" ]]; then
     "$PYTHON_BIN" scripts/download_data.py
   fi
-  if [[ ! -f "artifacts/dual_teacher_22k_pool.json.gz" ]]; then
+  if [[ ! -f "artifacts/dual_teacher_transfer_pool_30k.pt" ]]; then
     "$PYTHON_BIN" scripts/prepare_v3_unified_and_30k.py
     "$PYTHON_BIN" scripts/build_dual_teacher_punct_pool.py
   fi

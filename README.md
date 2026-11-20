@@ -13,8 +13,8 @@ MV-CSN v3 (`2,352,240` parameters, ~`2.35M`) upgrades our character-level graph 
 
 - **Fixes Raw Unpreprocessed Drop (+7.16% over v2 Clean):** Without distillation/cross-view augmentation, clean-trained `MV-CSN v2 (Clean)` drops to `0.9200` F1 (`Recall 0.8576`) on unpreprocessed raw inputs. `MV-CSN v3 (2.35M)` restores **`0.9916` Raw F1** (`0.9924 +- 0.0006` Fair F1), achieves the highest punctuation-stripped recall **`-P = 0.9862`**, and significantly outperforms fixed-graph `LZASD (Fixed)` (`0.9766`, McNemar `p = 4.11e-11`).
 - **22K Unlabeled Consensus Drives Cross-Domain Transfer (+6.40% on Olivi-9):** Distilling across `22,028` unlabeled SMS raises zero-shot external `Olivi-9` F1 from `0.6960` (`Clean-KD Only`) to **`0.7600`** (`Full Dual-Teacher KD`).
-- **Heavy-Substitution Resilience at 1/16.5x Footprint:** Under 60% symmetric homophone/glyph substitution (`sub_only=0.6`), `MV-CSN v3` retains **`0.9848` F1** (`Clean-KD Only` `0.9871`), beating `RBT3 (Clean)` (`0.9660`, **+1.88%**) and identically distilled `Plain CNN+Trans` (`0.9678`, **+1.70%**), while running at **`0.0967 ms/SMS`** (`bs=64`) / **`0.788 ms`** (`torch.compile bs=1`) on A100.
-- **Honest Track 2 Comparison with `RBT3 (Same Data+Aug)`:** When `38.8M` `RBT3` is also given the exact same 22K pseudo-labeled pool and cross-view/space augmentation, `RBT3 (Same Data+Aug)` (`0.9937`) and `RBT3 + MV-CSN v3` (`0.9932`) match within 1 std (`p = 0.0784`), and both significantly beat `RBT3 (Clean)` (`p = 0.0107`). Thus the 22K consensus pool benefits compact encoders broadly, while `MV-CSN v3` offers a **16.5x smaller** standalone graph architecture with higher `sub_only=0.6` resilience.
+- **Heavy-Substitution Resilience at 1/16.5x Footprint:** Under symmetric homophone/glyph substitution stress (`sub_only`, rate `0.6`), `MV-CSN v3` retains **`0.9848` F1** (`Clean-KD Only` `0.9871`), beating `RBT3 (Clean)` (`0.9660`, **+1.88%**) and the graph-disabled `Plain CNN+Trans` control (`0.9678`, **+1.70%**, trained with `unk_prob=1.0`), while forward inference runs at **`0.0967 ms/SMS`** (`bs=64`) / **`0.788 ms`** (`torch.compile bs=1`; `5.14 ms` eager `bs=1`) on A100 (excluding preprocessing/OOV graph construction).
+- **Honest Track 2 Comparison with `RBT3 (Same Data+Aug)`:** When `38.8M` `RBT3` is also given the exact same 22K pseudo-labeled pool and cross-view/space augmentation, `RBT3 (Same Data+Aug)` (`0.9937`) and `RBT3 + MV-CSN v3` (`0.9932`) match within 1 std on Bench B Fair F1 (`p = 0.0784`), slightly trailing `RBT3 (Clean)` (`0.9944`, McNemar `p = 0.0107` with `8` vs `23` discordant errors for `RBT3 + MV-CSN v3` vs `RBT3 (Clean)`), while gaining substantially on external `Olivi-9` (`0.8410 / 0.8392` vs `0.8051`), `CF16` (`0.8125` vs `0.5000`), and `sub_only=0.6` (`0.9815 / 0.9827` vs `0.9660`). Thus the 22K consensus pool trades a tiny in-domain Fair F1 margin for cross-domain and heavy-obfuscation robustness across compact encoders, while `MV-CSN v3` offers a **16.5x smaller** standalone graph architecture (`2.35M`) with top `sub_only=0.6` resilience.
 - **LLMs Alone Collapse on Clean Ham Under Obfuscation — Uncertainty Cascade Forms the Pareto Frontier:** Under `SymSub40`, `Qwen3-4B Zero-Shot`, `4-Shot ICL`, and `Qwen3-8B Zero-Shot` collapse to **`0.09%–0.47%` Clean Ham Acc**; even after 3-epoch `Clean-LoRA` (`905s`, `11.8M` LoRA params), `Qwen3-4B` drops to `68.88%` Ham Acc (`0.9278` F1, `98.02 ms bs=1`). Routing only **`1.31%`** uncertain SMS from `MV-CSN v3` to `Qwen3-4B Clean-LoRA` (`Cascade tau=0.45`) reaches **`0.9951` F1** at **`0.200 ms` batch / `6.42 ms` bs=1** while keeping `SymSub40 F1 = 0.9894` (`96.25%` Ham Acc) and lifting `Olivi-9` from `0.7658` to `0.8353`.
 
 ---
@@ -38,7 +38,7 @@ MV-CSN v3 (`2,352,240` parameters, ~`2.35M`) upgrades our character-level graph 
 | Track 2 | `RBT3 (Same Data+Aug)` | 38.8M | **`0.9937 +- 0.0004`** (0.9863) | **0.9926** | 0.9766 | **0.8410** | **0.8125** | **0.8583** |
 | Track 2 | `RBT3 + MV-CSN v3 (Dual-Teacher)` | 41.1M | `0.9932 +- 0.0015` (0.9866) | 0.9921 | 0.9706 | 0.8392 | **0.8125** | 0.8500 |
 
-Per-attack F1/Accuracy for `MV-CSN v3 (Full Dual-Teacher KD)`: `CLEAN 0.9657 | GLYPH 1.0000 | MIXED 0.9987 | PHON 0.9910 | SPACE 0.9915 | SPLIT 0.9710`.
+Per-attack scores for `MV-CSN v3 (Full Dual-Teacher KD)`: `CLEAN F1 0.9657 | GLYPH Acc/Recall 1.0000 (n=8 spam) | MIXED Recall 0.9987 | PHON Recall 0.9910 | SPACE Recall 0.9915 | SPLIT Recall 0.9710` (only `CLEAN` contains both ham and spam; attack buckets report positive recall/accuracy).
 
 ### 2. Symmetric Intensity Curves (`0.0 -> 0.6`) & In-Distribution / `Olivi-9` Benchmarks
 
@@ -82,8 +82,8 @@ Per-attack F1/Accuracy for `MV-CSN v3 (Full Dual-Teacher KD)`: `CLEAN 0.9657 | G
 - `obf_in_vocab_phon_or_glyph (7,303)`: `alpha_ctx = 0.3384`, `alpha_phon = 0.2574`, `alpha_glyph = 0.4041` (`graph = 66.16%`)
 - `clean_oov_bridged (461)`: `alpha_ctx = 0.1466`, `alpha_phon = 0.3528`, `alpha_glyph = 0.5006` (`graph = 85.34%`)
 - `obf_oov_bridged (3,976)`: `alpha_ctx = 0.1146`, `alpha_phon = 0.3354`, `alpha_glyph = 0.5500` (`graph = 88.54%`)
-- `unbridged_unk`: **`0`** (100% of test OOV tokens dynamically bridged)
-- **Errors (`n=3,216`):** `19 FP` (all `CLEAN`) + `15 FN` (`PHON:6, CLEAN:4, MIXED:2, SPLIT:2, SPACE:1`). On synthetic `CF16`, standalone `MV-CSN v3` still misclassifies `5/16` polite service/notification messages (fixed on 3/5 by `RBT3 + MV-CSN v3`, `CF16 = 0.8125`), indicating a clear avenue for hard polite-ham negative mining.
+- `unbridged_unk`: **`0`** (every test OOV token receives a dynamic extended OOV ID via `OOVGraphBridge`; gate weights reflect graph-regularized training)
+- **Errors (`n=3,216`, Seed 42):** `19 FP` (all `CLEAN`) + `15 FN` (`PHON:6, CLEAN:4, MIXED:2, SPLIT:2, SPACE:1`). On the `CF16` polite-notification diagnostic probe (which also informed Qwen/domain teacher blending weights), standalone `MV-CSN v3` misclassifies `5/16` messages on Seed 42 (`68.75%` acc; 3-seed mean `0.6250`, i.e., `37.5%` FP; `RBT3 + MV-CSN v3` reaches `0.8125`), indicating a clear avenue for hard polite-ham negative mining.
 
 ---
 
